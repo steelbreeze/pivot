@@ -1,0 +1,31 @@
+{
+  "name": "pivot",
+  "version": "1.0.0-rc.1",
+  "description": "Minimal TypeScript / JavaScript pivot table library",
+  "main": "./lib/node/pivot.js",
+  "scripts": {
+    "build": "tsc -p .",
+    "package": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/steelbreeze/pivot.git"
+  },
+  "keywords": [
+    "pivot",
+    "table",
+    "javascript",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/steelbreeze/pivot/issues"
+  },
+  "homepage": "https://github.com/steelbreeze/pivot#readme",
+  "devDependencies": {
+    "typescript": "^4.2.4",
+    "webpack-cli": "^4.7.0"
+  }
+}
