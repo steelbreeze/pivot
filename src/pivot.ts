@@ -2,22 +2,22 @@ export type Func<TArg, TResult> = (arg: TArg) => TResult;
 export type Value = any;
 export type Key = string | number;
 export type Row = { [TKey in Key]: Value };
-export type Criterion<TRow extends Row> = { name: Key, f: Func<TRow, Value>, value: Value };
+export type Criterion<TRow extends Row> = { key: Key, value: Value, f: Func<TRow, boolean>, };
 export type Dimension<TRow extends Row> = Criterion<TRow>[];
 export type Axis<TRow extends Row> = Dimension<TRow>[];
 export type Table<TRow extends Row> = TRow[];
 export type Cube<TRow extends Row> = Table<TRow>[][];
 
 /**
- * Creates a dimension for a given column in a table; a dimension is a name and a set of unique values provided by a function.
+ * Creates a dimension for a given column in a table; a dimension is a key and a set of unique values provided by a function.
  * @param source The source data, an array of objects.
- * @param name The name to give this dimension.
- * @param f An optional callback function to derive values from the source objects. If omitted, the attribute with the same name as the name parameter passed.
+ * @param key The name to give this dimension.
+ * @param f An optional callback function to derive values from the source objects. If omitted, the attribute with the same key as the key parameter passed.
  * @param s An optional callback function used to determine the order of the dimension. Functions in exacly the same way as Array.prototype.sort's compareFn.
  * @remarks This data structure can be useful in populating lists for filters.
  */
-export function dimension<TRow extends Row>(source: Table<TRow>, name: string, f: Func<TRow, any> = row => row[name], s?: (a: Value, b: Value) => number): Dimension<TRow> {
-	return source.map(f).filter((value, index, source) => source.indexOf(value) === index).sort(s).map(value => { return { name, f, value } });
+export function dimension<TRow extends Row>(source: Table<TRow>, key: string, f: Func<TRow, any> = row => row[key]): Dimension<TRow> {
+	return source.map(f).filter((value, index, source) => source.indexOf(value) === index).sort().map(value => { return { key, value, f: row => f(row) === value } });
 }
 
 /**
@@ -36,7 +36,7 @@ export function axis<TRow extends Row>(...dimensions: Dimension<TRow>[]): Axis<T
  */
 function slice<TRow extends Row>(table: Table<TRow>, axis: Axis<TRow>): Table<TRow>[] {
 	// map the axis criteria into a set of filters
-	const filters = axis.map(criteria => criteria.map(criterion => (row: TRow) => criterion.f(row) === criterion.value).reduce((a, b) => row => a(row) && b(row)));
+	const filters = axis.map(criteria => criteria.map(criterion => criterion.f).reduce((a, b) => row => a(row) && b(row)));
 
 	// slice the table based on the filters
 	return filters.map(filter => table.filter(filter));

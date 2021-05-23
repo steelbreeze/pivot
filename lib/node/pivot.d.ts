@@ -5,23 +5,23 @@ export declare type Row = {
     [TKey in Key]: Value;
 };
 export declare type Criterion<TRow extends Row> = {
-    name: Key;
-    f: Func<TRow, Value>;
+    key: Key;
     value: Value;
+    f: Func<TRow, boolean>;
 };
 export declare type Dimension<TRow extends Row> = Criterion<TRow>[];
 export declare type Axis<TRow extends Row> = Dimension<TRow>[];
 export declare type Table<TRow extends Row> = TRow[];
 export declare type Cube<TRow extends Row> = Table<TRow>[][];
 /**
- * Creates a dimension for a given column in a table; a dimension is a name and a set of unique values provided by a function.
+ * Creates a dimension for a given column in a table; a dimension is a key and a set of unique values provided by a function.
  * @param source The source data, an array of objects.
- * @param name The name to give this dimension.
- * @param f An optional callback function to derive values from the source objects. If omitted, the attribute with the same name as the name parameter passed.
+ * @param key The name to give this dimension.
+ * @param f An optional callback function to derive values from the source objects. If omitted, the attribute with the same key as the key parameter passed.
  * @param s An optional callback function used to determine the order of the dimension. Functions in exacly the same way as Array.prototype.sort's compareFn.
  * @remarks This data structure can be useful in populating lists for filters.
  */
-export declare function dimension<TRow extends Row>(source: Table<TRow>, name: string, f?: Func<TRow, any>, s?: (a: Value, b: Value) => number): Dimension<TRow>;
+export declare function dimension<TRow extends Row>(source: Table<TRow>, key: string, f?: Func<TRow, any>): Dimension<TRow>;
 /**
  * Combines one of more dimensions into an axis, the axis is the cartesean product of all dimension values.
  * @param dimensions The set of dimensions to turn into an axis.
