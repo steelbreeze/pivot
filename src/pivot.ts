@@ -10,14 +10,24 @@ export type Cube<TRow extends Row> = Table<TRow>[][];
 
 /**
  * Creates a dimension for a given column in a table; a dimension is a key and a set of unique values provided by a function.
- * @param source The source data, an array of objects.
+ * @param table The source data, an array of objects.
  * @param key The name to give this dimension.
  * @param f An optional callback function to derive values from the source objects. If omitted, the attribute with the same key as the key parameter passed.
- * @param s An optional callback function used to determine the order of the dimension. Functions in exacly the same way as Array.prototype.sort's compareFn.
  * @remarks This data structure can be useful in populating lists for filters.
  */
-export function dimension<TRow extends Row>(source: Table<TRow>, key: string, f: Func<TRow, any> = row => row[key]): Dimension<TRow> {
-	return source.map(f).filter((value, index, source) => source.indexOf(value) === index).sort().map(value => { return { key, value, f: row => f(row) === value } });
+export function dimension<TRow extends Row>(table: Table<TRow>, key: string, f: Func<TRow, any> = row => row[key]): Dimension<TRow> {
+	return dimension.make(table.map(f).filter((value, index, source) => source.indexOf(value) === index).sort(), key, f);
+}
+
+/**
+ * Creates a dimension from an array of values.
+ * @param source The source values.
+ * @param key The name to give this dimension.
+ * @param f An optional callback function used to convert values in the source table to those in the dimension when pivoting.
+ * @remarks This data structure can be useful in populating lists for filters.
+ */
+dimension.make = function <TRow extends Row>(source: Value[], key: string, f: Func<TRow, any> = row => row[key]): Dimension<TRow> {
+	return source.map(value => { return { key, value, f: row => f(row) === value } });
 }
 
 /**

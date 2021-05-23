@@ -15,13 +15,15 @@ export declare type Table<TRow extends Row> = TRow[];
 export declare type Cube<TRow extends Row> = Table<TRow>[][];
 /**
  * Creates a dimension for a given column in a table; a dimension is a key and a set of unique values provided by a function.
- * @param source The source data, an array of objects.
+ * @param table The source data, an array of objects.
  * @param key The name to give this dimension.
  * @param f An optional callback function to derive values from the source objects. If omitted, the attribute with the same key as the key parameter passed.
- * @param s An optional callback function used to determine the order of the dimension. Functions in exacly the same way as Array.prototype.sort's compareFn.
  * @remarks This data structure can be useful in populating lists for filters.
  */
-export declare function dimension<TRow extends Row>(source: Table<TRow>, key: string, f?: Func<TRow, any>): Dimension<TRow>;
+export declare function dimension<TRow extends Row>(table: Table<TRow>, key: string, f?: Func<TRow, any>): Dimension<TRow>;
+export declare namespace dimension {
+    var make: <TRow extends Row>(source: any[], key: string, f?: Func<TRow, any>) => Dimension<TRow>;
+}
 /**
  * Combines one of more dimensions into an axis, the axis is the cartesean product of all dimension values.
  * @param dimensions The set of dimensions to turn into an axis.
