@@ -1,4 +1,4 @@
-import * as pivot from '../pivot';
+import * as p from '../pivot';
 import { squad } from './fulham';
 
 // Calculate a person's age from their date of birth
@@ -7,18 +7,18 @@ function age(person: { dateOfBirth: Date }): number {
 }
 
 // extract dimensions from the test data
-const position = pivot.dimension(squad, 'position');
-const country = pivot.dimension(squad, 'country', player => player.nationality);
+const position = p.dimension(squad, 'position');
+const country = p.dimension(squad, 'country', player => player.nationality);
 
 // create axes out of the dimensions (note, you can use multiple dimensions in a single axis)
-const x = pivot.axis(position);
-const y = pivot.axis(country);
+const x = p.axis(position);
+const y = p.axis(country);
 
 // create a pivot cube
-const cube = pivot.pivot(squad, x, y);
+const cube = p.pivot(squad, x, y);
 
 // query data out of the cube
-const result = pivot.select(cube, pivot.average(age));
+const result = p.select(cube, p.average(age));
 
 // ugly code to pretty print the result with dimensions
 console.log(`\t${position.map(pos => pos.value.substr(0,7)).join('\t')}`)

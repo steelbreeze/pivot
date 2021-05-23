@@ -18,7 +18,7 @@ export declare type Cube<TRow extends Row> = Table<TRow>[][];
  * @param source The source data, an array of objects.
  * @param name The name to give this dimension.
  * @param f An optional callback function to derive values from the source objects. If omitted, the attribute with the same name as the name parameter passed.
- * @param s An optional callback function used to determine the order of the dimension.
+ * @param s An optional callback function used to determine the order of the dimension. Functions in exacly the same way as Array.prototype.sort's compareFn.
  * @remarks This data structure can be useful in populating lists for filters.
  */
 export declare function dimension<TRow extends Row>(source: Table<TRow>, name: string, f?: Func<TRow, any>, s?: (a: Value, b: Value) => number): Dimension<TRow>;
