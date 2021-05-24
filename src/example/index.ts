@@ -1,4 +1,4 @@
-import { average, axis, dimension, pivot, select as query } from '../pivot';
+import { average, axis, dimension, pivot, query } from '../pivot';
 import { squad } from './fulham';
 
 // Calculate a person's age from their date of birth

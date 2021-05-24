@@ -85,7 +85,7 @@ export function pivot<TRow extends Row>(table: Table<TRow>, x: Axis<TRow>, y: Ax
  * @param cube The source cube.
  * @param f A callback function to create a result for the table in each cell of the cube.
  */
-export function select<TRow extends Row, TResult extends Value>(cube: Cube<TRow>, f: Func<Table<TRow>, TResult>): Table<Row> {
+export function query<TRow extends Row, TResult extends Value>(cube: Cube<TRow>, f: Func<Table<TRow>, TResult>): Table<Row> {
 	return cube.map(y => y.map(f));
 }
 
