@@ -1,4 +1,4 @@
-import * as p from '../pivot';
+import { average, axis, dimension, pivot, select as query } from '../pivot';
 import { squad } from './fulham';
 
 // Calculate a person's age from their date of birth
@@ -6,20 +6,17 @@ function age(person: { dateOfBirth: Date }): number {
 	return new Date(Date.now() - person.dateOfBirth.getTime()).getUTCFullYear() - 1970;
 }
 
-// extract dimensions from the test data
-const position = p.dimension(squad, 'position');
-const country = p.dimension(squad, 'country', player => player.nationality);
+// create axes out of the dimensions (axis can be built from multiple dimensions)
+const x = axis(dimension(squad, 'position'));
+const y = axis(dimension(squad, 'country'));
 
-// create axes out of the dimensions (note, you can use multiple dimensions in a single axis)
-const x = p.axis(position);
-const y = p.axis(country);
+// create the pivot cube
+const cube = pivot(squad, x, y);
 
-// create a pivot cube
-const cube = p.pivot(squad, x, y);
-
-// query data out of the cube
-const result = p.select(cube, p.average(age));
+// find the average age of players by position by country
+const result = query(cube, average(age));
 
 // ugly code to pretty print the result with dimensions
-console.log(`\t${position.map(pos => pos.value.substr(0,7)).join('\t')}`)
-result.forEach((row, num) => console.log(`${country[num].value.substr(0,7)}\t${row.join('\t')}`));
+const print = (value: any) => { const str = String(value || ''); return str.length < 8 ? str : (str.substr(0, 6) + '\u2026'); };
+console.log(`\t${x.map(c => print(c.map(i => i.value).join(','))).join('\t')}`)
+result.forEach((row, i) => console.log(`${print(y[i].map(j => j.value).join(','))}\t${row.map(print).join('\t')}`));
