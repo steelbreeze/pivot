@@ -3,6 +3,6 @@ export declare const squad: {
     position: string;
     givenName: string;
     familyName: string;
-    nationality: string;
+    country: string;
     dateOfBirth: Date;
 }[];
