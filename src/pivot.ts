@@ -1,12 +1,29 @@
+/** A function taking one argument and returning a result. */
 export type Func<TArg, TResult> = (arg: TArg) => TResult;
-export type Value = any;
+
+/** The type of keys used to index the source data. */
 export type Key = string | number;
+
+/** A single data point. */
+export type Value = any;
+
+/** A row of data that is indexed by a key. */
 export type Row = { [TKey in Key]: Value };
-export type Criterion<TRow extends Row> = { key: Key, value: Value, f: Func<TRow, boolean>, };
-export type Dimension<TRow extends Row> = Criterion<TRow>[];
-export type Axis<TRow extends Row> = Dimension<TRow>[];
+
+/** A table of data. */
 export type Table<TRow extends Row> = TRow[];
+
+/** A cube of data. */
 export type Cube<TRow extends Row> = Table<TRow>[][];
+
+/** A key and value of that key to use when slicing data in a pivot operation and the filter to evaluate it. */
+export type Criterion<TRow extends Row> = { key: Key, value: Value, filter: Func<TRow, boolean> };
+
+/** A set of criterion representing the citeria for a single dimension. */
+export type Dimension<TRow extends Row> = Criterion<TRow>[];
+
+/** The cartesean product of multiple dimensions, allowing a pivot to use multiple dimensions for each of the x and y axis. */
+export type Axis<TRow extends Row> = Dimension<TRow>[];
 
 /**
  * Creates a dimension for a given column in a table; a dimension is a key and a set of unique values provided by a function.
@@ -27,7 +44,7 @@ export function dimension<TRow extends Row>(table: Table<TRow>, key: string, f: 
  * @remarks This data structure can be useful in populating lists for filters.
  */
 dimension.make = function <TRow extends Row>(source: Value[], key: string, f: Func<TRow, any> = row => row[key]): Dimension<TRow> {
-	return source.map(value => { return { key, value, f: row => f(row) === value } });
+	return source.map(value => { return { key, value, filter: row => f(row) === value } });
 }
 
 /**
@@ -46,7 +63,7 @@ export function axis<TRow extends Row>(...dimensions: Dimension<TRow>[]): Axis<T
  */
 function slice<TRow extends Row>(table: Table<TRow>, axis: Axis<TRow>): Table<TRow>[] {
 	// map the axis criteria into a set of filters
-	const filters = axis.map(criteria => criteria.map(criterion => criterion.f).reduce((a, b) => row => a(row) && b(row)));
+	const filters = axis.map(criteria => criteria.map(criterion => criterion.filter).reduce((a, b) => row => a(row) && b(row)));
 
 	// slice the table based on the filters
 	return filters.map(filter => table.filter(filter));

@@ -1,18 +1,27 @@
+/** A function taking one argument and returning a result. */
 export declare type Func<TArg, TResult> = (arg: TArg) => TResult;
-export declare type Value = any;
+/** The type of keys used to index the source data. */
 export declare type Key = string | number;
+/** A single data point. */
+export declare type Value = any;
+/** A row of data that is indexed by a key. */
 export declare type Row = {
     [TKey in Key]: Value;
 };
+/** A table of data. */
+export declare type Table<TRow extends Row> = TRow[];
+/** A cube of data. */
+export declare type Cube<TRow extends Row> = Table<TRow>[][];
+/** A key and value of that key to use when slicing data in a pivot operation and the filter to evaluate it. */
 export declare type Criterion<TRow extends Row> = {
     key: Key;
     value: Value;
-    f: Func<TRow, boolean>;
+    filter: Func<TRow, boolean>;
 };
+/** A set of criterion representing the citeria for a single dimension. */
 export declare type Dimension<TRow extends Row> = Criterion<TRow>[];
+/** The cartesean product of multiple dimensions, allowing a pivot to use multiple dimensions for each of the x and y axis. */
 export declare type Axis<TRow extends Row> = Dimension<TRow>[];
-export declare type Table<TRow extends Row> = TRow[];
-export declare type Cube<TRow extends Row> = Table<TRow>[][];
 /**
  * Creates a dimension for a given column in a table; a dimension is a key and a set of unique values provided by a function.
  * @param table The source data, an array of objects.
