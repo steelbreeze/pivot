@@ -1,5 +1,5 @@
 # pivot
-A minimalist pivot table library for TypeScript/JavaScript. While small in size (a mere 913 bytes when minified), this library is large in capability, supporting user-supplied or source data derived dimensions, derived fields for dimensions and calculations, multiple dimensions for an axis; even hypercubes can be generated.
+A minimalist pivot table library for TypeScript/JavaScript. While small in size (a mere 903 bytes when minified), this library is large in capability, supporting user-supplied or source data derived dimensions, derived fields for dimensions and calculations, multiple dimensions for an axis; even hypercubes can be generated.
 
 The library also provides a modest set of numberical selectors. Suggestions for additions, or better still contributions, are welcome.
 
