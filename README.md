@@ -5,7 +5,7 @@ The library also provides a modest set of numberical selectors. Suggestions for 
 
 
 ## Example
-The following is the result of pivoting publicly available information about the [Fulham Football Club mens squad](https://web.archive.org/web/20210516151437/https://www.fulhamfc.com/teams) in the form of an array of objects.
+The following is the result of pivoting publicly available information about the Fulham Football Club [mens squad](https://web.archive.org/web/20210516151437/https://www.fulhamfc.com/teams) in the form of an array of objects.
 
 First, we create a pair of axes to pivot by, in this case deriving position and country dimensions from the squad data and using them as the x and y axes respectively:
 ```typescript
