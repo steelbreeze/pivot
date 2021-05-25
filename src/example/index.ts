@@ -6,7 +6,7 @@ function age(person: { dateOfBirth: Date }): number {
 	return new Date(Date.now() - person.dateOfBirth.getTime()).getUTCFullYear() - 1970;
 }
 
-// create axes out of the dimensions (axis can be built from multiple dimensions)
+// create axes out of the dimensions derived from the squad data
 const x = axis(dimension(squad, 'position'));
 const y = axis(dimension(squad, 'country'));
 

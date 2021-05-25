@@ -5,19 +5,16 @@ The library also provides a modest set of numberical selectors. Suggestions for 
 
 
 ## Example
-The following is the result of pivoting publicly available information about the Fulham Football Club [mens squad](https://web.archive.org/web/20210516151437/https://www.fulhamfc.com/teams) in the form of an array of objects.
-
-First, we create a pair of axes to pivot by, in this case deriving position and country dimensions from the squad data and using them as the x and y axes respectively:
+The following is the result of pivoting publicly available information about the Fulham Football Club [mens squad](https://web.archive.org/web/20210516151437/https://www.fulhamfc.com/teams) in the form of an array of objects, calculating the average age of players by position and country.
 ```typescript
+// create axes out of the dimensions derived from the squad data
 const x = axis(dimension(squad, 'position'));
 const y = axis(dimension(squad, 'country'));
-```
-Then we pivot the squad data by the chosen x and y axes:
-```typescript
+
+// create the pivot cube
 const cube = pivot(squad, y, x);
-```
-And finally, query the cube for the averate 
-```typescript
+
+// find the average age of players by position by country
 const result = query(cube, average(age));
 ```
 The selection is the average age of the players grouped by position and country:
