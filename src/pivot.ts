@@ -70,14 +70,23 @@ function slice<TRow extends Row>(table: Table<TRow>, axis: Axis<TRow>): Table<TR
 }
 
 /**
- * Pivots a table by the x (rows) any z (columns) axis
+ * Pivots a table by any number of axis
  * @param table The source data, an array of JavaScript objects.
- * @param x The x axis, the result of a call to axis with one or more dimensions.
- * @param y The y axis, the result of a call to axis with one or more dimensions.
- * @remarks Should you need to pivot by more than two axes, simpley extend this method, slicing by each additional axis.
+ * @param axes The  axis on which to pivot the table.
  */
-export function pivot<TRow extends Row>(table: Table<TRow>, x: Axis<TRow>, y: Axis<TRow>): Cube<TRow> {
-	return slice(table, y).map(interim => slice(interim, x));
+export function pivot<TRow extends Row>(table: Table<TRow>, ...axes: Axis<TRow>[]) {
+	let res: any[] = table;
+	let axis = axes.pop();
+
+	if (axis) {
+		res = slice(table, axis);
+
+		while(axis = axes.pop()) {
+			res = res.map(interim => slice(interim, axis!));
+		}
+	}
+
+	return res;
 }
 
 /**
