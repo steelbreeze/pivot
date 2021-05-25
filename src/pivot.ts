@@ -17,7 +17,7 @@ export type Table<TRow extends Row> = TRow[];
 export type Cube<TRow extends Row> = Table<TRow>[][];
 
 /** A key and value of that key to use when slicing data in a pivot operation and the filter to evaluate it. */
-export type Criterion<TRow extends Row> = { key: Key, value: Value, filter: Func<TRow, boolean> };
+export type Criterion<TRow extends Row> = { key: Key, value: Value, f: Func<TRow, boolean> };
 
 /** A set of criterion representing the citeria for a single dimension. */
 export type Dimension<TRow extends Row> = Criterion<TRow>[];
@@ -30,7 +30,6 @@ export type Axis<TRow extends Row> = Dimension<TRow>[];
  * @param table The source data, an array of objects.
  * @param key The name to give this dimension.
  * @param f An optional callback function to derive values from the source objects. If omitted, the attribute with the same key as the key parameter passed.
- * @remarks This data structure can be useful in populating lists for filters.
  */
 export function dimension<TRow extends Row>(table: Table<TRow>, key: string, f: Func<TRow, any> = row => row[key]): Dimension<TRow> {
 	return dimension.make(table.map(f).filter((value, index, source) => source.indexOf(value) === index).sort(), key, f);
@@ -41,18 +40,17 @@ export function dimension<TRow extends Row>(table: Table<TRow>, key: string, f: 
  * @param source The source values.
  * @param key The name to give this dimension.
  * @param f An optional callback function used to convert values in the source table to those in the dimension when pivoting.
- * @remarks This data structure can be useful in populating lists for filters.
  */
 dimension.make = function <TRow extends Row>(source: Value[], key: string, f: Func<TRow, any> = row => row[key]): Dimension<TRow> {
-	return source.map(value => { return { key, value, filter: row => f(row) === value } });
+	return source.map(value => { return { key, value, f: row => f(row) === value } });
 }
 
 /**
  * Combines one of more dimensions into an axis, the axis is the cartesean product of all dimension values.
  * @param dimensions The set of dimensions to turn into an axis.
- * @remarks The data structure can be useful in drawing axis in resultant tables.
  */
 export function axis<TRow extends Row>(...dimensions: Dimension<TRow>[]): Axis<TRow> {
+	// create the cartesean product of all dimension values
 	return dimensions.reduce<Axis<TRow>>((axis, dimension) => axis.flatMap(criteria => dimension.map(criterion => [...criteria, criterion])), [[]]);
 }
 
@@ -62,17 +60,14 @@ export function axis<TRow extends Row>(...dimensions: Dimension<TRow>[]): Axis<T
  * @param axis The result of a call to axis with one or more dimensions.
  */
 function slice<TRow extends Row>(table: Table<TRow>, axis: Axis<TRow>): Table<TRow>[] {
-	// map the axis criteria into a set of filters
-	const filters = axis.map(criteria => criteria.map(criterion => criterion.filter).reduce((a, b) => row => a(row) && b(row)));
-
-	// slice the table based on the filters
-	return filters.map(filter => table.filter(filter));
+	// map the axis criteria into a set of filters then slice the table
+	return axis.map(criteria => table.filter(criteria.map(criterion => criterion.f).reduce((a, b) => row => a(row) && b(row)))); // TODO: move criterion aggregation into axis creation?
 }
 
 /**
  * Pivots a table by any number of axis
  * @param table The source data, an array of JavaScript objects.
- * @param axes 1..n axes on which to pivot the table.
+ * @param axes 1..n Axis to pivot the table by.
  */
 export function pivot<TRow extends Row>(table: Table<TRow>, ...axes: Axis<TRow>[]) {
 	return axes.reduce<any[]>((res, axis) => res.map(interim => slice(interim, axis)), slice(table, axes.shift()!));
@@ -90,7 +85,6 @@ export function query<TRow extends Row, TResult extends Value>(cube: Cube<TRow>,
 /**
  * Counts the number of items in a table.
  * @param table The source table.
- * @remarks Null is returned where the table is empty as this represents the absense of values.
  */
 export function count<TRow extends Row>(table: Table<TRow>): number | null {
 	return table.length || null;

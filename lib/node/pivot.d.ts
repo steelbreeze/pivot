@@ -16,7 +16,7 @@ export declare type Cube<TRow extends Row> = Table<TRow>[][];
 export declare type Criterion<TRow extends Row> = {
     key: Key;
     value: Value;
-    filter: Func<TRow, boolean>;
+    f: Func<TRow, boolean>;
 };
 /** A set of criterion representing the citeria for a single dimension. */
 export declare type Dimension<TRow extends Row> = Criterion<TRow>[];
@@ -27,7 +27,6 @@ export declare type Axis<TRow extends Row> = Dimension<TRow>[];
  * @param table The source data, an array of objects.
  * @param key The name to give this dimension.
  * @param f An optional callback function to derive values from the source objects. If omitted, the attribute with the same key as the key parameter passed.
- * @remarks This data structure can be useful in populating lists for filters.
  */
 export declare function dimension<TRow extends Row>(table: Table<TRow>, key: string, f?: Func<TRow, any>): Dimension<TRow>;
 export declare namespace dimension {
@@ -36,13 +35,12 @@ export declare namespace dimension {
 /**
  * Combines one of more dimensions into an axis, the axis is the cartesean product of all dimension values.
  * @param dimensions The set of dimensions to turn into an axis.
- * @remarks The data structure can be useful in drawing axis in resultant tables.
  */
 export declare function axis<TRow extends Row>(...dimensions: Dimension<TRow>[]): Axis<TRow>;
 /**
  * Pivots a table by any number of axis
  * @param table The source data, an array of JavaScript objects.
- * @param axes 1..n axes on which to pivot the table.
+ * @param axes 1..n Axis to pivot the table by.
  */
 export declare function pivot<TRow extends Row>(table: Table<TRow>, ...axes: Axis<TRow>[]): any[];
 /**
@@ -54,7 +52,6 @@ export declare function query<TRow extends Row, TResult extends Value>(cube: Cub
 /**
  * Counts the number of items in a table.
  * @param table The source table.
- * @remarks Null is returned where the table is empty as this represents the absense of values.
  */
 export declare function count<TRow extends Row>(table: Table<TRow>): number | null;
 /**
