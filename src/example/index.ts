@@ -11,7 +11,7 @@ const x = axis(dimension(squad, 'position'));
 const y = axis(dimension(squad, 'country'));
 
 // create the pivot cube
-const cube = pivot(squad, x, y);
+const cube = pivot(squad, y, x);
 
 // find the average age of players by position by country
 const result = query(cube, average(age));

@@ -72,21 +72,10 @@ function slice<TRow extends Row>(table: Table<TRow>, axis: Axis<TRow>): Table<TR
 /**
  * Pivots a table by any number of axis
  * @param table The source data, an array of JavaScript objects.
- * @param axes The  axis on which to pivot the table.
+ * @param axes 1..n axes on which to pivot the table.
  */
 export function pivot<TRow extends Row>(table: Table<TRow>, ...axes: Axis<TRow>[]) {
-	let res: any[] = table;
-	let axis = axes.pop();
-
-	if (axis) {
-		res = slice(table, axis);
-
-		while(axis = axes.pop()) {
-			res = res.map(interim => slice(interim, axis!));
-		}
-	}
-
-	return res;
+	return axes.reduce<any[]>((res, axis) => res.map(interim => slice(interim, axis)), slice(table, axes.shift()!));
 }
 
 /**

@@ -42,7 +42,7 @@ export declare function axis<TRow extends Row>(...dimensions: Dimension<TRow>[])
 /**
  * Pivots a table by any number of axis
  * @param table The source data, an array of JavaScript objects.
- * @param axes The  axis on which to pivot the table.
+ * @param axes 1..n axes on which to pivot the table.
  */
 export declare function pivot<TRow extends Row>(table: Table<TRow>, ...axes: Axis<TRow>[]): any[];
 /**
