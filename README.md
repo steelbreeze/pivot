@@ -14,7 +14,7 @@ const y = axis(dimension(squad, 'country'));
 ```
 Then we pivot the squad data by the chosen x and y axes:
 ```typescript
-const cube = pivot(squad, x, y);
+const cube = pivot(squad, y, x);
 ```
 And finally, query the cube for the averate 
 ```typescript
