@@ -1,4 +1,13 @@
-export const squad = [
+export interface Player {
+	shirt: number,
+	position: string,
+	givenName: string,
+	familyName: string,
+	country: string,
+	dateOfBirth: Date
+}
+
+export const squad: Player[] = [
 	{ shirt: 1, position: 'Goalkeeper', givenName: 'Alphonse', familyName: 'Areola', country: 'France', dateOfBirth: new Date('1993-02-27') },
 	{ shirt: 12, position: 'Goalkeeper', givenName: 'Marek', familyName: 'Rodák', country: 'Slovakia', dateOfBirth: new Date('1996-12-13') },
 	{ shirt: 31, position: 'Goalkeeper', givenName: 'Fabrico', familyName: 'Agosto Ramirez', country: 'Spain', dateOfBirth: new Date('1987-12-31') },

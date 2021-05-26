@@ -1,9 +1,9 @@
 /** A function taking one argument and returning a result. */
 export declare type Func<TArg, TResult> = (arg: TArg) => TResult;
-/** The type of keys used to index the source data. */
-export declare type Key = string | number;
 /** A single data point. */
 export declare type Value = any;
+/** The type of keys used to index the values. */
+export declare type Key = keyof Value;
 /** A row of data that is indexed by a key. */
 export declare type Row = {
     [TKey in Key]: Value;
@@ -28,7 +28,7 @@ export declare type Axis<TRow extends Row> = Dimension<TRow>[];
  * @param key The name to give this dimension.
  * @param f An optional callback function to derive values from the source objects. If omitted, the attribute with the same key as the key parameter passed.
  */
-export declare function dimension<TRow extends Row>(table: Table<TRow>, key: string, f?: Func<TRow, any>): Dimension<TRow>;
+export declare function dimension<TRow extends Row>(table: Table<TRow>, key: string, f?: Func<TRow, Value>): Dimension<TRow>;
 export declare namespace dimension {
     var make: <TRow extends Row>(source: any[], key: string, f?: Func<TRow, any>) => Dimension<TRow>;
 }
@@ -38,7 +38,7 @@ export declare namespace dimension {
  */
 export declare function axis<TRow extends Row>(...dimensions: Dimension<TRow>[]): Axis<TRow>;
 /**
- * Pivots a table by any number of axis
+ * Pivots a table by 1..n axis
  * @param table The source data, an array of JavaScript objects.
  * @param axes 1..n Axis to pivot the table by.
  */

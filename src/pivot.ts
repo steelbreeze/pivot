@@ -1,11 +1,11 @@
 /** A function taking one argument and returning a result. */
 export type Func<TArg, TResult> = (arg: TArg) => TResult;
 
-/** The type of keys used to index the source data. */
-export type Key = string | number;
-
 /** A single data point. */
 export type Value = any;
+
+/** The type of keys used to index the values. */
+export type Key = keyof Value;
 
 /** A row of data that is indexed by a key. */
 export type Row = { [TKey in Key]: Value };
@@ -31,7 +31,7 @@ export type Axis<TRow extends Row> = Dimension<TRow>[];
  * @param key The name to give this dimension.
  * @param f An optional callback function to derive values from the source objects. If omitted, the attribute with the same key as the key parameter passed.
  */
-export function dimension<TRow extends Row>(table: Table<TRow>, key: string, f: Func<TRow, any> = row => row[key]): Dimension<TRow> {
+export function dimension<TRow extends Row>(table: Table<TRow>, key: string, f: Func<TRow, Value> = row => row[key]): Dimension<TRow> {
 	return dimension.make(table.map(f).filter((value, index, source) => source.indexOf(value) === index).sort(), key, f);
 }
 
@@ -41,7 +41,7 @@ export function dimension<TRow extends Row>(table: Table<TRow>, key: string, f: 
  * @param key The name to give this dimension.
  * @param f An optional callback function used to convert values in the source table to those in the dimension when pivoting.
  */
-dimension.make = function <TRow extends Row>(source: Value[], key: string, f: Func<TRow, any> = row => row[key]): Dimension<TRow> {
+dimension.make = function <TRow extends Row>(source: Value[], key: string, f: Func<TRow, Value> = row => row[key]): Dimension<TRow> {
 	return source.map(value => { return { key, value, f: row => f(row) === value } });
 }
 
@@ -65,7 +65,7 @@ function slice<TRow extends Row>(table: Table<TRow>, axis: Axis<TRow>): Table<TR
 }
 
 /**
- * Pivots a table by any number of axis
+ * Pivots a table by 1..n axis
  * @param table The source data, an array of JavaScript objects.
  * @param axes 1..n Axis to pivot the table by.
  */
