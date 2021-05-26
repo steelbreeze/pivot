@@ -1,30 +1,28 @@
 /** A function taking one argument and returning a result. */
 export declare type Func<TArg, TResult> = (arg: TArg) => TResult;
-/** The type of keys used to index the values. */
-export declare type Key = string | number;
+/** A key and value of that key to use when slicing data in a pivot operation and the filter to evaluate it. */
+export declare type Criterion<TRow, TValue> = {
+    key: string | number;
+    value: TValue;
+    f: Func<TRow, boolean>;
+};
+/** A set of criterion representing a single dimension. */
+export declare type Dimension<TRow, TValue> = Criterion<TRow, TValue>[];
+/** A cartesean product of multiple dimensions. */
+export declare type Axis<TRow, TValue> = Dimension<TRow, TValue>[];
 /** A table of data. */
 export declare type Table<TRow> = TRow[];
 /** A cube of data. */
 export declare type Cube<TRow> = Table<TRow>[][];
-/** A key and value of that key to use when slicing data in a pivot operation and the filter to evaluate it. */
-export declare type Criterion<TRow, TValue> = {
-    key: Key;
-    value: TValue;
-    f: Func<TRow, boolean>;
-};
-/** A set of criterion representing the citeria for a single dimension. */
-export declare type Dimension<TRow, TValue> = Criterion<TRow, TValue>[];
-/** The cartesean product of multiple dimensions, allowing a pivot to use multiple dimensions for each of the x and y axis. */
-export declare type Axis<TRow, TValue> = Dimension<TRow, TValue>[];
 /**
  * Creates a dimension for a given column in a table; a dimension is a key and a set of unique values provided by a function.
  * @param table The source data, an array of objects.
  * @param key The name to give this dimension.
  * @param f An optional callback function to derive values from the source objects. If omitted, the attribute with the same key as the key parameter passed.
  */
-export declare function dimension<TRow, TValue>(table: Table<TRow>, key: Key, f?: Func<TRow, TValue>): Dimension<TRow, TValue>;
+export declare function dimension<TRow, TValue>(table: Table<TRow>, key: string | number, f?: Func<TRow, TValue>): Dimension<TRow, TValue>;
 export declare namespace dimension {
-    var make: <TRow, TValue>(source: TValue[], key: Key, f?: Func<TRow, TValue>) => Dimension<TRow, TValue>;
+    var make: <TRow, TValue>(source: TValue[], key: string | number, f?: Func<TRow, TValue>) => Dimension<TRow, TValue>;
 }
 /**
  * Combines one of more dimensions into an axis, the axis is the cartesean product of all dimension values.

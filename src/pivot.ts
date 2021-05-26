@@ -1,8 +1,14 @@
 /** A function taking one argument and returning a result. */
 export type Func<TArg, TResult> = (arg: TArg) => TResult;
 
-/** The type of keys used to index the values. */
-export type Key = string | number;
+/** A key and value of that key to use when slicing data in a pivot operation and the filter to evaluate it. */
+export type Criterion<TRow, TValue> = { key: string | number, value: TValue, f: Func<TRow, boolean> };
+
+/** A set of criterion representing a single dimension. */
+export type Dimension<TRow, TValue> = Criterion<TRow, TValue>[];
+
+/** A cartesean product of multiple dimensions. */
+export type Axis<TRow, TValue> = Dimension<TRow, TValue>[];
 
 /** A table of data. */
 export type Table<TRow> = TRow[];
@@ -10,22 +16,13 @@ export type Table<TRow> = TRow[];
 /** A cube of data. */
 export type Cube<TRow> = Table<TRow>[][];
 
-/** A key and value of that key to use when slicing data in a pivot operation and the filter to evaluate it. */
-export type Criterion<TRow, TValue> = { key: Key, value: TValue, f: Func<TRow, boolean> };
-
-/** A set of criterion representing the citeria for a single dimension. */
-export type Dimension<TRow, TValue> = Criterion<TRow, TValue>[];
-
-/** The cartesean product of multiple dimensions, allowing a pivot to use multiple dimensions for each of the x and y axis. */
-export type Axis<TRow, TValue> = Dimension<TRow, TValue>[];
-
 /**
  * Creates a dimension for a given column in a table; a dimension is a key and a set of unique values provided by a function.
  * @param table The source data, an array of objects.
  * @param key The name to give this dimension.
  * @param f An optional callback function to derive values from the source objects. If omitted, the attribute with the same key as the key parameter passed.
  */
-export function dimension<TRow, TValue>(table: Table<TRow>, key: Key, f: Func<TRow, TValue> = row => row[key]): Dimension<TRow, TValue> {
+export function dimension<TRow, TValue>(table: Table<TRow>, key: string | number, f: Func<TRow, TValue> = row => row[key]): Dimension<TRow, TValue> {
 	return dimension.make(table.map(f).filter((value, index, source) => source.indexOf(value) === index).sort(), key, f);
 }
 
@@ -35,7 +32,7 @@ export function dimension<TRow, TValue>(table: Table<TRow>, key: Key, f: Func<TR
  * @param key The name to give this dimension.
  * @param f An optional callback function used to convert values in the source table to those in the dimension when pivoting.
  */
-dimension.make = function <TRow, TValue>(source: TValue[], key: Key, f: Func<TRow, TValue> = row => row[key]): Dimension<TRow, TValue> {
+dimension.make = function <TRow, TValue>(source: TValue[], key: string | number, f: Func<TRow, TValue> = row => row[key]): Dimension<TRow, TValue> {
 	return source.map(value => { return { key, value, f: row => f(row) === value } });
 }
 
