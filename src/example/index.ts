@@ -4,6 +4,7 @@ import { squad } from './fulham';
 // create axes out of the dimensions derived from the squad data
 const x = axis(dimension(squad, 'position'));
 const y = axis(dimension(squad, 'country'));
+//const y = axis(dimension(squad, 'age', age)); // an alternative choice for the y axis using a derived field
 
 // create the pivot cube
 const cube = pivot(squad, y, x);

@@ -5,25 +5,26 @@ export type Func<TArg, TResult> = (arg: TArg) => TResult;
 export type Criterion<TRow, TValue> = { key: string | number, value: TValue, f: Func<TRow, boolean> };
 
 /** A set of criterion representing a single dimension. */
-export type Dimension<TRow, TValue> = Criterion<TRow, TValue>[];
+export type Dimension<TRow, TValue> = Array<Criterion<TRow, TValue>>;
 
-/** A cartesean product of multiple dimensions. */
-export type Axis<TRow, TValue> = Dimension<TRow, TValue>[];
+/** A cartesian product of multiple dimensions. */
+export type Axis<TRow, TValue> = Array<Dimension<TRow, TValue>>;
 
 /** A table of data. */
-export type Table<TRow> = TRow[];
+export type Table<TRow> = Array<TRow>;
 
 /** A cube of data. */
-export type Cube<TRow> = Table<TRow>[][];
+export type Cube<TRow> = Array<Array<Table<TRow>>>;
 
 /**
  * Creates a dimension for a given column in a table; a dimension is a key and a set of unique values provided by a function.
  * @param table The source data, an array of objects.
  * @param key The name to give this dimension.
  * @param f An optional callback function to derive values from the source objects. If omitted, the attribute with the same key as the key parameter passed.
+ * @param s An optional callback function used to sort the values of the dimension, conforming to Array.prototype.sort.
  */
-export function dimension<TRow, TValue>(table: Table<TRow>, key: string | number, f: Func<TRow, TValue> = row => row[key]): Dimension<TRow, TValue> {
-	return dimension.make(table.map(f).filter((value, index, source) => source.indexOf(value) === index).sort(), key, f);
+export function dimension<TRow, TValue>(table: Table<TRow>, key: string | number, f: Func<TRow, TValue> = (row: TRow) => row[key], s?: (a: TValue, b: TValue) => number): Dimension<TRow, TValue> {
+	return dimension.make(table.map(f).filter((value, index, source) => source.indexOf(value) === index).sort(s), key, f);
 }
 
 /**
@@ -32,17 +33,16 @@ export function dimension<TRow, TValue>(table: Table<TRow>, key: string | number
  * @param key The name to give this dimension.
  * @param f An optional callback function used to convert values in the source table to those in the dimension when pivoting.
  */
-dimension.make = function <TRow, TValue>(source: TValue[], key: string | number, f: Func<TRow, TValue> = row => row[key]): Dimension<TRow, TValue> {
+dimension.make = function <TRow, TValue>(source: Array<TValue>, key: string | number, f: Func<TRow, TValue> = (row: TRow) => row[key]): Dimension<TRow, TValue> {
 	return source.map(value => { return { key, value, f: row => f(row) === value } });
 }
 
 /**
- * Combines one of more dimensions into an axis, the axis is the cartesean product of all dimension values.
+ * Combines one of more dimensions into an axis, the axis is the cartesian product of all dimension values.
  * @param dimensions The set of dimensions to turn into an axis.
  */
-export function axis<TRow, TValue>(...dimensions: Dimension<TRow, TValue>[]): Axis<TRow, TValue> {
-	// create the cartesean product of all dimension values
-	return dimensions.reduce<Axis<TRow, TValue>>((axis, dimension) => axis.flatMap(criteria => dimension.map(criterion => [...criteria, criterion])), [[]]);
+export function axis<TRow, TValue>(...dimensions: Array<Dimension<TRow, TValue>>): Axis<TRow, TValue> {
+	return dimensions.reduce<Axis<TRow, TValue>>((axis, dimension) => axis.flatMap(criteria => dimension.map(criterion => [...criteria, criterion])), [[]]); // NOTE: this is just a generic cartesian product algorithm
 }
 
 /**
@@ -50,8 +50,7 @@ export function axis<TRow, TValue>(...dimensions: Dimension<TRow, TValue>[]): Ax
  * @param table The source data, an array of JavaScript objects.
  * @param axis The result of a call to axis with one or more dimensions.
  */
-function slice<TRow, TValue>(table: Table<TRow>, axis: Axis<TRow, TValue>): Table<TRow>[] {
-	// map the axis criteria into a set of filters then slice the table
+function slice<TRow, TValue>(table: Table<TRow>, axis: Axis<TRow, TValue>): Array<Table<TRow>> {
 	return axis.map(criteria => table.filter(criteria.map(criterion => criterion.f).reduce((a, b) => row => a(row) && b(row)))); // TODO: move criterion aggregation into axis creation?
 }
 
@@ -60,16 +59,16 @@ function slice<TRow, TValue>(table: Table<TRow>, axis: Axis<TRow, TValue>): Tabl
  * @param table The source data, an array of JavaScript objects.
  * @param axes 1..n Axis to pivot the table by.
  */
-export function pivot<TRow, TValue>(table: Table<TRow>, ...axes: Axis<TRow, TValue>[]) {
-	return axes.reduce<any[]>((res, axis) => res.map(interim => slice(interim, axis)), slice(table, axes.shift()!));
+export function pivot<TRow, TValue>(table: Table<TRow>, ...axes: Array<Axis<TRow, TValue>>) {
+	return axes.reduce<Array<any>>((res, axis) => res.map(interim => slice(interim, axis)), slice(table, axes.shift()!));
 }
 
 /**
- * Selects data from a cube as a table.
+ * Returns data queried from a cube as a table.
  * @param cube The source cube.
- * @param f A callback function to create a result for the table in each cell of the cube.
+ * @param f A callback function to create a result from each cell of the cube.
  */
-export function query<TRow, TValue, TResult extends TValue>(cube: Cube<TRow>, f: Func<Table<TRow>, TResult>): Table<TResult[]> {
+export function query<TRow, TValue, TResult extends TValue>(cube: Cube<TRow>, f: Func<Table<TRow>, TResult>): Table<Array<TResult>> {
 	return cube.map(y => y.map(f));
 }
 
@@ -82,7 +81,7 @@ export function count<TRow>(table: Table<TRow>): number | null {
 }
 
 /**
- * Sums numerical values derived from rows in a table.
+ *  generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param f A callback function to derive a numerical value for each row.
  */
 export function sum<TRow>(f: Func<TRow, number>): Func<Table<TRow>, number | null> {
@@ -90,7 +89,7 @@ export function sum<TRow>(f: Func<TRow, number>): Func<Table<TRow>, number | nul
 }
 
 /**
- * Averages numerical values derived from rows in a table.
+ * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube .
  * @param f A callback function to derive a numerical value for each row.
  */
 export function average<TRow>(f: Func<TRow, number>): Func<Table<TRow>, number | null> {
