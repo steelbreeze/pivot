@@ -1,6 +1,5 @@
 /** A function taking one argument and returning a result. */
 export declare type Func<TArg, TResult> = (arg: TArg) => TResult;
-/** A single data point. */
 /** The type of keys used to index the values. */
 export declare type Key = string | number;
 /** A table of data. */
