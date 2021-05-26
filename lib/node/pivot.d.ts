@@ -3,7 +3,7 @@ export declare type Func<TArg, TResult> = (arg: TArg) => TResult;
 /** A single data point. */
 export declare type Value = any;
 /** The type of keys used to index the values. */
-export declare type Key = keyof Value;
+export declare type Key = string | number;
 /** A row of data that is indexed by a key. */
 export declare type Row = {
     [TKey in Key]: Value;
@@ -28,9 +28,9 @@ export declare type Axis<TRow extends Row> = Dimension<TRow>[];
  * @param key The name to give this dimension.
  * @param f An optional callback function to derive values from the source objects. If omitted, the attribute with the same key as the key parameter passed.
  */
-export declare function dimension<TRow extends Row>(table: Table<TRow>, key: string, f?: Func<TRow, Value>): Dimension<TRow>;
+export declare function dimension<TRow extends Row>(table: Table<TRow>, key: Key, f?: Func<TRow, Value>): Dimension<TRow>;
 export declare namespace dimension {
-    var make: <TRow extends Row>(source: any[], key: string, f?: Func<TRow, any>) => Dimension<TRow>;
+    var make: <TRow extends Row>(source: any[], key: Key, f?: Func<TRow, any>) => Dimension<TRow>;
 }
 /**
  * Combines one of more dimensions into an axis, the axis is the cartesean product of all dimension values.
