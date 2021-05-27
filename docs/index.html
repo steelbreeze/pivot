@@ -51,11 +51,12 @@
 		// find the average age of players by position by country
 		const result = pivot.query(cube, pivot.average(age));
 
-		console.log(transpose(x));
+		console.log(x);
+		console.log(y);
 
 		document.getElementById("squad").innerHTML =
-			transpose(x).map(row => `<tr>${y[0].map(() => `<td></td>`)}${row.map(val => `<td>${val.value}</td>`).join('')}</tr>`).join('') +
-			result.map((row, rowIndex) => `<tr>${y[rowIndex].map(rh => `<td>${rh.value}</td>`).join('')}${row.map(cell => `<td>${cell || ''}</td>`).join('')}</tr>`).join('');
+			transpose(x).map(row => `<tr>${y[0].map(() => th(''))}${row.map(val => th(val.value, val.key)).join('')}</tr>`).join('') +
+			result.map((row, rowIndex) => `<tr>${y[rowIndex].map(rh => td(rh.value, rh.key)).join('')}${row.map(cell => td(cell || '')).join('')}</tr>`).join('');
 
 		// Calculate a person's age from their date of birth
 		function age(person) {
@@ -65,6 +66,17 @@
 		function transpose(array) {
 			return array.reduce((prev, next) => next.map((item, i) => (prev[i] || []).concat(next[i])), []);
 		}
+
+		// generate a header cell in a table
+		function th(value, clas) {
+			return `<th${clas ? ` class="${clas}"` : ``}>${value}</th>`;
+		}
+
+		// generate a cell in a table
+		function td(value, clas) {
+			return `<td${clas ? ` class="${clas}"` : ``}>${value}</td>`;
+		}
+
 	</script>
 </body>
 
