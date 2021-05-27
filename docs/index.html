@@ -54,7 +54,7 @@
 		console.log(transpose(x));
 
 		document.getElementById("squad").innerHTML =
-			transpose(x).map(row => `<tr>${row.map(val => `<td>${val.value}</td>`).join('')}</tr>`).join('') +
+			transpose(x).map(row => `<tr>${y[0].map(() => `<td></td>`)}${row.map(val => `<td>${val.value}</td>`).join('')}</tr>`).join('') +
 			result.map((row, rowIndex) => `<tr>${y[rowIndex].map(rh => `<td>${rh.value}</td>`).join('')}${row.map(cell => `<td>${cell || ''}</td>`).join('')}</tr>`).join('');
 
 		// Calculate a person's age from their date of birth
