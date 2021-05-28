@@ -6,8 +6,6 @@
   "directories": {
     "lib": "lib"
   },
-  "dependencies": {
-  },
   "devDependencies": {
     "typescript": "^4.2.4",
     "webpack-cli": "^4.7.0"

@@ -57,3 +57,10 @@ export declare function sum<TRow>(f: Func<TRow, number>): Func<Table<TRow>, numb
  * @param f A callback function to derive a numerical value for each row.
  */
 export declare function average<TRow>(f: Func<TRow, number>): Func<Table<TRow>, number | null>;
+/**
+ * Compacts a cube and its axes by removing any rows without resultant values. Note that this also removes entries from the axes as well such that they still align to the cube.
+ * @param cube The source cube.
+ * @param y The y axis that the cube was origionally pivoted by.
+ * @remarks This currently only compacts on the y dimension, x dimension and potentially multi dimensional coming soon...
+ */
+export declare function compact<TRow, TValue>(cube: Cube<TRow>, y: Axis<TRow, TValue>): void;

@@ -47,15 +47,12 @@
 
 		// create the pivot cube
 		const cube = pivot.pivot(squad, y, x);
-
+		
 		// find the average age of players by position by country
 		const result = pivot.query(cube, pivot.average(age));
 
-		console.log(x);
-		console.log(y);
-
 		document.getElementById("squad").innerHTML =
-			transpose(x).map(row => `<tr>${y[0].map(() => th(''))}${row.map(val => th(val.value, val.key)).join('')}</tr>`).join('') +
+			transpose(x).map(row => `<tr>${y[0].map(() => th()).join('')}${row.map(val => th(val.value, val.key)).join('')}</tr>`).join('') +
 			result.map((row, rowIndex) => `<tr>${y[rowIndex].map(rh => td(rh.value, rh.key)).join('')}${row.map(cell => td(cell || '')).join('')}</tr>`).join('');
 
 		// Calculate a person's age from their date of birth
@@ -68,13 +65,13 @@
 		}
 
 		// generate a header cell in a table
-		function th(value, clas) {
-			return `<th${clas ? ` class="${clas}"` : ``}>${value}</th>`;
+		function th(t = '', c ='') {
+			return `<th${c ? ` class="${c}"` : ``}>${t}</th>`;
 		}
 
 		// generate a cell in a table
-		function td(value, clas) {
-			return `<td${clas ? ` class="${clas}"` : ``}>${value}</td>`;
+		function td(t, c) {
+			return `<td${c ? ` class="${c}"` : ``}>${t}</td>`;
 		}
 
 	</script>

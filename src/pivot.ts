@@ -51,7 +51,7 @@ export function axis<TRow, TValue>(...dimensions: Array<Dimension<TRow, TValue>>
  * @param axis The result of a call to axis with one or more dimensions.
  */
 function slice<TRow, TValue>(table: Table<TRow>, axis: Axis<TRow, TValue>): Array<Table<TRow>> {
-	return axis.map(criteria => table.filter(criteria.map(criterion => criterion.f).reduce((a, b) => row => a(row) && b(row)))); // TODO: move criterion aggregation into axis creation?
+	return axis.map(criteria => table.filter(criteria.map(criterion => criterion.f).reduce((a, b) => row => a(row) && b(row))));
 }
 
 /**
@@ -94,4 +94,20 @@ export function sum<TRow>(f: Func<TRow, number>): Func<Table<TRow>, number | nul
  */
 export function average<TRow>(f: Func<TRow, number>): Func<Table<TRow>, number | null> {
 	return table => table.length ? sum(f)(table)! / count(table)! : null;
+}
+
+/**
+ * Compacts a cube and its axes by removing any rows without resultant values. Note that this also removes entries from the axes as well such that they still align to the cube.
+ * @param cube The source cube.
+ * @param y The y axis that the cube was origionally pivoted by.
+ * @remarks This currently only compacts on the y dimension, x dimension and potentially multi dimensional coming soon...
+ */
+export function compact<TRow, TValue>(cube: Cube<TRow>, y: Axis<TRow, TValue>): void {
+	// filter out empty rows from the cube and y axis
+	for (let i = y.length; --i;) { // NOTE: have to perform a reverse loop to preserve indexs as we iterate 
+		if(!cube[i].some(table => table.length)){
+			cube.splice(i, 1);
+			y.splice(i, 1);
+		}
+	}
 }
