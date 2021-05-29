@@ -9,7 +9,7 @@ export interface Player {
 
 export const squad: Player[] = [
 	{ shirt: 1, position: 'Goalkeeper', givenName: 'Alphonse', familyName: 'Areola', country: 'France', dateOfBirth: new Date('1993-02-27') },
-	{ shirt: 12, position: 'Goalkeeper', givenName: 'Marek', familyName: 'Rodák', country: 'Slovakia', dateOfBirth: new Date('1996-12-13') },
+	{ shirt: 12, position: 'Goalkeeper', givenName: 'Marek', familyName: 'Rodak', country: 'Slovakia', dateOfBirth: new Date('1996-12-13') },
 	{ shirt: 31, position: 'Goalkeeper', givenName: 'Fabrico', familyName: 'Agosto Ramirez', country: 'Spain', dateOfBirth: new Date('1987-12-31') },
 	{ shirt: 2, position: 'Defender', givenName: 'Kenny', familyName: 'Tete', country: 'Netherlands', dateOfBirth: new Date('1995-10-09') },
 	{ shirt: 3, position: 'Defender', givenName: 'Michael', familyName: 'Hector', country: 'Jamaca', dateOfBirth: new Date('1992-07-19') },

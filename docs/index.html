@@ -13,7 +13,7 @@
 	<script>
 		const squad = [
 			{ shirt: 1, position: 'Goalkeeper', givenName: 'Alphonse', familyName: 'Areola', country: 'France', dateOfBirth: new Date('1993-02-27') },
-			{ shirt: 12, position: 'Goalkeeper', givenName: 'Marek', familyName: 'Rodák', country: 'Slovakia', dateOfBirth: new Date('1996-12-13') },
+			{ shirt: 12, position: 'Goalkeeper', givenName: 'Marek', familyName: 'Rodak', country: 'Slovakia', dateOfBirth: new Date('1996-12-13') },
 			{ shirt: 31, position: 'Goalkeeper', givenName: 'Fabrico', familyName: 'Agosto Ramirez', country: 'Spain', dateOfBirth: new Date('1987-12-31') },
 			{ shirt: 2, position: 'Defender', givenName: 'Kenny', familyName: 'Tete', country: 'Netherlands', dateOfBirth: new Date('1995-10-09') },
 			{ shirt: 3, position: 'Defender', givenName: 'Michael', familyName: 'Hector', country: 'Jamaca', dateOfBirth: new Date('1992-07-19') },
@@ -47,9 +47,11 @@
 
 		// create the pivot cube
 		const cube = pivot.pivot(squad, y, x);
-		
+
+		pivot.compact(cube, y);
+
 		// find the average age of players by position by country
-		const result = pivot.query(cube, pivot.average(age));
+		const result = pivot.query(cube, cell => cell.map(player => `${player.givenName} ${player.familyName}`).join(', '));
 
 		document.getElementById("squad").innerHTML =
 			transpose(x).map(row => `<tr>${y[0].map(() => th()).join('')}${row.map(val => th(val.value, val.key)).join('')}</tr>`).join('') +

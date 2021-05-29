@@ -57,10 +57,29 @@ function slice<TRow, TValue>(table: Table<TRow>, axis: Axis<TRow, TValue>): Arra
 /**
  * Pivots a table by 1..n axis
  * @param table The source data, an array of JavaScript objects.
- * @param axes 1..n Axis to pivot the table by.
+ * @param y The first axis to pivot the table by.
+ * @param axes 0..n subsiquent axes to pivot the table by.
  */
-export function pivot<TRow, TValue>(table: Table<TRow>, ...axes: Array<Axis<TRow, TValue>>) {
-	return axes.reduce<Array<any>>((res, axis) => res.map(interim => slice(interim, axis)), slice(table, axes.shift()!));
+export function pivot<TRow, TValue>(table: Table<TRow>, y: Axis<TRow, TValue>, ...axes: Array<Axis<TRow, TValue>>) {
+	const initial = slice(table, y);
+
+	const presence = initial.map(table => table.length);
+
+	for (let i = presence.length; --i;) {
+		if (!presence[i]) {
+			y.splice(i, 1);
+			initial.splice(i, 1);
+		}
+	}
+
+	return axes.reduce<Array<any>>((res, axis) => {
+		const result = res.map(interim => slice(interim, axis));
+
+		// TODO: replicate presence and compression
+
+		return result;
+	}, initial);
+
 }
 
 /**
@@ -94,20 +113,4 @@ export function sum<TRow>(f: Func<TRow, number>): Func<Table<TRow>, number | nul
  */
 export function average<TRow>(f: Func<TRow, number>): Func<Table<TRow>, number | null> {
 	return table => table.length ? sum(f)(table)! / count(table)! : null;
-}
-
-/**
- * Compacts a cube and its axes by removing any rows without resultant values. Note that this also removes entries from the axes as well such that they still align to the cube.
- * @param cube The source cube.
- * @param y The y axis that the cube was origionally pivoted by.
- * @remarks This currently only compacts on the y dimension, x dimension and potentially multi dimensional coming soon...
- */
-export function compact<TRow, TValue>(cube: Cube<TRow>, y: Axis<TRow, TValue>): void {
-	// filter out empty rows from the cube and y axis
-	for (let i = y.length; --i;) { // NOTE: have to perform a reverse loop to preserve indexs as we iterate 
-		if(!cube[i].some(table => table.length)){
-			cube.splice(i, 1);
-			y.splice(i, 1);
-		}
-	}
 }
