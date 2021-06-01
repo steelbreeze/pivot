@@ -60,7 +60,7 @@ function slice<TRow, TValue>(table: Table<TRow>, axis: Axis<TRow, TValue>): Arra
  * @param y The first axis to pivot the table by.
  * @param axes 0..n subsiquent axes to pivot the table by.
  */
-export function pivot<TRow, TValue>(table: Table<TRow>, y: Axis<TRow, TValue>, ...axes: Array<Axis<TRow, TValue>>) {
+export function pivot<TRow, TValue>(table: Table<TRow>, y: Axis<TRow, TValue>, x: Axis<TRow, TValue>): Cube<TRow> {
 	const initial = slice(table, y);
 
 	const presence = initial.map(table => table.length);
@@ -72,14 +72,9 @@ export function pivot<TRow, TValue>(table: Table<TRow>, y: Axis<TRow, TValue>, .
 		}
 	}
 
-	return axes.reduce<Array<any>>((res, axis) => {
-		const result = res.map(interim => slice(interim, axis));
+	const result = initial.map(interim => slice(interim, x));
 
-		// TODO: replicate presence and compression
-
-		return result;
-	}, initial);
-
+	return result;
 }
 
 /**

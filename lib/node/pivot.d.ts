@@ -36,7 +36,7 @@ export declare function axis<TRow, TValue>(...dimensions: Array<Dimension<TRow, 
  * @param y The first axis to pivot the table by.
  * @param axes 0..n subsiquent axes to pivot the table by.
  */
-export declare function pivot<TRow, TValue>(table: Table<TRow>, y: Axis<TRow, TValue>, ...axes: Array<Axis<TRow, TValue>>): any[];
+export declare function pivot<TRow, TValue>(table: Table<TRow>, y: Axis<TRow, TValue>, x: Axis<TRow, TValue>): Cube<TRow>;
 /**
  * Returns data queried from a cube as a table.
  * @param cube The source cube.
