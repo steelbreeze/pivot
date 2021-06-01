@@ -60,31 +60,32 @@ function slice<TRow, TValue>(table: Table<TRow>, axis: Axis<TRow, TValue>): Arra
  * @param y The first axis to pivot the table by.
  * @param axes 0..n subsiquent axes to pivot the table by.
  */
-export function pivot<TRow, TValue>(table: Table<TRow>, y: Axis<TRow, TValue>, x: Axis<TRow, TValue>, compact: boolean = true): Cube<TRow> {
-	const initial = slice(table, y);
+export function pivot<TRow, TValue>(table: Table<TRow>, y: Axis<TRow, TValue>, x: Axis<TRow, TValue>): Cube<TRow> {
+	return slice(table, y).map(interim => slice(interim, x));
+}
 
-	if (compact) {
-		const presence = initial.map(table => table.length);
+/**
+ * Compacts a cube and axes where row or columns have no values.
+ * @param cube The cube to compact.
+ * @param y The y axis to compact.
+ * @param x The x axis to compact.
+ */
+export function compact<TRow, TValue>(cube: Cube<TRow>, y: Axis<TRow, TValue>, x: Axis<TRow, TValue>): void {
+	const population = query(cube, count);
 
-		for (let i = presence.length; i--;) {
-			if (!presence[i]) {
-				y.splice(i, 1);
-				initial.splice(i, 1);
-			}
+	for (let i = population.length; i--;) {
+		if (!population[i].some(t => t)) {
+			y.splice(i, 1);
+			cube.splice(i, 1);
 		}
 	}
 
-	const result = initial.map(interim => slice(interim, x));
-	if (compact) {
-		for (let i = result[0].length; i--;) {
-			if (!result.some(row => row[i].length)) {
-				x.splice(i, 1);
-				result.forEach(row => row.splice(i, 1));
-			}
+	for (let i = population[0].length; i--;) {
+		if (!population.some(r => r[i])) {
+			x.splice(i, 1);
+			cube.forEach(r => r.splice(i, 1));
 		}
 	}
-
-	return result;
 }
 
 /**

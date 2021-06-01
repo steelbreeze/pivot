@@ -36,7 +36,14 @@ export declare function axis<TRow, TValue>(...dimensions: Array<Dimension<TRow, 
  * @param y The first axis to pivot the table by.
  * @param axes 0..n subsiquent axes to pivot the table by.
  */
-export declare function pivot<TRow, TValue>(table: Table<TRow>, y: Axis<TRow, TValue>, x: Axis<TRow, TValue>, compact?: boolean): Cube<TRow>;
+export declare function pivot<TRow, TValue>(table: Table<TRow>, y: Axis<TRow, TValue>, x: Axis<TRow, TValue>): Cube<TRow>;
+/**
+ * Compacts a cube and axes where row or columns have no values.
+ * @param cube The cube to compact.
+ * @param y The y axis to compact.
+ * @param x The x axis to compact.
+ */
+export declare function compact<TRow, TValue>(cube: Cube<TRow>, y: Axis<TRow, TValue>, x: Axis<TRow, TValue>): void;
 /**
  * Returns data queried from a cube as a table.
  * @param cube The source cube.
