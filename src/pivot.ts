@@ -65,7 +65,7 @@ export function pivot<TRow, TValue>(table: Table<TRow>, y: Axis<TRow, TValue>, .
 
 	const presence = initial.map(table => table.length);
 
-	for (let i = presence.length; --i;) {
+	for (let i = presence.length; i--;) {
 		if (!presence[i]) {
 			y.splice(i, 1);
 			initial.splice(i, 1);
