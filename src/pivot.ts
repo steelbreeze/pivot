@@ -60,19 +60,29 @@ function slice<TRow, TValue>(table: Table<TRow>, axis: Axis<TRow, TValue>): Arra
  * @param y The first axis to pivot the table by.
  * @param axes 0..n subsiquent axes to pivot the table by.
  */
-export function pivot<TRow, TValue>(table: Table<TRow>, y: Axis<TRow, TValue>, x: Axis<TRow, TValue>): Cube<TRow> {
+export function pivot<TRow, TValue>(table: Table<TRow>, y: Axis<TRow, TValue>, x: Axis<TRow, TValue>, compact: boolean = true): Cube<TRow> {
 	const initial = slice(table, y);
 
-	const presence = initial.map(table => table.length);
+	if (compact) {
+		const presence = initial.map(table => table.length);
 
-	for (let i = presence.length; i--;) {
-		if (!presence[i]) {
-			y.splice(i, 1);
-			initial.splice(i, 1);
+		for (let i = presence.length; i--;) {
+			if (!presence[i]) {
+				y.splice(i, 1);
+				initial.splice(i, 1);
+			}
 		}
 	}
 
 	const result = initial.map(interim => slice(interim, x));
+	if (compact) {
+		for (let i = result[0].length; i--;) {
+			if (!result.some(row => row[i].length)) {
+				x.splice(i, 1);
+				result.forEach(row => row.splice(i, 1));
+			}
+		}
+	}
 
 	return result;
 }
