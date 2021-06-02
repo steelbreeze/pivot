@@ -8,7 +8,7 @@ export declare type Criterion<TRow, TValue> = {
 };
 /** A set of criterion representing a single dimension. */
 export declare type Dimension<TRow, TValue> = Array<Criterion<TRow, TValue>>;
-/** A cartesian product of multiple dimensions. */
+/** An axis on which to pivot source data; an axis is constructed from 1..n dimensions. */
 export declare type Axis<TRow, TValue> = Array<Dimension<TRow, TValue>>;
 /** A table of data. */
 export declare type Table<TRow> = Array<TRow>;
