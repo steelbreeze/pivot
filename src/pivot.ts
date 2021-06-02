@@ -1,20 +1,4 @@
-/** A function taking one argument and returning a result. */
-export type Func<TArg, TResult> = (arg: TArg) => TResult;
-
-/** A key and value of that key to use when slicing data in a pivot operation and the filter to evaluate it. */
-export type Criterion<TRow, TValue> = { key: string | number, value: TValue, f: Func<TRow, boolean> };
-
-/** A set of criterion representing a single dimension. */
-export type Dimension<TRow, TValue> = Array<Criterion<TRow, TValue>>;
-
-/** A cartesian product of multiple dimensions. */
-export type Axis<TRow, TValue> = Array<Dimension<TRow, TValue>>;
-
-/** A table of data. */
-export type Table<TRow> = Array<TRow>;
-
-/** A cube of data. */
-export type Cube<TRow> = Array<Array<Table<TRow>>>;
+import { Axis, Cube, Dimension, Func, Table } from './types';
 
 /**
  * Creates a dimension for a given column in a table; a dimension is a key and a set of unique values provided by a function.
