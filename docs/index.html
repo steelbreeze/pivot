@@ -67,8 +67,8 @@
 		const result = pivot.query(cube, cell => cell.map(player => `${player.givenName} ${player.familyName}`).join('<br>'));
 
 		document.getElementById("squad").innerHTML =
-			transpose(x).map(row => `<tr>${y[0].map(() => th()).join('')}${row.map(val => th(val.value, val.key)).join('')}</tr>`).join('') +
-			result.map((row, rowIndex) => `<tr>${y[rowIndex].map(rh => td(rh.value, rh.key)).join('')}${row.map(cell => td(cell || '')).join('')}</tr>`).join('');
+			transpose(x).map(row => `<tr>${y[0].map(() => th()).join('')}${row.map(val => th(val.meta.value, val.key)).join('')}</tr>`).join('') +
+			result.map((row, rowIndex) => `<tr>${y[rowIndex].map(rh => td(rh.meta.value, rh.key)).join('')}${row.map(cell => td(cell || '')).join('')}</tr>`).join('');
 
 		// Calculate a person's age from their date of birth
 		function age(person) {

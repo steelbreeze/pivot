@@ -8,7 +8,8 @@ export declare type Pair<TValue> = {
 /** A key and value of that key to use when slicing data in a pivot operation and the filter to evaluate it. */
 export declare type Criterion<TRow, TValue> = {
     predicate: Func<TRow, boolean>;
-} & Pair<TValue>;
+    meta: Pair<TValue>;
+};
 /** A set of criterion representing a single dimension. */
 export declare type Dimension<TRow, TValue> = Array<Criterion<TRow, TValue>>;
 /** An axis on which to pivot source data; an axis is constructed from 1..n dimensions. */

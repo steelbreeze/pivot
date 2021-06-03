@@ -18,7 +18,7 @@ export function dimension<TRow, TValue>(table: Table<TRow>, key: string | number
  * @param f An optional callback function used to convert values in the source table to those in the dimension when pivoting.
  */
 dimension.make = function <TRow, TValue>(source: Array<TValue>, key: string | number, f: Func<TRow, TValue> = (row: TRow) => row[key]): Dimension<TRow, TValue> {
-	return source.map(value => { return { key, value, predicate: row => f(row) === value } });
+	return source.map(value => { return { predicate: row => f(row) === value, meta: { key, value } } });
 }
 
 /**
