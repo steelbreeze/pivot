@@ -1,4 +1,4 @@
-import { Axis, Cube, Dimension, Func, Table } from './types';
+import { Axis, Cube, Func, Key, Pair, Table } from './types';
 /**
  * Creates a dimension for a given column in a table; a dimension is a key and a set of unique values provided by a function.
  * @param table The source data, an array of objects.
@@ -6,15 +6,10 @@ import { Axis, Cube, Dimension, Func, Table } from './types';
  * @param f An optional callback function to derive values from the source objects. If omitted, the attribute with the same key as the key parameter passed.
  * @param s An optional callback function used to sort the values of the dimension, conforming to Array.prototype.sort.
  */
-export declare function dimension<TRow, TValue>(table: Table<TRow>, key: string | number, f?: Func<TRow, TValue>, s?: (a: TValue, b: TValue) => number): Dimension<TRow, TValue>;
-export declare namespace dimension {
-    var make: <TRow, TValue>(source: TValue[], key: string | number, f?: Func<TRow, TValue>) => Dimension<TRow, TValue>;
+export declare function axis<TRow, TValue>(table: Table<TRow>, key: Key, f?: Func<TRow, TValue>, s?: (a: TValue, b: TValue) => number): Axis<TRow, Pair<TValue>>;
+export declare namespace axis {
+    var make: <TRow, TValue>(source: TValue[], key: string | number, f?: Func<TRow, TValue>) => Axis<TRow, Pair<TValue>>;
 }
-/**
- * Combines one of more dimensions into an axis, the axis is the cartesian product of all dimension values.
- * @param dimensions The set of dimensions to turn into an axis.
- */
-export declare function axis<TRow, TValue>(...dimensions: Array<Dimension<TRow, TValue>>): Axis<TRow, TValue>;
 /**
  * Pivots a table by 1..n axis
  * @param table The source data, an array of JavaScript objects.
@@ -22,13 +17,6 @@ export declare function axis<TRow, TValue>(...dimensions: Array<Dimension<TRow, 
  * @param axes 0..n subsiquent axes to pivot the table by.
  */
 export declare function pivot<TRow, TValue>(table: Table<TRow>, y: Axis<TRow, TValue>, x: Axis<TRow, TValue>): Cube<TRow>;
-/**
- * Compacts a cube and axes where row or columns have no values.
- * @param cube The cube to compact.
- * @param y The y axis to compact.
- * @param x The x axis to compact.
- */
-export declare function compact<TRow, TValue>(cube: Cube<TRow>, y: Axis<TRow, TValue>, x: Axis<TRow, TValue>): void;
 /**
  * Returns data queried from a cube as a table.
  * @param cube The source cube.

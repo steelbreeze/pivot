@@ -5,18 +5,21 @@
 	<title>steelbreeze/pivot</title>
 	<style>
 		table {
-		  border-collapse: collapse;
-		  width: 100%;
+			border-collapse: collapse;
+			width: 100%;
 		}
-		
-		th, td {
-		  text-align: left;
-		  vertical-align: top;
-		  padding: 8px;
+
+		th,
+		td {
+			text-align: left;
+			vertical-align: top;
+			padding: 8px;
 		}
-		
-		tr:nth-child(even) {background-color: #f2f2f2;}
-		</style>
+
+		tr:nth-child(even) {
+			background-color: #f2f2f2;
+		}
+	</style>
 </head>
 
 <body>
@@ -56,8 +59,8 @@
 		];
 
 		// create axes out of the dimensions derived from the squad data
-		const x = pivot.axis(pivot.dimension(squad, 'position'));
-		const y = pivot.axis(pivot.dimension(squad, 'country'));
+		const x = pivot.axis(squad, 'position');
+		const y = pivot.axis(squad, 'country');
 		//const y = pivot.axis(pivot.dimension(squad, 'age', age)); // an alternative choice for the y axis using a derived field
 
 		// create the pivot cube
@@ -67,20 +70,16 @@
 		const result = pivot.query(cube, cell => cell.map(player => `${player.givenName} ${player.familyName}`).join('<br>'));
 
 		document.getElementById("squad").innerHTML =
-			transpose(x).map(row => `<tr>${y[0].map(() => th()).join('')}${row.map(val => th(val.meta.value, val.key)).join('')}</tr>`).join('') +
-			result.map((row, rowIndex) => `<tr>${y[rowIndex].map(rh => td(rh.meta.value, rh.key)).join('')}${row.map(cell => td(cell || '')).join('')}</tr>`).join('');
+			`<thead><tr>${th('', 'xy')}${x.map(c => th(c.meta.value, c.meta.key)).join('')}</tr></thead>` +
+			result.map((row, i) => `<tr>${th(y[i].meta.value, y[i].meta.key)}${row.map(cell => td(cell || '', '')).join('')}</tr>`).join('');
 
 		// Calculate a person's age from their date of birth
 		function age(person) {
 			return new Date(Date.now() - person.dateOfBirth.getTime()).getUTCFullYear() - 1970;
 		}
 
-		function transpose(array) {
-			return array.reduce((prev, next) => next.map((item, i) => (prev[i] || []).concat(next[i])), []);
-		}
-
 		// generate a header cell in a table
-		function th(t = '', c ='') {
+		function th(t = '', c = '') {
 			return `<th${c ? ` class="${c}"` : ``}>${t}</th>`;
 		}
 

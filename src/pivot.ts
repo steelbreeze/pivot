@@ -1,4 +1,4 @@
-import { Axis, Cube, Dimension, Func, Table } from './types';
+import { Axis, Cube, Func, Key, Pair, Table } from './types';
 
 /**
  * Creates a dimension for a given column in a table; a dimension is a key and a set of unique values provided by a function.
@@ -7,8 +7,8 @@ import { Axis, Cube, Dimension, Func, Table } from './types';
  * @param f An optional callback function to derive values from the source objects. If omitted, the attribute with the same key as the key parameter passed.
  * @param s An optional callback function used to sort the values of the dimension, conforming to Array.prototype.sort.
  */
-export function dimension<TRow, TValue>(table: Table<TRow>, key: string | number, f: Func<TRow, TValue> = (row: TRow) => row[key], s?: (a: TValue, b: TValue) => number): Dimension<TRow, TValue> {
-	return dimension.make(table.map(f).filter((value, index, source) => source.indexOf(value) === index).sort(s), key, f);
+export function axis<TRow, TValue>(table: Table<TRow>, key: Key, f: Func<TRow, TValue> = (row: TRow) => row[key], s?: (a: TValue, b: TValue) => number): Axis<TRow, Pair<TValue>> {
+	return axis.make(table.map(f).filter((value, index, source) => source.indexOf(value) === index).sort(s), key, f);
 }
 
 /**
@@ -17,25 +17,21 @@ export function dimension<TRow, TValue>(table: Table<TRow>, key: string | number
  * @param key The name to give this dimension.
  * @param f An optional callback function used to convert values in the source table to those in the dimension when pivoting.
  */
-dimension.make = function <TRow, TValue>(source: Array<TValue>, key: string | number, f: Func<TRow, TValue> = (row: TRow) => row[key]): Dimension<TRow, TValue> {
+axis.make = function <TRow, TValue>(source: Array<TValue>, key: string | number, f: Func<TRow, TValue> = (row: TRow) => row[key]): Axis<TRow, Pair<TValue>> {
 	return source.map(value => { return { predicate: row => f(row) === value, meta: { key, value } } });
 }
 
-/**
- * Combines one of more dimensions into an axis, the axis is the cartesian product of all dimension values.
- * @param dimensions The set of dimensions to turn into an axis.
- */
-export function axis<TRow, TValue>(...dimensions: Array<Dimension<TRow, TValue>>): Axis<TRow, TValue> {
-	return dimensions.reduce<Axis<TRow, TValue>>((axis, dimension) => axis.flatMap(criteria => dimension.map(criterion => [...criteria, criterion])), [[]]); // NOTE: this is just a generic cartesian product algorithm
-}
+//export function axis<TRow, TValue>(...dimensions: Array<Dimension<TRow, TValue>>): Axis<TRow, TValue> {
+//	return dimensions.reduce<Axis<TRow, TValue>>((axis, dimension) => axis.flatMap(criteria => dimension.map(criterion => [...criteria, criterion])), [[]]); // NOTE: this is just a generic cartesian product algorithm
+//}
 
 /**
  * Slices a table based on the critera specified by a single axis.
  * @param table The source data, an array of JavaScript objects.
  * @param axis The result of a call to axis with one or more dimensions.
  */
-function slice<TRow, TValue>(table: Table<TRow>, axis: Axis<TRow, TValue>): Array<Table<TRow>> {
-	return axis.map(criteria => table.filter(criteria.map(criterion => criterion.predicate).reduce((a, b) => row => a(row) && b(row))));
+function slice<TRow>(table: Table<TRow>, axis: Axis<TRow, any>): Array<Table<TRow>> {
+	return axis.map(criteria => table.filter(criteria.predicate));
 }
 
 /**
@@ -48,29 +44,23 @@ export function pivot<TRow, TValue>(table: Table<TRow>, y: Axis<TRow, TValue>, x
 	return slice(table, y).map(interim => slice(interim, x));
 }
 
-/**
- * Compacts a cube and axes where row or columns have no values.
- * @param cube The cube to compact.
- * @param y The y axis to compact.
- * @param x The x axis to compact.
- */
-export function compact<TRow, TValue>(cube: Cube<TRow>, y: Axis<TRow, TValue>, x: Axis<TRow, TValue>): void {
-	const population = query(cube, count);
-
-	for (let i = population.length; i--;) {
-		if (!population[i].some(t => t)) {
-			y.splice(i, 1);
-			cube.splice(i, 1);
-		}
-	}
-
-	for (let i = population[0].length; i--;) {
-		if (!population.some(r => r[i])) {
-			x.splice(i, 1);
-			cube.forEach(r => r.splice(i, 1));
-		}
-	}
-}
+//export function compact<TRow, TValue>(cube: Cube<TRow>, y: Axis<TRow, TValue>, x: Axis<TRow, TValue>): void {
+//	const population = query(cube, count);
+//
+//	for (let i = population.length; i--;) {
+//		if (!population[i].some(t => t)) {
+//			y.splice(i, 1);
+//			cube.splice(i, 1);
+//		}
+//	}
+//
+//	for (let i = population[0].length; i--;) {
+//		if (!population.some(r => r[i])) {
+//			x.splice(i, 1);
+//			cube.forEach(r => r.splice(i, 1));
+//		}
+//	}
+//}
 
 /**
  * Returns data queried from a cube as a table.

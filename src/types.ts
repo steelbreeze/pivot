@@ -1,17 +1,14 @@
 /** A function taking one argument and returning a result. */
 export type Func<TArg, TResult> = (arg: TArg) => TResult;
 
+export type Predicate<TArg> = Func<TArg, boolean>;
+
+export type Key = string | number;
+
 /** A pair consiting of a key and value. */
-export type Pair<TValue> = { key: string | number, value: TValue };
+export type Pair<TValue> = { key: Key, value: TValue };
 
-/** A key and value of that key to use when slicing data in a pivot operation and the filter to evaluate it. */
-export type Criterion<TRow, TValue> = { predicate: Func<TRow, boolean>, meta: Pair<TValue> };
-
-/** A set of criterion representing a single dimension. */
-export type Dimension<TRow, TValue> = Array<Criterion<TRow, TValue>>;
-
-/** An axis on which to pivot source data; an axis is constructed from 1..n dimensions. */
-export type Axis<TRow, TValue> = Array<Dimension<TRow, TValue>>;
+export type Axis<TRow, TMeta> = Array<{ predicate: Predicate<TRow>, meta: TMeta }>;
 
 /** A table of data. */
 export type Table<TRow> = Array<TRow>;
