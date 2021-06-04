@@ -12,8 +12,8 @@ There are plenty of pivot table libraries in existance, so why create another on
 The following is the result of pivoting publicly available information about the Fulham Football Club [mens squad](https://web.archive.org/web/20210516151437/https://www.fulhamfc.com/teams) in the form of an array of objects, calculating the average age of players by position and country.
 ```typescript
 // create axes out of the dimensions derived from the squad data
-const x = axis(dimension(squad, 'position'));
-const y = axis(dimension(squad, 'country'));
+const x = axis(squad, 'position');
+const y = axis(squad, 'country');
 
 // create the pivot cube
 const cube = pivot(squad, y, x);
