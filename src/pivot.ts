@@ -1,18 +1,18 @@
 import { Axis, Cube, Func, Key, Pair, Table } from './types';
 
 /**
- * Creates a dimension for a given column in a table; a dimension is a key and a set of unique values provided by a function.
- * @param table The source data, an array of objects.
- * @param key The name to give this dimension.
- * @param f An optional callback function to derive values from the source objects. If omitted, the attribute with the same key as the key parameter passed.
- * @param s An optional callback function used to sort the values of the dimension, conforming to Array.prototype.sort.
+ * Creates an axis based on the contents of a table.
+ * @param table The source table, an array of objects.
+ * @param key The name to give this axis.
+ * @param f An optional callback function to derive values from the source table objects. If omitted, the object attribute with the same name as the key is derived.
+ * @param s An optional callback function used to sort the values of the dimension. This conforms to the sort criteria used by Array.prototype.sort.
  */
 export function axis<TRow, TValue>(table: Table<TRow>, key: Key, f: Func<TRow, TValue> = (row: TRow) => row[key], s?: (a: TValue, b: TValue) => number): Axis<TRow, Pair<TValue>> {
 	return axis.make(table.map(f).filter((value, index, source) => source.indexOf(value) === index).sort(s), key, f);
 }
 
 /**
- * Creates a dimension from an array of values.
+ * Creates an axis from an array of values.
  * @param source The source values.
  * @param key The name to give this dimension.
  * @param f An optional callback function used to convert values in the source table to those in the dimension when pivoting.
