@@ -7,7 +7,7 @@ import { Axis, Cube, Func, Key, Pair, Table } from './types';
  * @param f An optional callback function to derive values from the source table objects. If omitted, the object attribute with the same name as the key is derived.
  * @param s An optional callback function used to sort the values of the dimension. This conforms to the sort criteria used by Array.prototype.sort.
  */
-export function axis<TRow, TValue>(table: Table<TRow>, key: Key, f: Func<TRow, TValue> = (row: TRow) => row[key], s?: (a: TValue, b: TValue) => number): Axis<TRow, Pair<TValue>> {
+export function axis<TValue, TKey extends Key, TRow extends {[P in TKey]: TValue}>(table: Table<TRow>, key: TKey, f: Func<TRow, TValue> = (row: TRow) => row[key], s?: (a: TValue, b: TValue) => number): Axis<TRow, Pair<TValue>> {
 	return axis.make(table.map(f).filter((value, index, source) => source.indexOf(value) === index).sort(s), key, f);
 }
 
@@ -17,7 +17,7 @@ export function axis<TRow, TValue>(table: Table<TRow>, key: Key, f: Func<TRow, T
  * @param key The name to give this dimension.
  * @param f An optional callback function used to convert values in the source table to those in the dimension when pivoting.
  */
-axis.make = function <TRow, TValue>(source: Array<TValue>, key: string | number, f: Func<TRow, TValue> = (row: TRow) => row[key]): Axis<TRow, Pair<TValue>> {
+axis.make = function <TValue, TKey extends Key, TRow extends {[P in TKey]: TValue}>(source: Array<TValue>, key: TKey, f: Func<TRow, TValue> = (row: TRow) => row[key]): Axis<TRow, Pair<TValue>> {
 	return source.map(value => { return { predicate: row => f(row) === value, meta: { key, value } } });
 }
 

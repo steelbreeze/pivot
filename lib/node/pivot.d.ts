@@ -6,9 +6,11 @@ import { Axis, Cube, Func, Key, Pair, Table } from './types';
  * @param f An optional callback function to derive values from the source table objects. If omitted, the object attribute with the same name as the key is derived.
  * @param s An optional callback function used to sort the values of the dimension. This conforms to the sort criteria used by Array.prototype.sort.
  */
-export declare function axis<TRow, TValue>(table: Table<TRow>, key: Key, f?: Func<TRow, TValue>, s?: (a: TValue, b: TValue) => number): Axis<TRow, Pair<TValue>>;
+export declare function axis<TValue, TKey extends Key, TRow extends {
+    [P in TKey]: TValue;
+}>(table: Table<TRow>, key: TKey, f?: Func<TRow, TValue>, s?: (a: TValue, b: TValue) => number): Axis<TRow, Pair<TValue>>;
 export declare namespace axis {
-    var make: <TRow, TValue>(source: TValue[], key: string | number, f?: Func<TRow, TValue>) => Axis<TRow, Pair<TValue>>;
+    var make: <TValue, TKey extends Key, TRow extends { [P in TKey]: TValue; }>(source: TValue[], key: TKey, f?: Func<TRow, TValue>) => Axis<TRow, Pair<TValue>>;
 }
 /**
  * Pivots a table by 1..n axis
