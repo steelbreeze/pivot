@@ -1,5 +1,5 @@
 import { average, axis, pivot, query } from '../pivot';
-import { squad } from './fulham';
+import { Player, squad } from './fulham';
 
 // create axes out of the dimensions derived from the squad data
 const x = axis(squad, 'position');
@@ -17,7 +17,7 @@ console.log(`\t${x.map(c => print(c.meta[0].value)).join('\t')}`)
 result.forEach((row, i) => console.log(`${print(y[i].meta[0].value)}\t${row.map(print).join('\t')}`));
 
 // Calculate a person's age from their date of birth
-function age(person: { dateOfBirth: Date }): number {
+function age(person: Player): number {
 	return new Date(Date.now() - person.dateOfBirth.getTime()).getUTCFullYear() - 1970;
 }
 

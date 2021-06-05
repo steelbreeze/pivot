@@ -15,7 +15,7 @@ export type Pair<TValue, TKey extends Key> = { key: TKey, value: TValue };
 export type Axis<TValue, TKey extends Key, TRow extends Row<TValue, TKey>> = Array<{ predicate: Predicate<TRow>, meta: Array<Pair<TValue, TKey>> }>;
 
 /** A table of data. */
-export type Table<TRow> = Array<TRow>;
+export type Table<TValue, TKey extends Key, TRow extends Row<TValue, TKey>> = Array<TRow>;
 
 /** A cube of data. */
-export type Cube<TRow> = Array<Array<Table<TRow>>>;
+export type Cube<TValue, TKey extends Key, TRow extends Row<TValue, TKey>> = Array<Array<Table<TValue, TKey, TRow>>>;

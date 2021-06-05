@@ -17,6 +17,6 @@ export declare type Axis<TValue, TKey extends Key, TRow extends Row<TValue, TKey
     meta: Array<Pair<TValue, TKey>>;
 }>;
 /** A table of data. */
-export declare type Table<TRow> = Array<TRow>;
+export declare type Table<TValue, TKey extends Key, TRow extends Row<TValue, TKey>> = Array<TRow>;
 /** A cube of data. */
-export declare type Cube<TRow> = Array<Array<Table<TRow>>>;
+export declare type Cube<TValue, TKey extends Key, TRow extends Row<TValue, TKey>> = Array<Array<Table<TValue, TKey, TRow>>>;

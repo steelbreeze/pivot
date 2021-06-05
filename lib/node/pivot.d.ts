@@ -6,7 +6,7 @@ import { Axis, Cube, Func, Key, Row, Table } from './types';
  * @param f An optional callback function to derive values from the source table objects. If omitted, the object attribute with the same name as the key is derived.
  * @param s An optional callback function used to sort the values of the dimension. This conforms to the sort criteria used by Array.prototype.sort.
  */
-export declare function axis<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TRow>, key: TKey, f?: Func<TRow, TValue>, s?: (a: TValue, b: TValue) => number): Axis<TValue, TKey, TRow>;
+export declare function axis<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, key: TKey, f?: Func<TRow, TValue>, s?: (a: TValue, b: TValue) => number): Axis<TValue, TKey, TRow>;
 export declare namespace axis {
     var make: <TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(source: TValue[], key: TKey, f?: Func<TRow, TValue>) => Axis<TValue, TKey, TRow>;
     var compose: <TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(...axes: Axis<TValue, TKey, TRow>[]) => Axis<TValue, TKey, TRow>;
@@ -17,25 +17,25 @@ export declare namespace axis {
  * @param y The first axis to pivot the table by.
  * @param axes 0..n subsiquent axes to pivot the table by.
  */
-export declare function pivot<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TRow>, y: Axis<TValue, TKey, TRow>, x: Axis<TValue, TKey, TRow>): Cube<TRow>;
+export declare function pivot<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, y: Axis<TValue, TKey, TRow>, x: Axis<TValue, TKey, TRow>): Cube<TValue, TKey, TRow>;
 /**
  * Returns data queried from a cube as a table.
  * @param cube The source cube.
  * @param f A callback function to create a result from each cell of the cube.
  */
-export declare function query<TRow, TValue, TResult extends TValue>(cube: Cube<TRow>, f: Func<Table<TRow>, TResult>): Table<Array<TResult>>;
+export declare function query<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult extends TValue>(cube: Cube<TValue, TKey, TRow>, f: Func<Table<TValue, TKey, TRow>, TResult>): Array<Array<TResult>>;
 /**
  * Counts the number of items in a table.
  * @param table The source table.
  */
-export declare function count<TRow>(table: Table<TRow>): number | null;
+export declare function count<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>): number | null;
 /**
  *  generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param f A callback function to derive a numerical value for each row.
  */
-export declare function sum<TRow>(f: Func<TRow, number>): Func<Table<TRow>, number | null>;
+export declare function sum<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(f: Func<TRow, number>): Func<Table<TValue, TKey, TRow>, number | null>;
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube .
  * @param f A callback function to derive a numerical value for each row.
  */
-export declare function average<TRow>(f: Func<TRow, number>): Func<Table<TRow>, number | null>;
+export declare function average<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(f: Func<TRow, number>): Func<Table<TValue, TKey, TRow>, number | null>;
