@@ -18,7 +18,7 @@ export function axis<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(t
  * @param f An optional callback function used to convert values in the source table to those in the dimension when pivoting.
  */
 axis.make = function <TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(source: Array<TValue>, key: TKey, f: Func<TRow, TValue> = (row: TRow) => row[key]): Axis<TValue, TKey, TRow> {
-	return source.map(value => { return { predicate: row => f(row) === value, meta: [{ key, value }] } });
+	return source.map(value => { return { predicate: row => f(row) === value, criteria: [{ key, value }] } });
 }
 
 axis.compose = function <TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(...axes: Array<Axis<TValue, TKey, TRow>>): Axis<TValue, TKey, TRow> {
@@ -33,7 +33,7 @@ axis.compose = function <TValue, TKey extends Key, TRow extends Row<TValue, TKey
 
 			for (const i0 of axis) {
 				for (const i1 of result) {
-					tmp.push({ predicate: row => i0.predicate(row) && i1.predicate(row), meta: [...i0.meta, ...i1.meta] });
+					tmp.push({ predicate: row => i0.predicate(row) && i1.predicate(row), criteria: [...i0.criteria, ...i1.criteria] });
 				}
 			}
 
@@ -45,22 +45,22 @@ axis.compose = function <TValue, TKey extends Key, TRow extends Row<TValue, TKey
 }
 
 /**
- * Slices a table based on the critera specified by a single axis.
- * @param table The source data, an array of JavaScript objects.
+ * Slices a table based on the critera specified by an axis.
+ * @param table The source data, an array of rows.
  * @param axis The result of a call to axis with one or more dimensions.
  */
 function slice<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, axis: Axis<TValue, TKey, TRow>): Array<Table<TValue, TKey, TRow>> {
-	return axis.map(criteria => table.filter(criteria.predicate));
+	return axis.map(s => table.filter(s.predicate));
 }
 
 /**
  * Pivots a table by 1..n axis
- * @param table The source data, an array of JavaScript objects.
+ * @param table The source data, an array of rows.
  * @param y The first axis to pivot the table by.
  * @param axes 0..n subsiquent axes to pivot the table by.
  */
 export function pivot<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, y: Axis<TValue, TKey, TRow>, x: Axis<TValue, TKey, TRow>): Cube<TValue, TKey, TRow> {
-	return slice(table, y).map(interim => slice(interim, x));
+	return slice(table, y).map(i => slice(i, x));
 }
 
 //export function compact<TRow, TValue>(cube: Cube<TRow>, y: Axis<TRow, TValue>, x: Axis<TRow, TValue>): void {

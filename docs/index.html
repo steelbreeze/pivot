@@ -70,8 +70,10 @@
 		const result = pivot.query(cube, cell => cell.map(player => `${player.givenName} ${player.familyName}`).join('<br>'));
 
 		document.getElementById("squad").innerHTML =
-			`<thead><tr>${th('', 'xy')}${x.map(c => th(c.meta[0].value, c.meta[0].key)).join('')}</tr></thead>` +
-			result.map((row, i) => `<tr>${th(y[i].meta[0].value, y[i].meta[0].key)}${row.map(cell => td(cell || '', '')).join('')}</tr>`).join('');
+			`<thead>` +
+			`<tr><td></td>${x.map(c => th(c.criteria[0])).join('')}</tr>` +
+			`</thead>` +
+			result.map((row, i) => `<tr>${th(y[i].criteria[0])}${row.map(cell => td(cell || '', '')).join('')}</tr>`).join('');
 
 		// Calculate a person's age from their date of birth
 		function age(person) {
@@ -79,8 +81,9 @@
 		}
 
 		// generate a header cell in a table
-		function th(t = '', c = '') {
-			return `<th${c ? ` class="${c}"` : ``}>${t}</th>`;
+		function th(criteria) {
+
+			return `<th${criteria.key ? ` class="${criteria.key}"` : ``}>${criteria.value}</th>`;
 		}
 
 		// generate a cell in a table
