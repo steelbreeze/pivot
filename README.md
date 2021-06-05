@@ -42,7 +42,7 @@ USA     28
 ```
 > The full example code can be found [here](src/example/index.ts).
 
-Alternatively, as can be seen in the web example, non-numerical content can also be queried, resulting in this sort of output:
+Alternatively, as can be seen in the [web example](https://steelbreeze.net/pivot), non-numerical content can also be queried, resulting in this sort of output:
 ||Defender|Forward|Goalkeeper|Midfielder|
 |-|-|-|-|-|
 | Belgium|Denis Odoi||||			
@@ -61,7 +61,6 @@ Alternatively, as can be seen in the web example, non-numerical content can also
 |Spain|||Fabrico Agosto Ramirez|
 |USA|Tim Ream, Antonee Robinson|||
 
-See the web example [here](https://steelbreeze.net/pivot).
 > Data and calculations correct as of: 2021-05-23.
 
 ## Hypercubes
