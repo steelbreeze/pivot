@@ -7,10 +7,11 @@ import { Axis, Cube, Func, Key, Pair, Table } from './types';
  * @param s An optional callback function used to sort the values of the dimension. This conforms to the sort criteria used by Array.prototype.sort.
  */
 export declare function axis<TValue, TKey extends Key, TRow extends {
-    [P in TKey]: TValue;
-}>(table: Table<TRow>, key: TKey, f?: Func<TRow, TValue>, s?: (a: TValue, b: TValue) => number): Axis<TRow, Pair<TValue>>;
+    [T in TKey]: TValue;
+}>(table: Table<TRow>, key: TKey, f?: Func<TRow, TValue>, s?: (a: TValue, b: TValue) => number): Axis<TRow, Pair<TValue, TKey>>;
 export declare namespace axis {
-    var make: <TValue, TKey extends Key, TRow extends { [P in TKey]: TValue; }>(source: TValue[], key: TKey, f?: Func<TRow, TValue>) => Axis<TRow, Pair<TValue>>;
+    var make: <TValue, TKey extends Key, TRow extends { [T in TKey]: TValue; }>(source: TValue[], key: TKey, f?: Func<TRow, TValue>) => Axis<TRow, Pair<TValue, TKey>>;
+    var compose: <TValue, TKey extends Key, TRow extends { [T in TKey]: TValue; }>(...axes: Axis<TRow, Pair<TValue, TKey>>[]) => Axis<TRow, Pair<TValue, TKey>[]>;
 }
 /**
  * Pivots a table by 1..n axis
@@ -18,7 +19,7 @@ export declare namespace axis {
  * @param y The first axis to pivot the table by.
  * @param axes 0..n subsiquent axes to pivot the table by.
  */
-export declare function pivot<TRow, TValue>(table: Table<TRow>, y: Axis<TRow, TValue>, x: Axis<TRow, TValue>): Cube<TRow>;
+export declare function pivot<TRow>(table: Table<TRow>, y: Axis<TRow>, x: Axis<TRow>): Cube<TRow>;
 /**
  * Returns data queried from a cube as a table.
  * @param cube The source cube.

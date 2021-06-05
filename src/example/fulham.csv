@@ -3,7 +3,7 @@ shirt,position,givenName,familyName,country,dateOfBirth
 12,Goalkeeper,Marek,Rodák,Slovakia,1996-12-13
 31,Goalkeeper,Fabrico,Agosto Ramirez,Spain,1987-12-31
 2,Defender,Kenny,Tete,Netherlands,1995-10-09
-3,Defender,Michael,Hector,Jamaca,1992-07-19
+3,Defender,Michael,Hector,Jamaica,1992-07-19
 4,Defender,Denis,Odoi,Belgium,1988-05-27
 5,Defender,Joachim,Anderson,Denmark,1996-05-31
 13,Defender,Tim,Ream,USA,1987-10-05
@@ -21,7 +21,7 @@ shirt,position,givenName,familyName,country,dateOfBirth
 29,Midfielder,Andre-Frank,Zambo Anguissa,Cameroon,1995-11-16
 48,Midfielder,Fabio,Carvalho,England,2002-08-30
 9,Forward,Aleksander,Mitrovic,Serbia,1994-09-16
-14,Forward,Bobby,De Cordova-Reid,Jamaca,1993-02-02
+14,Forward,Bobby,De Cordova-Reid,Jamaica,1993-02-02
 17,Forward,Ivan,Cavaleiro,Portugal,1993-10-18
 19,Forward,Ademola,Lookman,England,1997-10-20
 27,Forward,Josh,Maja,Nigeria,1998-12-27

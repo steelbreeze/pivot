@@ -1,7 +1,7 @@
 # pivot
 [![Maintainability](https://api.codeclimate.com/v1/badges/d2fd7facda5a61d2b66a/maintainability)](https://codeclimate.com/github/steelbreeze/pivot/maintainability)
 
-A minimalist pivot table library for TypeScript/JavaScript. While small in size (a mere 726 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, multiple dimensions for an axis.
+A minimalist pivot table library for TypeScript/JavaScript. While small in size (a mere 984 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, multiple dimensions for an axis.
 
 The library also provides a modest set of numberical selectors. Suggestions for additions, or better still contributions, are welcome.
 
@@ -30,7 +30,7 @@ Denmark 24
 England 25      23              23.25
 France  27              28
 Gabon                           27
-Jamaca  28      28
+Jamaica  28      28
 Nether… 25
 Nigeria 24      22
 Portug…         27
@@ -51,7 +51,7 @@ Alternatively, as can be seen in the web example, non-numerical content can also
 |England|Tosin Abarabioyo,Joe Bryan|Ademola Lookman||Ruben Loftus-Cheek, Harrison Reed, Josh Onomah, Fabio Carvalho|
 |France|Terence Kongolo||Alphonse Areola|
 |Gabon||||Mario Lemina|
-|Jamaca|Michael Hector|Bobby De Cordova-Reid||
+|Jamaica|Michael Hector|Bobby De Cordova-Reid||
 |Netherlands|Kenny Tete|||
 |Nigeria|Ola Aina|Josh Maja||
 |Portugal||Ivan Cavaleiro||
