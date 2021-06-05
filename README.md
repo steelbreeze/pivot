@@ -1,7 +1,7 @@
 # pivot
 [![Maintainability](https://api.codeclimate.com/v1/badges/d2fd7facda5a61d2b66a/maintainability)](https://codeclimate.com/github/steelbreeze/pivot/maintainability)
 
-A minimalist pivot table library for TypeScript/JavaScript. While small in size (a mere 955 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, multiple dimensions for an axis.
+A minimalist pivot table library for TypeScript/JavaScript. While small in size (a mere 955 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, multiple dimensions for an axis. Even hypercubes are possible.
 
 The library also provides a modest set of numberical selectors. Suggestions for additions, or better still contributions, are welcome.
 
@@ -61,4 +61,18 @@ Alternatively, as can be seen in the web example, non-numerical content can also
 |Spain|||Fabrico Agosto Ramirez|
 |USA|Tim Ream, Antonee Robinson|||
 
+See the web example [here](https://steelbreeze.net/pivot).
 > Data and calculations correct as of: 2021-05-23.
+
+## Hypercubes
+The ```pivot``` function returns a table pivoted on two dimensions, it acheives this through two calls two the ```slice``` function, one for each axis.
+
+The implementation of ```slice``` is as follows:
+```typescript
+return slice(table, y).map(i => slice(i, x));
+```
+
+There is nothing to stop you making repeated calls to slice with additional axes, for example:
+```typescript
+const result = slice(table, z).map(i => slice(i, y)).map(i => slice(i, x));
+```
