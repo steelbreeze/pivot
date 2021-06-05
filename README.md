@@ -6,7 +6,7 @@ A minimalist pivot table library for TypeScript/JavaScript. While small in size 
 The library also provides a modest set of numberical selectors. Suggestions for additions, or better still contributions, are welcome.
 
 ## Why create another pivot table library?
-There are plenty of pivot table libraries in existance, so why create another one? Well, this is actually a spin-off from the steelbreeze/landscape project, where instead of aggregating numerical data from the pivot cube, non-numerical data is needed. So this library does both.
+There are plenty of pivot table libraries in existance, so why create another one? Well, this is actually a spin-off from the [steelbreeze/landscape](https://github.com/steelbreeze/landscape) project, where instead of aggregating numerical data from the pivot cube, non-numerical data is needed.
 
 ## Example
 The following is the result of pivoting publicly available information about the Fulham Football Club [mens squad](https://web.archive.org/web/20210516151437/https://www.fulhamfc.com/teams) in the form of an array of objects, calculating the average age of players by position and country.
