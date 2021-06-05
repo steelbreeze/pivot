@@ -1,9 +1,8 @@
 /** A function taking one argument and returning a result. */
 export declare type Func<TArg, TResult> = (arg: TArg) => TResult;
-/** A function taking one argument and returning a boolean result. */
-export declare type Predicate<TArg> = Func<TArg, boolean>;
 /** The type of keys used throughout the library. */
 export declare type Key = string | number;
+/** A set of attributes, each entry addressable via a key. */
 export declare type Row<TValue, TKey extends Key> = {
     [T in TKey]: TValue;
 };
@@ -13,7 +12,7 @@ export declare type Pair<TValue, TKey extends Key> = {
     value: TValue;
 };
 export declare type Axis<TValue, TKey extends Key, TRow extends Row<TValue, TKey>> = Array<{
-    predicate: Predicate<TRow>;
+    predicate: Func<TRow, boolean>;
     meta: Array<Pair<TValue, TKey>>;
 }>;
 /** A table of data. */
