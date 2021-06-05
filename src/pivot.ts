@@ -86,7 +86,7 @@ export function pivot<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(
  * @param cube The source cube.
  * @param f A callback function to create a result from each cell of the cube.
  */
-export function query<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult extends TValue>(cube: Cube<TValue, TKey, TRow>, f: Func<Table<TValue, TKey, TRow>, TResult>): Array<Array<TResult>> {
+export function query<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult>(cube: Cube<TValue, TKey, TRow>, f: Func<Table<TValue, TKey, TRow>, TResult>): Array<Array<TResult>> {
 	return cube.map(y => y.map(f));
 }
 

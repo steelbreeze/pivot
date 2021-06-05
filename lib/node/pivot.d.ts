@@ -23,7 +23,7 @@ export declare function pivot<TValue, TKey extends Key, TRow extends Row<TValue,
  * @param cube The source cube.
  * @param f A callback function to create a result from each cell of the cube.
  */
-export declare function query<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult extends TValue>(cube: Cube<TValue, TKey, TRow>, f: Func<Table<TValue, TKey, TRow>, TResult>): Array<Array<TResult>>;
+export declare function query<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult>(cube: Cube<TValue, TKey, TRow>, f: Func<Table<TValue, TKey, TRow>, TResult>): Array<Array<TResult>>;
 /**
  * Counts the number of items in a table.
  * @param table The source table.
