@@ -15,7 +15,7 @@ export declare namespace axis {
  * Pivots a table by 1..n axis
  * @param table The source data, an array of rows.
  * @param y The first axis to pivot the table by.
- * @param axes 0..n subsiquent axes to pivot the table by.
+ * @param x The second axis to pivot the table by.
  */
 export declare function pivot<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, y: Axis<TValue, TKey, TRow>, x: Axis<TValue, TKey, TRow>): Cube<TValue, TKey, TRow>;
 /**
