@@ -22,23 +22,17 @@ axis.make = function <TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(
 }
 
 axis.compose = function <TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(...axes: Array<Axis<TValue, TKey, TRow>>): Axis<TValue, TKey, TRow> {
-	let result: Axis<TValue, TKey, TRow> = [];
+	let result: Axis<TValue, TKey, TRow> = axes.shift()!;
 
 	// TODO: swap this with a reduce call
 	for (const axis of axes) {
-		if (!result.length) {
-			result = axis;//.map(c => { return { predicate: c.predicate, meta: c.meta } });
-		} else {
-			let tmp: Axis<TValue, TKey, TRow> = [];
+		let tmp: Axis<TValue, TKey, TRow> = [];
 
-			for (const i0 of axis) {
-				for (const i1 of result) {
-					tmp.push({ predicate: row => i0.predicate(row) && i1.predicate(row), criteria: [...i0.criteria, ...i1.criteria] });
-				}
-			}
-
-			result = tmp;
+		for (const i0 of axis) {
+			tmp = [...tmp, ...result.map(i1 => { return { predicate: (row: TRow) => i0.predicate(row) && i1.predicate(row), criteria: [...i0.criteria, ...i1.criteria] } })];
 		}
+
+		result = tmp;
 	}
 
 	return result;
