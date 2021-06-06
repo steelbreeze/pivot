@@ -21,18 +21,16 @@ axis.make = function <TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(
 	return source.map(value => { return { predicate: row => f(row) === value, criteria: [{ key, value }] } });
 }
 
-axis.compose = function <TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(...axes: Array<Axis<TValue, TKey, TRow>>): Axis<TValue, TKey, TRow> {
-	let result: Axis<TValue, TKey, TRow> = axes.shift()!;
+/**
+ * Merge two axes together.
+ * @param axis1 The first axis.
+ * @param axis2 The second axis.
+ */
+axis.join = function <TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(axis1: Axis<TValue, TKey, TRow>, axis2: Axis<TValue, TKey, TRow>): Axis<TValue, TKey, TRow> {
+	let result: Axis<TValue, TKey, TRow> = [];
 
-	// TODO: swap this with a reduce call
-	for (const axis of axes) {
-		let tmp: Axis<TValue, TKey, TRow> = [];
-
-		for (const i0 of axis) {
-			tmp = [...tmp, ...result.map(i1 => { return { predicate: (row: TRow) => i0.predicate(row) && i1.predicate(row), criteria: [...i0.criteria, ...i1.criteria] } })];
-		}
-
-		result = tmp;
+	for (const s2 of axis2) {
+		result = [...result, ...axis1.map(s1 => { return { predicate: (row: TRow) => s2.predicate(row) && s1.predicate(row), criteria: [...s2.criteria, ...s1.criteria] } })];
 	}
 
 	return result;

@@ -9,7 +9,7 @@ import { Axis, Cube, Func, Key, Row, Table } from './types';
 export declare function axis<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, key: TKey, f?: Func<TRow, TValue>, s?: (a: TValue, b: TValue) => number): Axis<TValue, TKey, TRow>;
 export declare namespace axis {
     var make: <TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(source: TValue[], key: TKey, f?: Func<TRow, TValue>) => Axis<TValue, TKey, TRow>;
-    var compose: <TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(...axes: Axis<TValue, TKey, TRow>[]) => Axis<TValue, TKey, TRow>;
+    var join: <TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(axis1: Axis<TValue, TKey, TRow>, axis2: Axis<TValue, TKey, TRow>) => Axis<TValue, TKey, TRow>;
 }
 /**
  * Pivots a table by 1..n axis
