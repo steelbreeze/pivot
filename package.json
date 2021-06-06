@@ -3,8 +3,10 @@
   "version": "1.0.0-rc.1",
   "description": "Minimal TypeScript / JavaScript pivot table library",
   "main": "./lib/node/pivot.js",
+  "types": "./lib/node/pivot.d.ts",
   "directories": {
-    "lib": "lib"
+    "lib": "./lib/node",
+    "dist": "./lib/web"
   },
   "devDependencies": {
     "typescript": "^4.2.4",
