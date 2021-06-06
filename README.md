@@ -64,9 +64,7 @@ Alternatively, as can be seen in the [web example](https://steelbreeze.net/pivot
 > Data and calculations correct as of: 2021-05-23.
 
 ## Hypercubes
-The ```pivot``` function returns a table pivoted on two axes, it acheives this through two calls to the ```slice``` function, one for each axis.
-
-The implementation of ```pivot``` is as follows:
+The ```pivot``` function returns a table pivoted on two axes, it acheives this through two calls to the ```slice``` function, one for each axis:
 ```typescript
 return slice(table, y).map(i => slice(i, x));
 ```
