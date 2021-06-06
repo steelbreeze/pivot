@@ -22,7 +22,7 @@ axis.make = function <TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(
 }
 
 /**
- * Merge two axes together.
+ * Merge two axes together into a single axis.
  * @param axis1 The first axis.
  * @param axis2 The second axis.
  */
@@ -40,7 +40,7 @@ function slice<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: 
 }
 
 /**
- * Pivots a table by 1..n axis
+ * Pivots a table by two axes
  * @param table The source data, an array of rows.
  * @param y The first axis to pivot the table by.
  * @param x The second axis to pivot the table by.
@@ -49,23 +49,23 @@ export function pivot<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(
 	return slice(table, y).map(i => slice(i, x));
 }
 
-//export function compact<TRow, TValue>(cube: Cube<TRow>, y: Axis<TRow, TValue>, x: Axis<TRow, TValue>): void {
-//	const population = query(cube, count);
-//
-//	for (let i = population.length; i--;) {
-//		if (!population[i].some(t => t)) {
-//			y.splice(i, 1);
-//			cube.splice(i, 1);
-//		}
-//	}
-//
-//	for (let i = population[0].length; i--;) {
-//		if (!population.some(r => r[i])) {
-//			x.splice(i, 1);
-//			cube.forEach(r => r.splice(i, 1));
-//		}
-//	}
-//}
+export function compact<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(cube: Cube<TValue, TKey, TRow>, y: Axis<TValue, TKey, TRow>, x: Axis<TValue, TKey, TRow>): void {
+	const population = query(cube, count);
+
+	for (let i = population.length; i--;) {
+		if (!population[i].some(t => t)) {
+			y.splice(i, 1);
+			cube.splice(i, 1);
+		}
+	}
+
+	for (let i = population[0].length; i--;) {
+		if (!population.some(r => r[i])) {
+			x.splice(i, 1);
+			cube.forEach(r => r.splice(i, 1));
+		}
+	}
+}
 
 /**
  * Returns data queried from a cube as a table.
