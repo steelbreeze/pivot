@@ -49,6 +49,12 @@ export function pivot<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(
 	return slice(table, y).map(i => slice(i, x));
 }
 
+/**
+ * Compacts a cube, removing empty rows or columns on the x any y axes.
+ * @param cube The source cube.
+ * @param y The first axis the cube was pivoted by.
+ * @param x The second axis the cube was pivoted by.
+ */
 export function compact<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(cube: Cube<TValue, TKey, TRow>, y: Axis<TValue, TKey, TRow>, x: Axis<TValue, TKey, TRow>): void {
 	const population = query(cube, count);
 
