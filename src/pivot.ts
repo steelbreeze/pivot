@@ -37,7 +37,7 @@ export namespace axis {
  * @param table The source data, an array of rows.
  * @param axis The result of a call to axis with one or more dimensions.
  */
-function slice<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, axis: Axis<TValue, TKey, TRow>): Array<Table<TValue, TKey, TRow>> {
+export function slice<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, axis: Axis<TValue, TKey, TRow>): Array<Table<TValue, TKey, TRow>> {
 	return axis.map(s => table.filter(s.predicate));
 }
 

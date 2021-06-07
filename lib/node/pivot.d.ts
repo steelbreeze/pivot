@@ -23,6 +23,12 @@ export declare namespace axis {
     function combine<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(axis1: Axis<TValue, TKey, TRow>, axis2: Axis<TValue, TKey, TRow>): Axis<TValue, TKey, TRow>;
 }
 /**
+ * Slices a table based on the critera specified by an axis.
+ * @param table The source data, an array of rows.
+ * @param axis The result of a call to axis with one or more dimensions.
+ */
+export declare function slice<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, axis: Axis<TValue, TKey, TRow>): Array<Table<TValue, TKey, TRow>>;
+/**
  * Pivots a table by two axes
  * @param table The source data, an array of rows.
  * @param y The first axis to pivot the table by.
