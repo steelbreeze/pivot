@@ -35,6 +35,7 @@ export declare function pivot<TValue, TKey extends Key, TRow extends Row<TValue,
  * @param y The first axis the cube was pivoted by.
  * @param x The second axis the cube was pivoted by.
  */
+export declare function compact<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(cube: Cube<TValue, TKey, TRow>, y: Axis<TValue, TKey, TRow>, x: Axis<TValue, TKey, TRow>): void;
 /**
  * Returns data queried from a cube as a table.
  * @param cube The source cube.
