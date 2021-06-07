@@ -69,9 +69,6 @@ In the example above, the axes are a deriving set unique set of values seen with
 ### Composite axes
 Axes can be merged with a call to ```axis.combine```.
 If the criteria for one axis was [a, b] and another was [c, d], then the combined axis would be [ac, ad, bc, bd].
-## Compression
-Using custom or composite axes can result in sparsely populated cubes; the ```compress``` function will remove any rows or columns on the x and y axis where no values exist.
-> Note: this removes values not only from the cube, but also the axes as well.
 ## Hypercubes
 The ```pivot``` function returns a table pivoted on two axes, it acheives this through two calls to the ```slice``` function, one for each axis:
 ```typescript
