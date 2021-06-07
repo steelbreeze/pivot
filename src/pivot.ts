@@ -52,30 +52,6 @@ export function pivot<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(
 }
 
 /**
- * Compacts a cube, removing empty rows or columns on the x any y axes.
- * @param cube The source cube.
- * @param y The first axis the cube was pivoted by.
- * @param x The second axis the cube was pivoted by.
- */
-export function compact<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(cube: Cube<TValue, TKey, TRow>, y: Axis<TValue, TKey, TRow>, x: Axis<TValue, TKey, TRow>): void {
-	const population = query(cube, count);
-
-	for (let i = y.length; i--;) {
-		if (!population[i].some(t => t)) {
-			y.splice(i, 1);
-			cube.splice(i, 1);
-		}
-	}
-
-	for (let i = x.length; i--;) {
-		if (!population.some(r => r[i])) {
-			x.splice(i, 1);
-			cube.forEach(r => r.splice(i, 1));
-		}
-	}
-}
-
-/**
  * Returns data queried from a cube as a table.
  * @param cube The source cube.
  * @param f A callback function to create a result from each cell of the cube.
