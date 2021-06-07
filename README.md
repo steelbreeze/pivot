@@ -1,7 +1,7 @@
 # pivot
 [![Maintainability](https://api.codeclimate.com/v1/badges/d2fd7facda5a61d2b66a/maintainability)](https://codeclimate.com/github/steelbreeze/pivot/maintainability)
 
-A minimalist pivot table library for TypeScript/JavaScript. While small in size (a mere 1109 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, multiple dimensions for an axis. Even hypercubes are possible.
+A minimalist pivot table library for TypeScript/JavaScript. While small in size (a mere 1113 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite axes. Even hypercubes are possible.
 
 The library also provides a modest set of numberical selectors. Suggestions for additions, or better still contributions, are welcome.
 
@@ -12,8 +12,8 @@ There are plenty of pivot table libraries in existance, so why create another on
 The following is the result of pivoting publicly available information about the Fulham Football Club [mens squad](https://web.archive.org/web/20210516151437/https://www.fulhamfc.com/teams) in the form of an array of objects, calculating the average age of players by position and country.
 ```typescript
 // create axes derived from the squad data
-const x = axis(squad, 'position');
-const y = axis(squad, 'country', player => player.country.substr(0,3).toUpperCase());
+const x = axis.fromTable(squad, 'position');
+const y = axis.fromTable(squad, 'country', player => player.country.substr(0,3).toUpperCase());
 
 // create the pivot cube
 const cube = pivot(squad, y, x);
@@ -63,6 +63,15 @@ Alternatively, as can be seen in the [web example](https://steelbreeze.net/pivot
 
 > Data and calculations correct as of: 2021-05-23.
 
+## Axis manipulation
+### Custom axis
+In the example above, the axes are a deriving set unique set of values seen within the data. Should you wish to use custom axes you can call ```axis.fromValues```, passing a set of values in place of the table.
+### Composite axes
+Axes can be merged with a call to ```axis.combine```.
+If axis one was [a, b] and axis two was [c, d], then the combined axis would be [a && c, a && d, b && c, b &&d].
+## Compression
+Using custom or composite axes can result in sparsely populated cubes; the ```compress``` function will remove any rows or columns on the x and y axis where no values exist.
+> Note: this removes values not only from the cube, but also the axes as well.
 ## Hypercubes
 The ```pivot``` function returns a table pivoted on two axes, it acheives this through two calls to the ```slice``` function, one for each axis:
 ```typescript

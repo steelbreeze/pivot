@@ -1,15 +1,26 @@
 import { Axis, Cube, Func, Key, Row, Table } from './types';
-/**
- * Creates an axis based on the contents of a table.
- * @param table The source table, an array of objects.
- * @param key The name to give this axis.
- * @param f An optional callback function to derive values from the source table objects. If omitted, the object attribute with the same name as the key is derived.
- * @param s An optional callback function used to sort the values of the dimension. This conforms to the sort criteria used by Array.prototype.sort.
- */
-export declare function axis<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, key: TKey, f?: Func<TRow, TValue>, s?: (a: TValue, b: TValue) => number): Axis<TValue, TKey, TRow>;
 export declare namespace axis {
-    var make: <TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(source: TValue[], key: TKey, f?: Func<TRow, TValue>) => Axis<TValue, TKey, TRow>;
-    var join: <TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(axis1: Axis<TValue, TKey, TRow>, axis2: Axis<TValue, TKey, TRow>) => Axis<TValue, TKey, TRow>;
+    /**
+     * Creates an axis based on the contents of a table.
+     * @param table The source table, an array of objects.
+     * @param key The name to give this axis.
+     * @param f An optional callback function to derive values from the source table objects. If omitted, the object attribute with the same name as the key is derived.
+     * @param s An optional callback function used to sort the values of the dimension. This conforms to the sort criteria used by Array.prototype.sort.
+     */
+    function fromTable<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, key: TKey, f?: Func<TRow, TValue>, s?: (a: TValue, b: TValue) => number): Axis<TValue, TKey, TRow>;
+    /**
+     * Creates an axis from an array of values.
+     * @param values The source values.
+     * @param key The name to give this dimension.
+     * @param f An optional callback function used to convert values in the source table to those in the dimension when pivoting.
+     */
+    function fromValues<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(values: Array<TValue>, key: TKey, f?: Func<TRow, TValue>): Axis<TValue, TKey, TRow>;
+    /**
+     * Merge two axes together into a single axis.
+     * @param axis1 The first axis.
+     * @param axis2 The second axis.
+     */
+    function combine<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(axis1: Axis<TValue, TKey, TRow>, axis2: Axis<TValue, TKey, TRow>): Axis<TValue, TKey, TRow>;
 }
 /**
  * Pivots a table by two axes
@@ -24,7 +35,6 @@ export declare function pivot<TValue, TKey extends Key, TRow extends Row<TValue,
  * @param y The first axis the cube was pivoted by.
  * @param x The second axis the cube was pivoted by.
  */
-export declare function compact<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(cube: Cube<TValue, TKey, TRow>, y: Axis<TValue, TKey, TRow>, x: Axis<TValue, TKey, TRow>): void;
 /**
  * Returns data queried from a cube as a table.
  * @param cube The source cube.

@@ -2,8 +2,8 @@ import { average, axis, pivot, query } from '../pivot';
 import { Player, squad } from './fulham';
 
 // create axes derived from the squad data
-const x = axis(squad, 'position');
-const y = axis(squad, 'country', player => player.country.substr(0,3).toUpperCase());
+const x = axis.fromTable(squad, 'position');
+const y = axis.fromTable(squad, 'country', player => player.country.substr(0,3).toUpperCase());
 
 // create the pivot cube
 const cube = pivot(squad, y, x);

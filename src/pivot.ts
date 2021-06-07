@@ -1,33 +1,35 @@
 import { Axis, Cube, Func, Key, Row, Table } from './types';
 
-/**
- * Creates an axis based on the contents of a table.
- * @param table The source table, an array of objects.
- * @param key The name to give this axis.
- * @param f An optional callback function to derive values from the source table objects. If omitted, the object attribute with the same name as the key is derived.
- * @param s An optional callback function used to sort the values of the dimension. This conforms to the sort criteria used by Array.prototype.sort.
- */
-export function axis<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, key: TKey, f: Func<TRow, TValue> = (row: TRow) => row[key], s?: (a: TValue, b: TValue) => number): Axis<TValue, TKey, TRow> {
-	return axis.make(table.map(f).filter((value, index, source) => source.indexOf(value) === index).sort(s), key, f);
-}
+export namespace axis {
+	/**
+	 * Creates an axis based on the contents of a table.
+	 * @param table The source table, an array of objects.
+	 * @param key The name to give this axis.
+	 * @param f An optional callback function to derive values from the source table objects. If omitted, the object attribute with the same name as the key is derived.
+	 * @param s An optional callback function used to sort the values of the dimension. This conforms to the sort criteria used by Array.prototype.sort.
+	 */
+	export function fromTable<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, key: TKey, f: Func<TRow, TValue> = (row: TRow) => row[key], s?: (a: TValue, b: TValue) => number): Axis<TValue, TKey, TRow> {
+		return fromValues(table.map(f).filter((value, index, source) => source.indexOf(value) === index).sort(s), key, f);
+	}
 
-/**
- * Creates an axis from an array of values.
- * @param source The source values.
- * @param key The name to give this dimension.
- * @param f An optional callback function used to convert values in the source table to those in the dimension when pivoting.
- */
-axis.make = function <TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(source: Array<TValue>, key: TKey, f: Func<TRow, TValue> = (row: TRow) => row[key]): Axis<TValue, TKey, TRow> {
-	return source.map(value => { return { predicate: row => f(row) === value, criteria: [{ key, value }] } });
-}
+	/**
+	 * Creates an axis from an array of values.
+	 * @param values The source values.
+	 * @param key The name to give this dimension.
+	 * @param f An optional callback function used to convert values in the source table to those in the dimension when pivoting.
+	 */
+	export function fromValues<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(values: Array<TValue>, key: TKey, f: Func<TRow, TValue> = (row: TRow) => row[key]): Axis<TValue, TKey, TRow> {
+		return values.map(value => { return { predicate: row => f(row) === value, criteria: [{ key, value }] } });
+	}
 
-/**
- * Merge two axes together into a single axis.
- * @param axis1 The first axis.
- * @param axis2 The second axis.
- */
-axis.join = function <TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(axis1: Axis<TValue, TKey, TRow>, axis2: Axis<TValue, TKey, TRow>): Axis<TValue, TKey, TRow> {
-	return axis2.reduce<Axis<TValue, TKey, TRow>>((result, s2) => [...result, ...axis1.map(s1 => { return { predicate: (row: TRow) => s2.predicate(row) && s1.predicate(row), criteria: [...s2.criteria, ...s1.criteria] } })], []);
+	/**
+	 * Merge two axes together into a single axis.
+	 * @param axis1 The first axis.
+	 * @param axis2 The second axis.
+	 */
+	export function combine<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(axis1: Axis<TValue, TKey, TRow>, axis2: Axis<TValue, TKey, TRow>): Axis<TValue, TKey, TRow> {
+		return axis2.reduce<Axis<TValue, TKey, TRow>>((result, s2) => [...result, ...axis1.map(s1 => { return { predicate: (row: TRow) => s2.predicate(row) && s1.predicate(row), criteria: [...s2.criteria, ...s1.criteria] } })], []);
+	}
 }
 
 /**
