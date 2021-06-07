@@ -58,14 +58,14 @@ export function pivot<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(
 export function compact<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(cube: Cube<TValue, TKey, TRow>, y: Axis<TValue, TKey, TRow>, x: Axis<TValue, TKey, TRow>): void {
 	const population = query(cube, count);
 
-	for (let i = population.length; i--;) {
+	for (let i = y.length; i--;) {
 		if (!population[i].some(t => t)) {
 			y.splice(i, 1);
 			cube.splice(i, 1);
 		}
 	}
 
-	for (let i = population[0].length; i--;) {
+	for (let i = x.length; i--;) {
 		if (!population.some(r => r[i])) {
 			x.splice(i, 1);
 			cube.forEach(r => r.splice(i, 1));
