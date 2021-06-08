@@ -34,13 +34,14 @@ export declare function slice<TValue, TKey extends Key, TRow extends Row<TValue,
  * @param y The first axis to pivot the table by.
  * @param x The second axis to pivot the table by.
  */
-export declare function pivot<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, y: Axis<TValue, TKey, TRow>, x: Axis<TValue, TKey, TRow>): Cube<TValue, TKey, TRow>;
+export declare function cube<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, y: Axis<TValue, TKey, TRow>, x: Axis<TValue, TKey, TRow>): Cube<TValue, TKey, TRow>;
 /**
  * Returns data queried from a cube as a table.
  * @param cube The source cube.
  * @param f A callback function to create a result from each cell of the cube.
+ * @param p A predicate to call on rows to filter the cube prior to
  */
-export declare function query<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult>(cube: Cube<TValue, TKey, TRow>, f: Func<Table<TValue, TKey, TRow>, TResult>): Array<Array<TResult>>;
+export declare function query<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult>(cube: Cube<TValue, TKey, TRow>, f: Func<Table<TValue, TKey, TRow>, TResult>, p?: Func<TRow, boolean>): Array<Array<TResult>>;
 /**
  * Counts the number of items in a table.
  * @param table The source table.

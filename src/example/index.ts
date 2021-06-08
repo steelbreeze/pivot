@@ -1,15 +1,15 @@
-import { average, axis, pivot, query } from '../pivot';
+import * as pivot from '../pivot';
 import { Player, squad } from './fulham';
 
 // create axes derived from the squad data
-const x = axis.fromTable(squad, 'position');
-const y = axis.fromTable(squad, 'country', player => player.country.substr(0,3).toUpperCase());
+const x = pivot.axis.fromTable(squad, 'position');
+const y = pivot.axis.fromTable(squad, 'country', player => player.country.substr(0,3).toUpperCase());
 
 // create the pivot cube
-const cube = pivot(squad, y, x);
+const cube = pivot.cube(squad, y, x);
 
 // find the average age of players by position by country
-const result = query(cube, average(age));
+const result = pivot.query(cube, pivot.average(age));
 
 // ugly code to pretty print the result with axes
 console.log(`\t${x.map(c => print(c.criteria[0].value)).join('\t')}`)

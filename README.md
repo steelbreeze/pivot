@@ -1,7 +1,7 @@
 # pivot
 [![Maintainability](https://api.codeclimate.com/v1/badges/d2fd7facda5a61d2b66a/maintainability)](https://codeclimate.com/github/steelbreeze/pivot/maintainability)
 
-A minimalist pivot table library for TypeScript/JavaScript. While small in size (a mere 951 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite axes. Even hypercubes are possible.
+A minimalist pivot table library for TypeScript/JavaScript. While small in size (a mere 973 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite axes, filtering. Even hypercubes are possible.
 
 The library also provides a modest set of numberical selectors. Suggestions for additions, or better still contributions, are welcome.
 
@@ -9,17 +9,19 @@ The library also provides a modest set of numberical selectors. Suggestions for 
 There are plenty of pivot table libraries in existance, so why create another one? Well, this is actually a spin-off from the [steelbreeze/landscape](https://github.com/steelbreeze/landscape) project, where instead of aggregating numerical data from the pivot cube, non-numerical data is needed.
 
 ## Example
-The following is the result of pivoting publicly available information about the Fulham Football Club [mens squad](https://web.archive.org/web/20210516151437/https://www.fulhamfc.com/teams) in the form of an array of objects, calculating the average age of players by position and country.
+The following is the result of pivoting publicly available information about the Fulham Football Club [mens squad](https://web.archive.org/web/20210516151437/https://www.fulhamfc.com/teams) at the end of the 2020/21 season, calculating the average age of players by position and country.
 ```typescript
+import * as pivot from '../pivot';
+
 // create axes derived from the squad data
-const x = axis.fromTable(squad, 'position');
-const y = axis.fromTable(squad, 'country', player => player.country.substr(0,3).toUpperCase());
+const x = pivot.axis.fromTable(squad, 'position');
+const y = pivot.axis.fromTable(squad, 'country', player => player.country.substr(0,3).toUpperCase());
 
 // create the pivot cube
-const cube = pivot(squad, y, x);
+const cube = pivot.cube(squad, y, x);
 
 // find the average age of players by position by country
-const result = query(cube, average(age));
+const result = pivot.query(cube, pivot.average(age));
 ```
 The selection is the average age of the players grouped by position and country:
 ```
