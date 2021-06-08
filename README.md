@@ -81,4 +81,3 @@ There is nothing to stop you making repeated calls to slice with additional axes
 ```typescript
 const result = slice(table, z).map(i => slice(i, y)).map(i => slice(i, x));
 ```
-Where ```table``` is the source data and ```z```, ```y``` and ```x``` are the axes.
