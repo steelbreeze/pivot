@@ -67,7 +67,7 @@ Alternatively, as can be seen in the [web example](https://steelbreeze.net/pivot
 
 ## Axis manipulation
 ### Custom axis
-In the example above, the axes are a deriving set unique set of values seen within the data. Should you wish to use custom axes you can call ```axis.fromValues```, passing a set of values in place of the table.
+In the example above, the axes are derived from the values seen within the data using ```axis.fromTable```. Should you wish to use custom axes, you can call ```axis.fromValues```.
 ### Composite axes
 Axes can be merged with a call to ```axis.combine```.
 If the criteria for one axis was [a, b] and another was [c, d], then the combined axis would be [ac, ad, bc, bd].
