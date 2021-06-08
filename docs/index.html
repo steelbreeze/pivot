@@ -66,8 +66,6 @@
 		// create the pivot cube
 		const cube = pivot.pivot(squad, y, x);
 
-		pivot.compact(cube, y, x);
-
 		// find the average age of players by position by country
 		const result = pivot.query(cube, cell => cell.map(player => `${player.givenName} ${player.familyName}`).join('<br>'));
 
