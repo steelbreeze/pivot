@@ -72,7 +72,7 @@ In the example above, the axes are derived from the values seen within the data 
 Axes can be merged with a call to ```axis.combine```.
 If the criteria for one axis was [a, b] and another was [c, d], then the combined axis would be [ac, ad, bc, bd].
 ## Hypercubes
-The ```cube``` function returns a table sliced on two axes, it acheives this through two calls to the ```slice``` function, one for each axis:
+The ```cube``` function returns a table sliced on two axes, it acheives this through two calls to the ```slice``` function, one for each axis, implemented as follows:
 ```typescript
 return slice(table, y).map(i => slice(i, x));
 ```
