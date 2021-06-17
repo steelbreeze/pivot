@@ -27,7 +27,7 @@ export class axis {
 	 * @param axis1 The first axis.
 	 * @param axis2 The second axis.
 	 */
-	static combine<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(axis1: Axis<TValue, TKey, TRow>, axis2: Axis<TValue, TKey, TRow>): Axis<TValue, TKey, TRow> {
+	static join<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(axis1: Axis<TValue, TKey, TRow>, axis2: Axis<TValue, TKey, TRow>): Axis<TValue, TKey, TRow> {
 		return axis2.reduce<Axis<TValue, TKey, TRow>>((result, s2) => [...result, ...axis1.map(s1 => { return { predicate: (row: TRow) => s2.predicate(row) && s1.predicate(row), criteria: [...s2.criteria, ...s1.criteria] } })], []);
 	}
 }
@@ -83,4 +83,12 @@ export function sum<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(f:
  */
 export function average<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(f: Func<TRow, number>): Func<Table<TValue, TKey, TRow>, number | null> {
 	return table => table.length ? sum(f)(table)! / count(table)! : null;
+}
+
+/**
+ * A generator, used to transform the source data in a cube to another representation.
+ * @param f A function to transform a source record into the desired result.
+ */
+export function select<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult>(f: Func<TRow, TResult>): Func<Table<TValue, TKey, TRow>, TResult[]> {
+	return table => table.map(f);
 }

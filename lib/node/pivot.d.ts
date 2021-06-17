@@ -20,7 +20,7 @@ export declare class axis {
      * @param axis1 The first axis.
      * @param axis2 The second axis.
      */
-    static combine<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(axis1: Axis<TValue, TKey, TRow>, axis2: Axis<TValue, TKey, TRow>): Axis<TValue, TKey, TRow>;
+    static join<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(axis1: Axis<TValue, TKey, TRow>, axis2: Axis<TValue, TKey, TRow>): Axis<TValue, TKey, TRow>;
 }
 /**
  * Slices a table based on the critera specified by an axis.
@@ -57,3 +57,8 @@ export declare function sum<TValue, TKey extends Key, TRow extends Row<TValue, T
  * @param f A callback function to derive a numerical value for each row.
  */
 export declare function average<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(f: Func<TRow, number>): Func<Table<TValue, TKey, TRow>, number | null>;
+/**
+ * A generator, used to transform the source data in a cube to another representation.
+ * @param f A function to transform a source record into the desired result.
+ */
+export declare function select<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult>(f: Func<TRow, TResult>): Func<Table<TValue, TKey, TRow>, TResult[]>;
