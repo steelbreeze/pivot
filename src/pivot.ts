@@ -19,7 +19,7 @@ export class axis {
 	 * @param f An optional callback function used to convert values in the source table to those in the dimension when pivoting.
 	 */
 	static fromValues<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(values: Array<TValue>, key: TKey, f: Func<TRow, TValue> = (row: TRow) => row[key]): Axis<TValue, TKey, TRow> {
-		return values.map(value => { return { predicate: row => f(row) === value, criteria: [{ key, value }] } });
+		return values.map(value => { return { p: row => f(row) === value, criteria: [{ key, value }] } });
 	}
 
 	/**
@@ -28,7 +28,7 @@ export class axis {
 	 * @param axis2 The second axis.
 	 */
 	static join<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(axis1: Axis<TValue, TKey, TRow>, axis2: Axis<TValue, TKey, TRow>): Axis<TValue, TKey, TRow> {
-		return axis2.reduce<Axis<TValue, TKey, TRow>>((result, s2) => [...result, ...axis1.map(s1 => { return { predicate: (row: TRow) => s2.predicate(row) && s1.predicate(row), criteria: [...s2.criteria, ...s1.criteria] } })], []);
+		return axis2.reduce<Axis<TValue, TKey, TRow>>((result, s2) => [...result, ...axis1.map(s1 => { return { p: (row: TRow) => s2.p(row) && s1.p(row), criteria: [...s2.criteria, ...s1.criteria] } })], []);
 	}
 }
 
@@ -38,7 +38,7 @@ export class axis {
  * @param axis The result of a call to axis with one or more dimensions.
  */
 export function slice<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, axis: Axis<TValue, TKey, TRow>): Array<Table<TValue, TKey, TRow>> {
-	return axis.map(s => table.filter(s.predicate));
+	return axis.map(s => table.filter(s.p));
 }
 
 /**

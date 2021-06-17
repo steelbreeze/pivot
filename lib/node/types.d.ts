@@ -12,7 +12,7 @@ export declare type Pair<TValue, TKey extends Key> = {
     value: TValue;
 };
 export declare type Axis<TValue, TKey extends Key, TRow extends Row<TValue, TKey>> = Array<{
-    predicate: Func<TRow, boolean>;
+    p: Func<TRow, boolean>;
     criteria: Array<Pair<TValue, TKey>>;
 }>;
 /** A table of data. */

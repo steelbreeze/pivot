@@ -10,7 +10,7 @@ export type Row<TValue, TKey extends Key> = { [T in TKey]: TValue };
 /** A pair consiting of a key and value. */
 export type Pair<TValue, TKey extends Key> = { key: TKey, value: TValue };
 
-export type Axis<TValue, TKey extends Key, TRow extends Row<TValue, TKey>> = Array<{ predicate: Func<TRow, boolean>, criteria: Array<Pair<TValue, TKey>> }>;
+export type Axis<TValue, TKey extends Key, TRow extends Row<TValue, TKey>> = Array<{ p: Func<TRow, boolean>, criteria: Array<Pair<TValue, TKey>> }>;
 
 /** A table of data. */
 export type Table<TValue, TKey extends Key, TRow extends Row<TValue, TKey>> = Array<TRow>;
