@@ -63,15 +63,17 @@
 		const y = pivot.axis.fromTable(squad, 'country');
 		//const y = pivot.axis(pivot.dimension(squad, 'age', age)); // an alternative choice for the y axis using a derived field
 
+		console.log(pivot)
+
 		// create the pivot cube
 		const cube = pivot.cube(squad, y, x);
 
-		// find the average age of players by position by country
-		const result = pivot.query(cube, cell => cell.map(player => `${player.givenName} ${player.familyName}`).join('<br>'));
+		// find the average age of players by position by country, select just the full name
+		const result = pivot.query(cube, pivot.select(player => `${player.givenName} ${player.familyName}`));
 
 		document.getElementById("squad").innerHTML =
 			`<thead>` +
-				x[0].criteria.map((_c, ii) => `<tr>${y[0].criteria.map(()=>`<td></td>`).join('')}${x.map(c => th(c.criteria[ii])).join('')}</tr>` ).join('') +
+			x[0].criteria.map((_c, ii) => `<tr>${y[0].criteria.map(() => `<td></td>`).join('')}${x.map(c => th(c.criteria[ii])).join('')}</tr>`).join('') +
 			`</thead>` +
 			result.map((row, i) => `<tr>${y[i].criteria.map(th).join('')}${row.map(cell => td(cell || '', '')).join('')}</tr>`).join('');
 
@@ -88,7 +90,7 @@
 
 		// generate a cell in a table
 		function td(t, c) {
-			return `<td${c ? ` class="${c}"` : ``}>${t}</td>`;
+			return `<td${c ? ` class="${c}"` : ``}>${t.join('<br>')}</td>`;
 		}
 
 	</script>
