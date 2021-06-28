@@ -69,7 +69,7 @@ Alternatively, as can be seen in the [web example](https://steelbreeze.net/pivot
 ### Custom axis
 In the example above, the axes are derived from the values seen within the data using ```axis.fromTable```. Should you wish to use custom axes, you can call ```axis.fromValues```.
 ### Composite axes
-Axes can be merged with a call to ```axis.combine```.
+Axes can be merged with a call to ```axis.join```.
 If the criteria for one axis was [a, b] and another was [c, d], then the combined axis would be [ac, ad, bc, bd].
 ## Hypercubes
 The ```cube``` function returns a table sliced on two axes, it acheives this through two calls to the ```slice``` function, one for each axis, implemented as follows:
