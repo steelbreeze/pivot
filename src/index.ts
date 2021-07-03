@@ -1,5 +1,24 @@
-import { Axis, Cube, Func, Key, Row, Table } from './types';
+/** A function taking one argument and returning a result. */
+export type Func<TArg, TResult> = (arg: TArg) => TResult;
 
+/** The type of keys used throughout the library. */
+export type Key = string | number;
+
+/** A set of attributes, each entry addressable via a key. */
+export type Row<TValue, TKey extends Key> = { [T in TKey]: TValue };
+
+/** A pair consiting of a key and value. */
+export type Pair<TValue, TKey extends Key> = { key: TKey, value: TValue };
+
+export type Axis<TValue, TKey extends Key, TRow extends Row<TValue, TKey>> = Array<{ p: Func<TRow, boolean>, criteria: Array<Pair<TValue, TKey>> }>;
+
+/** A table of data. */
+export type Table<TValue, TKey extends Key, TRow extends Row<TValue, TKey>> = Array<TRow>;
+
+/** A cube of data. */
+export type Cube<TValue, TKey extends Key, TRow extends Row<TValue, TKey>> = Array<Array<Table<TValue, TKey, TRow>>>;
+
+/** Static class acting as a namespace for axis related functions. */
 export class axis {
 	/**
 	 * Creates an axis based on the contents of a table.
@@ -28,7 +47,7 @@ export class axis {
 	 * @param axis2 The second axis.
 	 */
 	static join<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(axis1: Axis<TValue, TKey, TRow>, axis2: Axis<TValue, TKey, TRow>): Axis<TValue, TKey, TRow> {
-		return axis2.reduce<Axis<TValue, TKey, TRow>>((result, s2) => [...result, ...axis1.map(s1 => { return { p: (row: TRow) => s2.p(row) && s1.p(row), criteria: [...s2.criteria, ...s1.criteria] } })], []);
+		return axis1.reduce<Axis<TValue, TKey, TRow>>((result, s1) => [...result, ...axis2.map(s2 => { return { p: (row: TRow) => s1.p(row) && s2.p(row), criteria: [...s1.criteria, ...s2.criteria] } })], []);
 	}
 }
 

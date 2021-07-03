@@ -1,12 +1,12 @@
 {
   "name": "@steelbreeze/pivot",
-  "version": "1.0.0-rc.6",
+  "version": "1.0.0-rc.7",
   "description": "Minimal TypeScript / JavaScript pivot table library",
-  "main": "./lib/node/pivot.js",
-  "types": "./lib/node/pivot.d.ts",
+	"main": "lib/node/index.js",
+	"typings": "lib/node/index.d.ts",
   "directories": {
-    "lib": "./lib/node",
-    "dist": "./lib/web"
+    "lib": "lib/node",
+    "dist": "lib/web"
   },
   "devDependencies": {
     "typescript": "^4.2.4",
@@ -14,7 +14,7 @@
   },
   "scripts": {
     "build": "tsc -p .",
-    "package": "webpack && cp ./lib/web/pivot.js ./docs/dist",
+    "package": "webpack && cp lib/web/pivot.min.js docs/dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

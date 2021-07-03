@@ -1,4 +1,4 @@
-import * as pivot from '../pivot';
+import * as pivot from '..';
 import { Player, squad } from './fulham';
 
 // create axes derived from the squad data
