@@ -1,5 +1,7 @@
 /** A function taking one argument and returning a result. */
 export declare type Func<TArg, TResult> = (arg: TArg) => TResult;
+/** A function taking one argument and returning a boolean result. */
+export declare type Predicate<TArg> = Func<TArg, boolean>;
 /** The type of keys used throughout the library. */
 export declare type Key = string | number;
 /** A set of attributes, each entry addressable via a key. */
@@ -12,7 +14,7 @@ export declare type Pair<TValue, TKey extends Key> = {
     value: TValue;
 };
 export declare type Axis<TValue, TKey extends Key, TRow extends Row<TValue, TKey>> = Array<{
-    p: Func<TRow, boolean>;
+    p: Predicate<TRow>;
     criteria: Array<Pair<TValue, TKey>>;
 }>;
 /** A table of data. */
@@ -62,7 +64,7 @@ export declare function cube<TValue, TKey extends Key, TRow extends Row<TValue, 
  * @param f A callback function to create a result from each cell of the cube.
  * @param p A predicate to filter the cube by.
  */
-export declare function query<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult>(cube: Cube<TValue, TKey, TRow>, f: Func<Table<TValue, TKey, TRow>, TResult>, p?: Func<TRow, boolean>): Array<Array<TResult>>;
+export declare function query<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult>(cube: Cube<TValue, TKey, TRow>, f: Func<Table<TValue, TKey, TRow>, TResult>, p?: Predicate<TRow>): Array<Array<TResult>>;
 /**
  * Counts the number of items in a table.
  * @param table The source table.
