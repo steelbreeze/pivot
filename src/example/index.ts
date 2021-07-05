@@ -12,8 +12,8 @@ const cube = pivot.cube(squad, y, x);
 const result = pivot.query(cube, pivot.average(age));
 
 // ugly code to pretty print the result with axes
-console.log(`\t${x.map(c => print(c.criteria[0].value)).join('\t')}`)
-result.forEach((row, i) => console.log(`${print(y[i].criteria[0].value)}\t${row.map(print).join('\t')}`));
+console.log(`\t${x.map(c => print(c.pairs[0].value)).join('\t')}`)
+result.forEach((row, i) => console.log(`${print(y[i].pairs[0].value)}\t${row.map(print).join('\t')}`));
 
 // Calculate a person's age from their date of birth
 function age(person: Player): number {

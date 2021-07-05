@@ -13,7 +13,7 @@ export type Row<TValue, TKey extends Key> = { [T in TKey]: TValue };
 /** A pair consiting of a key and value. */
 export type Pair<TValue, TKey extends Key> = { key: TKey, value: TValue };
 
-export type Axis<TValue, TKey extends Key, TRow extends Row<TValue, TKey>> = Array<{ p: Predicate<TRow>, criteria: Array<Pair<TValue, TKey>> }>;
+export type Axis<TValue, TKey extends Key, TRow extends Row<TValue, TKey>> = Array<{ p: Predicate<TRow>, pairs: Array<Pair<TValue, TKey>> }>;
 
 /** A table of data. */
 export type Table<TValue, TKey extends Key, TRow extends Row<TValue, TKey>> = Array<TRow>;
@@ -41,7 +41,7 @@ export class axis {
 	 * @param mapper An optional callback function used to convert values in the source table to those in the dimension when pivoting.
 	 */
 	static fromValues<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(values: Array<TValue>, key: TKey, mapper: Func<TRow, TValue> = (row: TRow) => row[key]): Axis<TValue, TKey, TRow> {
-		return values.map(value => { return { p: row => mapper(row) === value, criteria: [{ key, value }] } });
+		return values.map(value => { return { p: row => mapper(row) === value, pairs: [{ key, value }] } });
 	}
 
 	/**
@@ -50,7 +50,7 @@ export class axis {
 	 * @param axis2 The second axis.
 	 */
 	static join<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(axis1: Axis<TValue, TKey, TRow>, axis2: Axis<TValue, TKey, TRow>): Axis<TValue, TKey, TRow> {
-		return axis1.reduce<Axis<TValue, TKey, TRow>>((result, s1) => [...result, ...axis2.map(s2 => { return { p: (row: TRow) => s1.p(row) && s2.p(row), criteria: [...s1.criteria, ...s2.criteria] } })], []);
+		return axis1.reduce<Axis<TValue, TKey, TRow>>((result, s1) => [...result, ...axis2.map(s2 => { return { p: (row: TRow) => s1.p(row) && s2.p(row), pairs: [...s1.pairs, ...s2.pairs] } })], []);
 	}
 }
 
