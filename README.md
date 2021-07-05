@@ -44,7 +44,7 @@ USA     28
 ```
 > The full example code can be found [here](src/example/index.ts).
 
-Alternatively, as can be seen in the [web example](https://steelbreeze.net/pivot), non-numerical content can also be queried, mapping the source data to an arbitory selection:
+Alternatively, as can be seen in the [web example](https://steelbreeze.net/pivot), non-numerical content can also be queried, mapping the source data to an arbitrary selection:
 ```javascript
 const result = pivot.map(cube, pivot.select(player => `${player.givenName} ${player.familyName}`));
 
