@@ -9,7 +9,7 @@ const y = pivot.axis.fromTable(squad, 'country', player => player.country.substr
 const cube = pivot.cube(squad, y, x);
 
 // find the average age of players by position by country
-const result = pivot.query(cube, pivot.average(age));
+const result = pivot.map(cube, pivot.average(age));
 
 // ugly code to pretty print the result with axes
 console.log(`\t${x.map(c => print(c.pairs[0].value)).join('\t')}`)

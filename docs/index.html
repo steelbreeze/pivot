@@ -25,7 +25,7 @@
 <body>
 	<h1>steelbreeze/pivot</h1>
 	<p>Coming soon...</p>
-	<h2>Fulham Football Club men's squad 2020/1</h2>
+	<h2>Fulham Football Club men's squad at the end of the 2020/1 season</h2>
 	<table id="squad"></table>
 	<script src="./dist/pivot.min.js"></script>
 	<script>
@@ -67,7 +67,7 @@
 		const cube = pivot.cube(squad, y, x);
 
 		// find the average age of players by position by country, select just the full name
-		const result = pivot.query(cube, pivot.select(player => `${player.givenName} ${player.familyName}`));
+		const result = pivot.map(cube, pivot.select(player => `${player.givenName} ${player.familyName}`));
 
 		document.getElementById("squad").innerHTML =
 			`<thead>` +

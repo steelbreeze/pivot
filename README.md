@@ -1,7 +1,7 @@
 # pivot
 [![Maintainability](https://api.codeclimate.com/v1/badges/d2fd7facda5a61d2b66a/maintainability)](https://codeclimate.com/github/steelbreeze/pivot/maintainability)
 
-A minimalist pivot table library for TypeScript/JavaScript. While small in size (a mere 959 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite axes, filtering. Even hypercubes are possible.
+A minimalist pivot table library for TypeScript/JavaScript. While small in size (a mere 981 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite axes, filtering. Even hypercubes are possible.
 
 The library also provides a modest set of numberical selectors. Suggestions for additions, or better still contributions, are welcome.
 
@@ -21,7 +21,7 @@ const y = pivot.axis.fromTable(squad, 'country', player => player.country.substr
 const cube = pivot.cube(squad, y, x);
 
 // find the average age of players by position by country
-const result = pivot.query(cube, pivot.average(age));
+const result = pivot.map(cube, pivot.average(age));
 ```
 The selection is the average age of the players grouped by position and country:
 ```
@@ -44,7 +44,12 @@ USA     28
 ```
 > The full example code can be found [here](src/example/index.ts).
 
-Alternatively, as can be seen in the [web example](https://steelbreeze.net/pivot), non-numerical content can also be queried, resulting in this sort of output:
+Alternatively, as can be seen in the [web example](https://steelbreeze.net/pivot), non-numerical content can also be queried, mapping the source data to an arbitory selection:
+```javascript
+const result = pivot.map(cube, pivot.select(player => `${player.givenName} ${player.familyName}`));
+
+```
+ Resulting in this sort of output:
 ||Defender|Forward|Goalkeeper|Midfielder|
 |-|-|-|-|-|
 | Belgium|Denis Odoi||||			

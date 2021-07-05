@@ -27,21 +27,21 @@ export class axis {
 	 * Creates an axis based on the contents of a table.
 	 * @param table The source table, an array of objects.
 	 * @param key The name to give this axis.
-	 * @param mapper An optional callback function to derive the axis values from the source table row. If omitted, the object attribute with the same name as the key is derived.
+	 * @param selector An optional callback function to derive the axis values from the source table row. If omitted, the object attribute with the same name as the key is derived.
 	 * @param sorter An optional callback function used to sort the values of the dimension. This conforms to the sort criteria used by Array.prototype.sort.
 	 */
-	static fromTable<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, key: TKey, mapper: Func<TRow, TValue> = (row: TRow) => row[key], sorter?: (a: TValue, b: TValue) => number): Axis<TValue, TKey, TRow> {
-		return axis.fromValues(table.map(mapper).filter((value, index, source) => source.indexOf(value) === index).sort(sorter), key, mapper);
+	static fromTable<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, key: TKey, selector: Func<TRow, TValue> = (row: TRow) => row[key], sorter?: (a: TValue, b: TValue) => number): Axis<TValue, TKey, TRow> {
+		return axis.fromValues(table.map(selector).filter((value, index, source) => source.indexOf(value) === index).sort(sorter), key, selector);
 	}
 
 	/**
 	 * Creates an axis from an array of values.
 	 * @param values The source values.
 	 * @param key The name to give this dimension.
-	 * @param mapper An optional callback function used to convert values in the source table to those in the dimension when pivoting.
+	 * @param selector An optional callback function used to convert values in the source table to those in the dimension when pivoting.
 	 */
-	static fromValues<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(values: Array<TValue>, key: TKey, mapper: Func<TRow, TValue> = (row: TRow) => row[key]): Axis<TValue, TKey, TRow> {
-		return values.map(value => { return { p: row => mapper(row) === value, pairs: [{ key, value }] } });
+	static fromValues<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(values: Array<TValue>, key: TKey, selector: Func<TRow, TValue> = (row: TRow) => row[key]): Axis<TValue, TKey, TRow> {
+		return values.map(value => { return { p: row => selector(row) === value, pairs: [{ key, value }] } });
 	}
 
 	/**
@@ -74,43 +74,51 @@ export function cube<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(t
 }
 
 /**
- * Returns data queried from a cube as a table.
+ * Filters data within a cube.
  * @param cube The source cube.
- * @param mapper A callback function to create a result from each cell of the cube.
- * @param filter A predicate to filter the cube by.
+ * @param predicate A predicate to filter the cube by.
  */
-export function query<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult>(cube: Cube<TValue, TKey, TRow>, mapper: Func<Table<TValue, TKey, TRow>, TResult>, filter?: Predicate<TRow>): Array<Array<TResult>> {
-	return cube.map(y => y.map(x => mapper(filter ? x.filter(filter) : x)));
+export function filter<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(cube: Cube<TValue, TKey, TRow>, predicate: Predicate<TRow>): Cube<TValue, TKey, TRow> {
+	return cube.map(y => y.map(x => x.filter(predicate)));
+}
+
+/**
+ * Queries data from a cube.
+ * @param cube The source cube.
+ * @param selector A callback function to create a result from each cell of the cube.
+ */
+export function map<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult>(cube: Cube<TValue, TKey, TRow>, selector: Func<Table<TValue, TKey, TRow>, TResult>): Array<Array<TResult>> {
+	return cube.map(y => y.map(selector));
+}
+
+/**
+ * A generator, used to transform the source data in a cube to another representation.
+ * @param selector A function to transform a source record into the desired result.
+ */
+export function select<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult>(selector: Func<TRow, TResult>): Func<Table<TValue, TKey, TRow>, TResult[]> {
+	return table => table.map(selector);
+}
+
+/**
+ * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
+ * @param selector A callback function to derive a numerical value for each row.
+ */
+export function sum<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(selector: Func<TRow, number>): Func<Table<TValue, TKey, TRow>, number | null> {
+	return table => table ? table.reduce((total, row) => total + selector(row), 0) : null;
+}
+
+/**
+ * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube .
+ * @param selector A callback function to derive a numerical value for each row.
+ */
+export function average<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(selector: Func<TRow, number>): Func<Table<TValue, TKey, TRow>, number | null> {
+	return table => table ? sum(selector)(table)! / count(table)! : null;
 }
 
 /**
  * Counts the number of items in a table.
  * @param table The source table.
  */
-export function count<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>): number | null {
+ export function count<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>): number | null {
 	return table.length || null;
-}
-
-/**
- *  generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
- * @param mapper A callback function to derive a numerical value for each row.
- */
-export function sum<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(mapper: Func<TRow, number>): Func<Table<TValue, TKey, TRow>, number | null> {
-	return table => table.length ? table.reduce((total, row) => total + mapper(row), 0) : null;
-}
-
-/**
- * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube .
- * @param mapper A callback function to derive a numerical value for each row.
- */
-export function average<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(mapper: Func<TRow, number>): Func<Table<TValue, TKey, TRow>, number | null> {
-	return table => table.length ? sum(mapper)(table)! / count(table)! : null;
-}
-
-/**
- * A generator, used to transform the source data in a cube to another representation.
- * @param mapper A function to transform a source record into the desired result.
- */
-export function select<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult>(mapper: Func<TRow, TResult>): Func<Table<TValue, TKey, TRow>, TResult[]> {
-	return table => table.map(mapper);
 }
