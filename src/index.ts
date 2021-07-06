@@ -27,21 +27,20 @@ export class axis {
 	 * Creates an axis based on the contents of a table.
 	 * @param table The source table, an array of objects.
 	 * @param key The name to give this axis.
-	 * @param selector An optional callback function to derive the axis values from the source table row. If omitted, the object attribute with the same name as the key is derived.
-	 * @param sorter An optional callback function used to sort the values of the dimension. This conforms to the sort criteria used by Array.prototype.sort.
+	 * @param options An optional get callback to derive the axis values for a row, and a sort callback.
 	 */
-	static fromTable<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, key: TKey, selector: Func<TRow, TValue> = (row: TRow) => row[key], sorter?: (a: TValue, b: TValue) => number): Axis<TValue, TKey, TRow> {
-		return axis.fromValues(table.map(selector).filter((value, index, source) => source.indexOf(value) === index).sort(sorter), key, selector);
+	static fromTable<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, key: TKey, options: { get?: Func<TRow, TValue>, sort?: (a: TValue, b: TValue) => number } = {}): Axis<TValue, TKey, TRow> {
+		return axis.fromValues(table.map(options.get || (row => row[key])).filter((value, index, source) => source.indexOf(value) === index).sort(options.sort), key, options.get);
 	}
 
 	/**
 	 * Creates an axis from an array of values.
 	 * @param values The source values.
 	 * @param key The name to give this dimension.
-	 * @param selector An optional callback function used to convert values in the source table to those in the dimension when pivoting.
+	 * @param get An optional callback function used to convert values in the source table to those in the dimension when pivoting.
 	 */
-	static fromValues<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(values: Array<TValue>, key: TKey, selector: Func<TRow, TValue> = (row: TRow) => row[key]): Axis<TValue, TKey, TRow> {
-		return values.map(value => { return { p: row => selector(row) === value, pairs: [{ key, value }] } });
+	static fromValues<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(values: Array<TValue>, key: TKey, get: Func<TRow, TValue> = row => row[key]): Axis<TValue, TKey, TRow> {
+		return values.map(value => { return { p: row => get(row) === value, pairs: [{ key, value: value }] } });
 	}
 
 	/**
@@ -119,6 +118,6 @@ export function average<TValue, TKey extends Key, TRow extends Row<TValue, TKey>
  * Counts the number of items in a table.
  * @param table The source table.
  */
- export function count<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>): number | null {
+export function count<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>): number | null {
 	return table.length || null;
 }

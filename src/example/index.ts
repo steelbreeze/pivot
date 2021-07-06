@@ -3,7 +3,7 @@ import { Player, squad } from './fulham';
 
 // create axes derived from the squad data
 const x = pivot.axis.fromTable(squad, 'position');
-const y = pivot.axis.fromTable(squad, 'country', player => player.country.substr(0,3).toUpperCase());
+const y = pivot.axis.fromTable(squad, 'country', { get: player => player.country.substr(0, 3).toUpperCase() });
 
 // create the pivot cube
 const cube = pivot.cube(squad, y, x);
@@ -23,6 +23,6 @@ function age(person: Player): number {
 // Print a value in 7 characters and truncate with ellipsis
 function print(value: any) {
 	const str = String(value || '');
-	
+
 	return str.length < 8 ? str : (str.substr(0, 6) + '\u2026');
 }
