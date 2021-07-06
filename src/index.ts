@@ -1,8 +1,11 @@
 /** A function taking one argument and returning a result. */
-export type Func<TArg, TResult> = (arg: TArg) => TResult;
+export type Function1<TArg1, TResult> = (arg: TArg1) => TResult;
+
+/** A function taking two arguments and returning a result. */
+export type Function2<TArg1, TArg2, TResult> = (arg1: TArg1, arg2: TArg2) => TResult;
 
 /** A function taking one argument and returning a boolean result. */
-export type Predicate<TArg> = Func<TArg, boolean>;
+export type Predicate<TArg> = Function1<TArg, boolean>;
 
 /** The type of keys used throughout the library. */
 export type Key = string | number;
@@ -29,7 +32,7 @@ export class axis {
 	 * @param key The name to give this axis.
 	 * @param options An optional get callback to derive the axis values for a row, and a sort callback.
 	 */
-	static fromTable<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, key: TKey, options: { get?: Func<TRow, TValue>, sort?: (a: TValue, b: TValue) => number } = {}): Axis<TValue, TKey, TRow> {
+	static fromTable<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, key: TKey, options: { get?: Function1<TRow, TValue>, sort?: Function2<TValue, TValue, number> } = {}): Axis<TValue, TKey, TRow> {
 		return axis.fromValues(table.map(options.get || (row => row[key])).filter((value, index, source) => source.indexOf(value) === index).sort(options.sort), key, options.get);
 	}
 
@@ -39,7 +42,7 @@ export class axis {
 	 * @param key The name to give this dimension.
 	 * @param get An optional callback function used to convert values in the source table to those in the dimension when pivoting.
 	 */
-	static fromValues<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(values: Array<TValue>, key: TKey, get: Func<TRow, TValue> = row => row[key]): Axis<TValue, TKey, TRow> {
+	static fromValues<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(values: Array<TValue>, key: TKey, get: Function1<TRow, TValue> = row => row[key]): Axis<TValue, TKey, TRow> {
 		return values.map(value => { return { p: row => get(row) === value, pairs: [{ key, value: value }] } });
 	}
 
@@ -86,7 +89,7 @@ export function filter<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>
  * @param cube The source cube.
  * @param selector A callback function to create a result from each cell of the cube.
  */
-export function map<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult>(cube: Cube<TValue, TKey, TRow>, selector: Func<Table<TValue, TKey, TRow>, TResult>): Array<Array<TResult>> {
+export function map<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult>(cube: Cube<TValue, TKey, TRow>, selector: Function1<Table<TValue, TKey, TRow>, TResult>): Array<Array<TResult>> {
 	return cube.map(y => y.map(selector));
 }
 
@@ -94,7 +97,7 @@ export function map<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TR
  * A generator, used to transform the source data in a cube to another representation.
  * @param selector A function to transform a source record into the desired result.
  */
-export function select<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult>(selector: Func<TRow, TResult>): Func<Table<TValue, TKey, TRow>, TResult[]> {
+export function select<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult>(selector: Function1<TRow, TResult>): Function1<Table<TValue, TKey, TRow>, TResult[]> {
 	return table => table.map(selector);
 }
 
@@ -102,7 +105,7 @@ export function select<TValue, TKey extends Key, TRow extends Row<TValue, TKey>,
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row.
  */
-export function sum<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(selector: Func<TRow, number>): Func<Table<TValue, TKey, TRow>, number | null> {
+export function sum<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(selector: Function1<TRow, number>): Function1<Table<TValue, TKey, TRow>, number | null> {
 	return table => table ? table.reduce((total, row) => total + selector(row), 0) : null;
 }
 
@@ -110,7 +113,7 @@ export function sum<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(se
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube .
  * @param selector A callback function to derive a numerical value for each row.
  */
-export function average<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(selector: Func<TRow, number>): Func<Table<TValue, TKey, TRow>, number | null> {
+export function average<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(selector: Function1<TRow, number>): Function1<Table<TValue, TKey, TRow>, number | null> {
 	return table => table ? sum(selector)(table)! / count(table)! : null;
 }
 

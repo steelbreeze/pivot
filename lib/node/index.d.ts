@@ -1,7 +1,9 @@
 /** A function taking one argument and returning a result. */
-export declare type Func<TArg, TResult> = (arg: TArg) => TResult;
+export declare type Function1<TArg1, TResult> = (arg: TArg1) => TResult;
+/** A function taking two arguments and returning a result. */
+export declare type Function2<TArg1, TArg2, TResult> = (arg1: TArg1, arg2: TArg2) => TResult;
 /** A function taking one argument and returning a boolean result. */
-export declare type Predicate<TArg> = Func<TArg, boolean>;
+export declare type Predicate<TArg> = Function1<TArg, boolean>;
 /** The type of keys used throughout the library. */
 export declare type Key = string | number;
 /** A set of attributes, each entry addressable via a key. */
@@ -27,11 +29,11 @@ export declare class axis {
      * Creates an axis based on the contents of a table.
      * @param table The source table, an array of objects.
      * @param key The name to give this axis.
-     * @param options An optional deriveValue callback to get the axis values for a row and a sort callback.
+     * @param options An optional get callback to derive the axis values for a row, and a sort callback.
      */
     static fromTable<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(table: Table<TValue, TKey, TRow>, key: TKey, options?: {
-        get?: Func<TRow, TValue>;
-        sort?: (a: TValue, b: TValue) => number;
+        get?: Function1<TRow, TValue>;
+        sort?: Function2<TValue, TValue, number>;
     }): Axis<TValue, TKey, TRow>;
     /**
      * Creates an axis from an array of values.
@@ -39,7 +41,7 @@ export declare class axis {
      * @param key The name to give this dimension.
      * @param get An optional callback function used to convert values in the source table to those in the dimension when pivoting.
      */
-    static fromValues<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(values: Array<TValue>, key: TKey, get?: Func<TRow, TValue>): Axis<TValue, TKey, TRow>;
+    static fromValues<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(values: Array<TValue>, key: TKey, get?: Function1<TRow, TValue>): Axis<TValue, TKey, TRow>;
     /**
      * Merge two axes together into a single axis.
      * @param axis1 The first axis.
@@ -71,22 +73,22 @@ export declare function filter<TValue, TKey extends Key, TRow extends Row<TValue
  * @param cube The source cube.
  * @param selector A callback function to create a result from each cell of the cube.
  */
-export declare function map<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult>(cube: Cube<TValue, TKey, TRow>, selector: Func<Table<TValue, TKey, TRow>, TResult>): Array<Array<TResult>>;
+export declare function map<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult>(cube: Cube<TValue, TKey, TRow>, selector: Function1<Table<TValue, TKey, TRow>, TResult>): Array<Array<TResult>>;
 /**
  * A generator, used to transform the source data in a cube to another representation.
  * @param selector A function to transform a source record into the desired result.
  */
-export declare function select<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult>(selector: Func<TRow, TResult>): Func<Table<TValue, TKey, TRow>, TResult[]>;
+export declare function select<TValue, TKey extends Key, TRow extends Row<TValue, TKey>, TResult>(selector: Function1<TRow, TResult>): Function1<Table<TValue, TKey, TRow>, TResult[]>;
 /**
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row.
  */
-export declare function sum<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(selector: Func<TRow, number>): Func<Table<TValue, TKey, TRow>, number | null>;
+export declare function sum<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(selector: Function1<TRow, number>): Function1<Table<TValue, TKey, TRow>, number | null>;
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube .
  * @param selector A callback function to derive a numerical value for each row.
  */
-export declare function average<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(selector: Func<TRow, number>): Func<Table<TValue, TKey, TRow>, number | null>;
+export declare function average<TValue, TKey extends Key, TRow extends Row<TValue, TKey>>(selector: Function1<TRow, number>): Function1<Table<TValue, TKey, TRow>, number | null>;
 /**
  * Counts the number of items in a table.
  * @param table The source table.

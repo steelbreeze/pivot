@@ -67,7 +67,7 @@
 		const cube = pivot.cube(squad, y, x);
 
 		// find the average age of players by position by country, select just the full name
-		const result = pivot.map(cube, pivot.select(player => `${player.givenName} ${player.familyName}`));
+		const result = pivot.map(cube, pivot.select(player => `${player.givenName}&nbsp;${player.familyName}`));
 
 		document.getElementById("squad").innerHTML =
 			`<thead>` +
@@ -88,7 +88,7 @@
 
 		// generate a cell in a table
 		function td(t, c) {
-			return `<td${c ? ` class="${c}"` : ``}>${t.join('<br>')}</td>`;
+			return `<td${c ? ` class="${c}"` : ``}>${t.join(', ')}</td>`;
 		}
 
 	</script>
