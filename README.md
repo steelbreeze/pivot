@@ -46,7 +46,7 @@ USA     28
 
 Alternatively, as can be seen in the [web example](https://steelbreeze.net/pivot), non-numerical content can also be queried, mapping the source data to an arbitrary selection:
 ```javascript
-const result = pivot.map(cube, pivot.select(player => `${player.givenName} ${player.familyName}`));
+const result = pivot.map(cube, pivot.select(player => `${player.givenName}&nbsp;${player.familyName}`));
 
 ```
  Resulting in this sort of output:
