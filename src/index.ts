@@ -13,6 +13,7 @@ export type Row = { [key: string]: any };
 /** A pair consiting of a key and value. */
 export type Pair = { key: string, value: any };
 
+/** An axis to pivot a table by. */
 export type Axis<TRow extends Row> = Array<{ p: Predicate<TRow>, pairs: Array<Pair> }>;
 
 /** A table of data. */
@@ -29,7 +30,7 @@ export class axis {
 	 * @param key The name to give this axis.
 	 * @param options An optional get callback to derive the axis values for a row, and a sort callback.
 	 */
-	static fromTable<TRow extends Row>(table: Table<TRow>, key: string, options: { get?: Func1<TRow, string>, sort?: Func2<any, any, number> } = {}): Axis<TRow> {
+	static fromTable<TRow extends Row>(table: Table<TRow>, key: string, options: { get?: Func1<TRow, any>, sort?: Func2<any, any, number> } = {}): Axis<TRow> {
 		return axis.fromValues(table.map(options.get || (row => row[key])).filter((value, index, source) => source.indexOf(value) === index).sort(options.sort), key, options.get);
 	}
 
@@ -39,7 +40,7 @@ export class axis {
 	 * @param key The name to give this dimension.
 	 * @param get An optional callback function used to convert values in the source table to those in the dimension when pivoting.
 	 */
-	static fromValues<TRow extends Row>(values: Array<any>, key: string, get: Func1<TRow, string> = row => row[key]): Axis<TRow> {
+	static fromValues<TRow extends Row>(values: Array<any>, key: string, get: Func1<TRow, any> = row => row[key]): Axis<TRow> {
 		return values.map(value => { return { p: row => get(row) === value, pairs: [{ key, value: value }] } });
 	}
 
