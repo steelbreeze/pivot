@@ -1,9 +1,9 @@
-import * as pivot from '..';
 import { Player, squad } from './fulham';
+import * as pivot from '..';
 
 // create axes derived from the squad data
 const x = pivot.axis.fromTable(squad, 'position');
-const y = pivot.axis.fromTable(squad, 'country', { get: player => player.country.substr(0, 3).toUpperCase() });
+const y = pivot.axis.fromTable(squad, 'short country', { get: player => player.country.substr(0, 3).toUpperCase() });
 
 // create the pivot cube
 const cube = pivot.cube(squad, y, x);

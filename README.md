@@ -11,11 +11,11 @@ There are plenty of pivot table libraries in existance, so why create another on
 ## Example
 The following is the result of pivoting publicly available information about the Fulham Football Club [mens squad](https://web.archive.org/web/20210516151437/https://www.fulhamfc.com/teams) at the end of the 2020/21 season, calculating the average age of players by position and country.
 ```typescript
-import * as pivot from '../pivot';
+import * as pivot from '..';
 
 // create axes derived from the squad data
 const x = pivot.axis.fromTable(squad, 'position');
-const y = pivot.axis.fromTable(squad, 'country', { get: player => player.country.substr(0, 3).toUpperCase() });
+const y = pivot.axis.fromTable(squad, 'short country', { get: player => player.country.substr(0, 3).toUpperCase() });
 
 // create the pivot cube
 const cube = pivot.cube(squad, y, x);
