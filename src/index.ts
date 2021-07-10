@@ -8,10 +8,10 @@ export type Func2<TArg1, TArg2, TResult> = (arg1: TArg1, arg2: TArg2) => TResult
 export type Predicate<TArg> = Func1<TArg, boolean>;
 
 /** A set of attributes, each entry addressable via a key. */
-export type Row = { [key: string]: any };
+export type Row = { [key in keyof any]: any };
 
 /** A pair consiting of a key and value. */
-export type Pair = { key: string, value: any };
+export type Pair = { key: keyof any, value: any };
 
 /** An axis to pivot a table by. */
 export type Axis<TRow extends Row> = Array<{ p: Predicate<TRow>, pairs: Array<Pair> }>;

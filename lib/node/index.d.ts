@@ -6,11 +6,11 @@ export declare type Func2<TArg1, TArg2, TResult> = (arg1: TArg1, arg2: TArg2) =>
 export declare type Predicate<TArg> = Func1<TArg, boolean>;
 /** A set of attributes, each entry addressable via a key. */
 export declare type Row = {
-    [key: string]: any;
+    [key in keyof any]: any;
 };
 /** A pair consiting of a key and value. */
 export declare type Pair = {
-    key: string;
+    key: keyof any;
     value: any;
 };
 /** An axis to pivot a table by. */
