@@ -14,6 +14,7 @@
 			text-align: left;
 			vertical-align: top;
 			padding: 8px;
+			hyphens: none;
 		}
 
 		tr:nth-child(even) {
@@ -61,24 +62,18 @@
 		// create axes out of the dimensions derived from the squad data
 		const x = pivot.axis.fromTable(squad, 'position');
 		const y = pivot.axis.fromTable(squad, 'country');
-		//const y = pivot.axis(pivot.dimension(squad, 'age', age)); // an alternative choice for the y axis using a derived field
 
 		// create the pivot cube
 		const cube = pivot.cube(squad, y, x);
 
 		// find the average age of players by position by country, select just the full name
-		const result = pivot.map(cube, pivot.select(player => `${player.givenName}&nbsp;${player.familyName}`));
+		const result = pivot.map(cube, pivot.select(player => `${player.givenName.replace(/ /g, '&nbsp;')}&nbsp;${player.familyName.replace(/ /g, '&nbsp;')}`));
 
 		document.getElementById("squad").innerHTML =
 			`<thead>` +
 			x[0].pairs.map((_c, ii) => `<tr>${y[0].pairs.map(() => `<td></td>`).join('')}${x.map(c => th(c.pairs[ii])).join('')}</tr>`).join('') +
 			`</thead>` +
 			result.map((row, i) => `<tr>${y[i].pairs.map(th).join('')}${row.map(cell => td(cell || '', '')).join('')}</tr>`).join('');
-
-		// Calculate a person's age from their date of birth
-		function age(person) {
-			return new Date(Date.now() - person.dateOfBirth.getTime()).getUTCFullYear() - 1970;
-		}
 
 		// generate a header cell in a table
 		function th(pairs) {
