@@ -11,7 +11,7 @@ export type Predicate<TArg> = Func1<TArg, boolean>;
 export type Row = { [key in keyof any]: any };
 
 /** A pair consiting of a key and value. */
-export type Pair = { key: keyof any, value: any };
+export type Pair = { key: string, value: any };
 
 /** An axis to pivot a table by. */
 export type Axis<TRow extends Row> = Array<{ p: Predicate<TRow>, pairs: Array<Pair> }>;

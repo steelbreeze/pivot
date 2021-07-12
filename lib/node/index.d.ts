@@ -10,7 +10,7 @@ export declare type Row = {
 };
 /** A pair consiting of a key and value. */
 export declare type Pair = {
-    key: keyof any;
+    key: string;
     value: any;
 };
 /** An axis to pivot a table by. */
