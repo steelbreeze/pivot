@@ -19,36 +19,33 @@ export type Table<TRow extends Row> = Array<TRow>;
 /** A cube of data. */
 export type Cube<TRow extends Row> = Array<Array<Table<TRow>>>;
 
-/** Static class acting as a namespace for axis related functions. */
-export class axis {
-	/**
-	 * Creates an axis based on the contents of a table.
-	 * @param table The source table, an array of objects.
-	 * @param key The name to give this axis.
-	 * @param options An optional get callback to derive the axis values for a row, and a sort callback.
-	 */
-	static fromTable<TRow extends Row>(table: Table<TRow>, key: string, options: { get?: Func1<TRow, any>, sort?: Func2<any, any, number> } = {}): Axis<TRow> {
-		return axis.fromValues(table.map(options.get || (row => row[key])).filter((value, index, source) => source.indexOf(value) === index).sort(options.sort), key, options.get);
-	}
+/**
+ * Creates an axis based on the contents of column in a table.
+ * @param table The source table, an array of objects.
+ * @param key The name to give this axis.
+ * @param options An optional get callback to derive the axis values for a row, and a sort callback.
+ */
+export function columnAxis<TRow extends Row>(table: Table<TRow>, key: string, options: { get?: Func1<TRow, any>, sort?: Func2<any, any, number> } = {}): Axis<TRow> {
+	return valuesAxis(table.map(options.get || (row => row[key])).filter((value, index, source) => source.indexOf(value) === index).sort(options.sort), key, options.get);
+}
 
-	/**
-	 * Creates an axis from an array of values.
-	 * @param values The source values.
-	 * @param key The name to give this dimension.
-	 * @param get An optional callback function used to convert values in the source table to those in the dimension when pivoting.
-	 */
-	static fromValues<TRow extends Row>(values: Array<any>, key: string, get: Func1<TRow, any> = row => row[key]): Axis<TRow> {
-		return values.map(value => { return { p: row => get(row) === value, pairs: [{ key, value: value }] } });
-	}
+/**
+ * Creates an axis from an array of values.
+ * @param values The source values.
+ * @param key The name to give this dimension.
+ * @param get An optional callback function used to convert values in the source table to those in the dimension when pivoting.
+ */
+export function valuesAxis<TRow extends Row>(values: Array<any>, key: string, get: Func1<TRow, any> = row => row[key]): Axis<TRow> {
+	return values.map(value => { return { p: row => get(row) === value, pairs: [{ key, value: value }] } });
+}
 
-	/**
-	 * Merge two axes together into a single axis.
-	 * @param axis1 The first axis.
-	 * @param axis2 The second axis.
-	 */
-	static join<TRow extends Row>(axis1: Axis<TRow>, axis2: Axis<TRow>): Axis<TRow> {
-		return axis1.reduce<Axis<TRow>>((result, s1) => [...result, ...axis2.map(s2 => { return { p: (row: TRow) => s1.p(row) && s2.p(row), pairs: [...s1.pairs, ...s2.pairs] } })], []);
-	}
+/**
+ * Merge two axes together into a single axis.
+ * @param axis1 The first axis.
+ * @param axis2 The second axis.
+ */
+export function joinAxes<TRow extends Row>(axis1: Axis<TRow>, axis2: Axis<TRow>): Axis<TRow> {
+	return axis1.reduce<Axis<TRow>>((result, s1) => [...result, ...axis2.map(s2 => { return { p: (row: TRow) => s1.p(row) && s2.p(row), pairs: [...s1.pairs, ...s2.pairs] } })], []);
 }
 
 /**

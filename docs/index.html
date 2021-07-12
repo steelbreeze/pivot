@@ -60,8 +60,8 @@
 		];
 
 		// create axes out of the dimensions derived from the squad data
-		const x = pivot.axis.fromTable(squad, 'position');
-		const y = pivot.axis.fromTable(squad, 'country');
+		const x = pivot.columnAxis(squad, 'position');
+		const y = pivot.columnAxis(squad, 'country');
 
 		// create the pivot cube
 		const cube = pivot.cube(squad, y, x);

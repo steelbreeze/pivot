@@ -20,32 +20,29 @@ export declare type Axis<TRow extends Row> = Array<{
 export declare type Table<TRow extends Row> = Array<TRow>;
 /** A cube of data. */
 export declare type Cube<TRow extends Row> = Array<Array<Table<TRow>>>;
-/** Static class acting as a namespace for axis related functions. */
-export declare class axis {
-    /**
-     * Creates an axis based on the contents of a table.
-     * @param table The source table, an array of objects.
-     * @param key The name to give this axis.
-     * @param options An optional get callback to derive the axis values for a row, and a sort callback.
-     */
-    static fromTable<TRow extends Row>(table: Table<TRow>, key: string, options?: {
-        get?: Func1<TRow, any>;
-        sort?: Func2<any, any, number>;
-    }): Axis<TRow>;
-    /**
-     * Creates an axis from an array of values.
-     * @param values The source values.
-     * @param key The name to give this dimension.
-     * @param get An optional callback function used to convert values in the source table to those in the dimension when pivoting.
-     */
-    static fromValues<TRow extends Row>(values: Array<any>, key: string, get?: Func1<TRow, any>): Axis<TRow>;
-    /**
-     * Merge two axes together into a single axis.
-     * @param axis1 The first axis.
-     * @param axis2 The second axis.
-     */
-    static join<TRow extends Row>(axis1: Axis<TRow>, axis2: Axis<TRow>): Axis<TRow>;
-}
+/**
+ * Creates an axis based on the contents of column in a table.
+ * @param table The source table, an array of objects.
+ * @param key The name to give this axis.
+ * @param options An optional get callback to derive the axis values for a row, and a sort callback.
+ */
+export declare function columnAxis<TRow extends Row>(table: Table<TRow>, key: string, options?: {
+    get?: Func1<TRow, any>;
+    sort?: Func2<any, any, number>;
+}): Axis<TRow>;
+/**
+ * Creates an axis from an array of values.
+ * @param values The source values.
+ * @param key The name to give this dimension.
+ * @param get An optional callback function used to convert values in the source table to those in the dimension when pivoting.
+ */
+export declare function valuesAxis<TRow extends Row>(values: Array<any>, key: string, get?: Func1<TRow, any>): Axis<TRow>;
+/**
+ * Merge two axes together into a single axis.
+ * @param axis1 The first axis.
+ * @param axis2 The second axis.
+ */
+export declare function joinAxes<TRow extends Row>(axis1: Axis<TRow>, axis2: Axis<TRow>): Axis<TRow>;
 /**
  * Slices a table based on the critera specified by an axis.
  * @param table The source data, an array of rows.
