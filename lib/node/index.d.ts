@@ -24,7 +24,7 @@ export declare type Cube<TRow extends Row> = Array<Array<Table<TRow>>>;
  * Creates an axis based on the contents of column in a table.
  * @param table The source table, an array of objects.
  * @param key The name to give this axis.
- * @param options An optional get callback to derive the axis values for a row, and a sort callback.
+ * @param options An optional get callback to derive the axis values and an optional sort callback.
  */
 export declare function columnAxis<TRow extends Row>(table: Table<TRow>, key: string, options?: {
     get?: Func1<TRow, any>;
@@ -38,17 +38,11 @@ export declare function columnAxis<TRow extends Row>(table: Table<TRow>, key: st
  */
 export declare function valuesAxis<TRow extends Row>(values: Array<any>, key: string, get?: Func1<TRow, any>): Axis<TRow>;
 /**
- * Merge two axes together into a single axis.
+ * Join two axes together into a single axis.
  * @param axis1 The first axis.
  * @param axis2 The second axis.
  */
 export declare function joinAxes<TRow extends Row>(axis1: Axis<TRow>, axis2: Axis<TRow>): Axis<TRow>;
-/**
- * Slices a table based on the critera specified by an axis.
- * @param table The source data, an array of rows.
- * @param axis The result of a call to axis with one or more dimensions.
- */
-export declare function slice<TRow extends Row>(table: Table<TRow>, axis: Axis<TRow>): Array<Table<TRow>>;
 /**
  * Pivots a table by two axes
  * @param table The source data, an array of rows.

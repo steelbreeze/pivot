@@ -1,7 +1,7 @@
 # pivot
 [![Maintainability](https://api.codeclimate.com/v1/badges/d2fd7facda5a61d2b66a/maintainability)](https://codeclimate.com/github/steelbreeze/pivot/maintainability)
 
-A minimalist pivot table library for TypeScript/JavaScript. While small in size (just 1020 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite axes, filtering. Even hypercubes are possible.
+A minimalist pivot table library for TypeScript/JavaScript. While small in size (just 991 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite axes, filtering.
 
 The library also provides a modest set of numberical selectors. Suggestions for additions, or better still contributions, are welcome.
 
@@ -14,8 +14,8 @@ The following is the result of pivoting publicly available information about the
 import * as pivot from '..';
 
 // create axes derived from the squad data
-const x = pivot.axis.fromTable(squad, 'position');
-const y = pivot.axis.fromTable(squad, 'short country', { get: player => player.country.substr(0, 3).toUpperCase() });
+const x = pivot.columnAxis(squad, 'position');
+const y = pivot.columnAxis(squad, 'short country', { get: player => player.country.substr(0, 3).toUpperCase() });
 
 // create the pivot cube
 const cube = pivot.cube(squad, y, x);
@@ -72,17 +72,7 @@ const result = pivot.map(cube, pivot.select(player => `${player.givenName}&nbsp;
 
 ## Axis manipulation
 ### Custom axis
-In the example above, the axes are derived from the values seen within the data using ```axis.fromTable```. Should you wish to use custom axes, you can call ```axis.fromValues```.
+In the example above, the axes are derived from the values seen within the data using ```columnAxis```. Should you wish to use custom axes, you can call ```valuesAxis```.
 ### Composite axes
-Axes can be merged with a call to ```axis.join```.
+Axes can be merged with a call to ```joinAxes```.
 If the criteria for one axis was [a, b] and another was [c, d], then the combined axis would be [ac, ad, bc, bd].
-## Hypercubes
-The ```cube``` function returns a table sliced on two axes, it acheives this through two calls to the ```slice``` function, one for each axis, implemented as follows:
-```typescript
-return slice(table, y).map(i => slice(i, x));
-```
-
-There is nothing to stop you making repeated calls to slice with additional axes, for example:
-```typescript
-const result = slice(table, z).map(i => slice(i, y)).map(i => slice(i, x));
-```

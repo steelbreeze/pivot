@@ -23,7 +23,7 @@ export type Cube<TRow extends Row> = Array<Array<Table<TRow>>>;
  * Creates an axis based on the contents of column in a table.
  * @param table The source table, an array of objects.
  * @param key The name to give this axis.
- * @param options An optional get callback to derive the axis values for a row, and a sort callback.
+ * @param options An optional get callback to derive the axis values and an optional sort callback.
  */
 export function columnAxis<TRow extends Row>(table: Table<TRow>, key: string, options: { get?: Func1<TRow, any>, sort?: Func2<any, any, number> } = {}): Axis<TRow> {
 	return valuesAxis(table.map(options.get || (row => row[key])).filter((value, index, source) => source.indexOf(value) === index).sort(options.sort), key, options.get);
@@ -40,21 +40,12 @@ export function valuesAxis<TRow extends Row>(values: Array<any>, key: string, ge
 }
 
 /**
- * Merge two axes together into a single axis.
+ * Join two axes together into a single axis.
  * @param axis1 The first axis.
  * @param axis2 The second axis.
  */
 export function joinAxes<TRow extends Row>(axis1: Axis<TRow>, axis2: Axis<TRow>): Axis<TRow> {
 	return axis1.reduce<Axis<TRow>>((result, s1) => [...result, ...axis2.map(s2 => { return { p: (row: TRow) => s1.p(row) && s2.p(row), pairs: [...s1.pairs, ...s2.pairs] } })], []);
-}
-
-/**
- * Slices a table based on the critera specified by an axis.
- * @param table The source data, an array of rows.
- * @param axis The result of a call to axis with one or more dimensions.
- */
-export function slice<TRow extends Row>(table: Table<TRow>, axis: Axis<TRow>): Array<Table<TRow>> {
-	return axis.map(s => table.filter(s.p));
 }
 
 /**
@@ -64,7 +55,7 @@ export function slice<TRow extends Row>(table: Table<TRow>, axis: Axis<TRow>): A
  * @param x The second axis to pivot the table by.
  */
 export function cube<TRow extends Row>(table: Table<TRow>, y: Axis<TRow>, x: Axis<TRow>): Cube<TRow> {
-	return slice(table, y).map(i => slice(i, x));
+	return y.map(s => table.filter(s.p)).map(slice => x.map(s => slice.filter(s.p)));
 }
 
 /**
