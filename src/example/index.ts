@@ -3,7 +3,7 @@ import * as pivot from '..';
 
 // create axes derived from the squad data
 const x = pivot.columnAxis(squad, 'position');
-const y = pivot.columnAxis(squad, 'short country', { get: player => player.country.substr(0, 3).toUpperCase() });
+const y = pivot.columnAxis(squad, 'country');
 
 // create the pivot cube
 const cube = pivot.cube(squad, y, x);

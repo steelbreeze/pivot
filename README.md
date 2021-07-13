@@ -15,7 +15,7 @@ import * as pivot from '..';
 
 // create axes derived from the squad data
 const x = pivot.columnAxis(squad, 'position');
-const y = pivot.columnAxis(squad, 'short country', { get: player => player.country.substr(0, 3).toUpperCase() });
+const y = pivot.columnAxis(squad, 'country');
 
 // create the pivot cube
 const cube = pivot.cube(squad, y, x);
@@ -26,20 +26,20 @@ const result = pivot.map(cube, pivot.average(age));
 The selection is the average age of the players grouped by position and country:
 ```
         Defend… Forward Goalke… Midfie…
-BEL     32
-CAM                             25
-DEN     24
-ENG     25      23              23.25
-FRA     27              28
-GAB                             27
-JAM     28      28
-NET     25
-NIG     24      22
-POR             27
-SCO                             31
-SER             26
-SLO                     24
-SPA                     33
+Belgium 32
+Camero…                         25
+Denmark 24
+England 25      23              23.25
+France  27              28
+Gabon                           27
+Jamaica 28      28
+Nether… 25
+Nigeria 24      22
+Portug…         27
+Scotla…                         31
+Serbia          26
+Slovak…                 24
+Spain                   33
 USA     28
 ```
 > The full example code can be found [here](src/example/index.ts).
