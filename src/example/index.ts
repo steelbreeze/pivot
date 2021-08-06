@@ -2,8 +2,8 @@ import { Player, squad } from './fulham';
 import * as pivot from '..';
 
 // create axes derived from the squad data
-const x = pivot.columnAxis(squad, 'position');
-const y = pivot.columnAxis(squad, 'country');
+const y = pivot.deriveDimension(squad, 'country');
+const x = pivot.deriveDimension(squad, 'position');
 
 // create the pivot cube
 const cube = pivot.cube(squad, y, x);
@@ -12,8 +12,8 @@ const cube = pivot.cube(squad, y, x);
 const result = pivot.map(cube, pivot.average(age));
 
 // ugly code to pretty print the result with axes
-console.log(`\t${x.map(c => print(c.pairs[0].value)).join('\t')}`)
-result.forEach((row, i) => console.log(`${print(y[i].pairs[0].value)}\t${row.map(print).join('\t')}`));
+console.log(`\t${x.map(c => print(c.data[0].value)).join('\t')}`)
+result.forEach((row, i) => console.log(`${print(y[i].data[0].value)}\t${row.map(print).join('\t')}`));
 
 // Calculate a person's age from their date of birth
 function age(person: Player): number {

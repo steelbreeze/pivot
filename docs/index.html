@@ -60,25 +60,25 @@
 		];
 
 		// create axes out of the dimensions derived from the squad data
-		const x = pivot.columnAxis(squad, 'position');
-		const y = pivot.columnAxis(squad, 'country');
+		const yAxis = pivot.deriveDimension(squad, 'country');
+		const xAxis = pivot.deriveDimension(squad, 'position');
 
 		// create the pivot cube
-		const cube = pivot.cube(squad, y, x);
+		const cube = pivot.cube(squad, yAxis, xAxis);
 
 		// find the average age of players by position by country, select just the full name
 		const result = pivot.map(cube, pivot.select(player => `${player.givenName.replace(/ /g, '&nbsp;')}&nbsp;${player.familyName.replace(/ /g, '&nbsp;')}`));
 
 		document.getElementById("squad").innerHTML =
 			`<thead>` +
-			x[0].pairs.map((_c, ii) => `<tr>${y[0].pairs.map(() => `<td></td>`).join('')}${x.map(c => th(c.pairs[ii])).join('')}</tr>`).join('') +
+			xAxis[0].data.map((_c, ii) => `<tr>${yAxis[0].data.map(() => `<td></td>`).join('')}${xAxis.map(c => th(c.data[ii])).join('')}</tr>`).join('') +
 			`</thead>` +
-			result.map((row, i) => `<tr>${y[i].pairs.map(th).join('')}${row.map(cell => td(cell || '', '')).join('')}</tr>`).join('');
+			result.map((row, i) => `<tr>${yAxis[i].data.map(th).join('')}${row.map(cell => td(cell || '', '')).join('')}</tr>`).join('');
 
 		// generate a header cell in a table
-		function th(pairs) {
+		function th(data) {
 
-			return `<th${pairs.key ? ` class="${pairs.key}"` : ``}>${pairs.value}</th>`;
+			return `<th${data.key ? ` class="${data.key}"` : ``}>${data.value}</th>`;
 		}
 
 		// generate a cell in a table

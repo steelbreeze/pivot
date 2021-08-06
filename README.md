@@ -1,7 +1,7 @@
 # pivot
 [![Maintainability](https://api.codeclimate.com/v1/badges/d2fd7facda5a61d2b66a/maintainability)](https://codeclimate.com/github/steelbreeze/pivot/maintainability)
 
-A minimalist pivot table library for TypeScript/JavaScript. While small in size (just 991 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite axes, filtering.
+A minimalist pivot table library for TypeScript/JavaScript. While small in size (just 987 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite axes, filtering.
 
 The library also provides a modest set of numberical selectors. Suggestions for additions, or better still contributions, are welcome.
 
@@ -14,8 +14,8 @@ The following is the result of pivoting publicly available information about the
 import * as pivot from '..';
 
 // create axes derived from the squad data
-const x = pivot.columnAxis(squad, 'position');
-const y = pivot.columnAxis(squad, 'country');
+const y = pivot.deriveDimension(squad, 'country');
+const x = pivot.deriveDimension(squad, 'position');
 
 // create the pivot cube
 const cube = pivot.cube(squad, y, x);
