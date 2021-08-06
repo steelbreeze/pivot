@@ -3,7 +3,7 @@
 
 A minimalist pivot table library for TypeScript/JavaScript. While small in size (just 987 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite axes, filtering.
 
-The library also provides a modest set of numberical selectors. Suggestions for additions, or better still contributions, are welcome.
+The library also provides a modest set of numerical selectors. Suggestions for additions, or better still contributions, are welcome.
 
 ## Why create another pivot table library?
 There are plenty of pivot table libraries in existance, so why create another one? Well, this is actually a spin-off from the [steelbreeze/landscape](https://github.com/steelbreeze/landscape) project, where instead of aggregating numerical data from the pivot cube, non-numerical data is needed.
