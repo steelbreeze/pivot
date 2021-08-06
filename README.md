@@ -1,15 +1,15 @@
 # pivot
 [![Maintainability](https://api.codeclimate.com/v1/badges/d2fd7facda5a61d2b66a/maintainability)](https://codeclimate.com/github/steelbreeze/pivot/maintainability)
 
-A minimalist pivot table library for TypeScript/JavaScript. While small in size (just 987 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite axes, filtering.
+A minimalist pivot table library for TypeScript/JavaScript. While small (just 987 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite axes, filtering.
 
 The library also provides a modest set of numerical selectors. Suggestions for additions, or better still contributions, are welcome.
 
 ## Why create another pivot table library?
-There are plenty of pivot table libraries in existance, so why create another one? Well, this is actually a spin-off from the [steelbreeze/landscape](https://github.com/steelbreeze/landscape) project, where instead of aggregating numerical data from the pivot cube, non-numerical data is needed.
+There are plenty of pivot table libraries in existence, so why create another one? Well, this is a spin-off from the [steelbreeze/landscape](https://github.com/steelbreeze/landscape) project, where instead of aggregating numerical data from the pivot cube, non-numerical data is needed.
 
 ## Example
-The following is the result of pivoting publicly available information about the Fulham Football Club [mens squad](https://web.archive.org/web/20210516151437/https://www.fulhamfc.com/teams) at the end of the 2020/21 season, calculating the average age of players by position and country.
+The following is the result of pivoting publicly available information about the Fulham Football Club [men's squad](https://web.archive.org/web/20210516151437/https://www.fulhamfc.com/teams) at the end of the 2020/21 season, calculating the average age of players by position and country.
 ```typescript
 import * as pivot from '..';
 
@@ -71,8 +71,8 @@ const result = pivot.map(cube, pivot.select(player => `${player.givenName}&nbsp;
 > Data and calculations correct as of: 2021-05-23.
 
 ## Axis manipulation
-### Custom axis
-In the example above, the axes are derived from the values seen within the data using ```columnAxis```. Should you wish to use custom axes, you can call ```valuesAxis```.
-### Composite axes
-Axes can be merged with a call to ```joinAxes```.
-If the criteria for one axis was [a, b] and another was [c, d], then the combined axis would be [ac, ad, bc, bd].
+### Custom dimensions
+In the example above, the axes are derived from the values seen within the data using ```deriveDimension```. Should you wish to use custom dimensions, you can call ```dimension``` and pass in the desired values.
+### Composite dimensions
+Dimensions can be merged with a call to ```join```.
+If the criteria for one dimension was [a, b] and another was [c, d], then the combined dimension would be [ac, ad, bc, bd].
