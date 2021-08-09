@@ -1,0 +1,10 @@
+{
+    "entryPoints": [
+        "./src/index.ts"
+    ],
+    "readme": "none",
+    "excludeExternals": true,
+    "excludePrivate": true,
+    "name": "Landscape",
+    "out": "docs/api/v1"
+}
