@@ -1,7 +1,7 @@
 # pivot
 [![Maintainability](https://api.codeclimate.com/v1/badges/d2fd7facda5a61d2b66a/maintainability)](https://codeclimate.com/github/steelbreeze/pivot/maintainability)
 
-A minimalist pivot table library for TypeScript/JavaScript. While small (just 987 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite axes, filtering.
+A minimalist pivot table library for TypeScript/JavaScript. While small (just 987 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite dimensions, filtering.
 
 The library also provides a modest set of numerical selectors. Suggestions for additions, or better still contributions, are welcome.
 
@@ -16,12 +16,12 @@ The following is the result of pivoting publicly available information about the
 ```typescript
 import * as pivot from '..';
 
-// create axes derived from the squad data
-const y = pivot.deriveDimension(squad, 'country');
-const x = pivot.deriveDimension(squad, 'position');
+// create dimensions derived from the squad data
+const country = pivot.deriveDimension(squad, 'country');
+const position = pivot.deriveDimension(squad, 'position');
 
-// create the pivot cube
-const cube = pivot.cube(squad, y, x);
+// create the pivot cube from the squad data using position and country for x and y axes
+const cube = pivot.cube(squad, position, country);
 
 // find the average age of players by position by country
 const result = pivot.map(cube, pivot.average(age));
@@ -73,9 +73,9 @@ const result = pivot.map(cube, pivot.select(player => `${player.givenName}&nbsp;
 
 > Data and calculations correct as of: 2021-05-23.
 
-## Axis manipulation
+## Dimension manipulation
 ### Custom dimensions
-In the example above, the axes are derived from the values seen within the data using ```deriveDimension```. Should you wish to use custom dimensions, you can call ```dimension``` and pass in the desired values.
+In the example above, the dimensions are derived from the values seen within the data using ```deriveDimension```. Should you wish to use custom dimensions, you can call ```dimension``` and pass in the desired values.
 ### Composite dimensions
 Dimensions can be merged with a call to ```join```.
 If the criteria for one dimension was [a, b] and another was [c, d], then the combined dimension would be [ac, ad, bc, bd].

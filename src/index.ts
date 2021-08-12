@@ -51,10 +51,10 @@ export function join<TRow extends Row>(dimension1: Dimension<TRow>, dimension2: 
 /**
  * Pivots a table by two axes
  * @param table The source data, an array of rows.
- * @param yAxis The dimension to use as the yAxis.
  * @param xAxis The dimension to use as the xAxis.
+ * @param yAxis The dimension to use as the yAxis.
  */
-export function cube<TRow extends Row>(table: Table<TRow>, yAxis: Dimension<TRow>, xAxis: Dimension<TRow>): Cube<TRow> {
+export function cube<TRow extends Row>(table: Table<TRow>, xAxis: Dimension<TRow>, yAxis: Dimension<TRow>): Cube<TRow> {
 	return yAxis.map(s => table.filter(s.f)).map(slice => xAxis.map(s => slice.filter(s.f)));
 }
 

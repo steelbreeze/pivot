@@ -46,10 +46,10 @@ export declare function join<TRow extends Row>(dimension1: Dimension<TRow>, dime
 /**
  * Pivots a table by two axes
  * @param table The source data, an array of rows.
- * @param yAxis The dimension to use as the yAxis.
  * @param xAxis The dimension to use as the xAxis.
+ * @param yAxis The dimension to use as the yAxis.
  */
-export declare function cube<TRow extends Row>(table: Table<TRow>, yAxis: Dimension<TRow>, xAxis: Dimension<TRow>): Cube<TRow>;
+export declare function cube<TRow extends Row>(table: Table<TRow>, xAxis: Dimension<TRow>, yAxis: Dimension<TRow>): Cube<TRow>;
 /**
  * Filters data within a cube.
  * @param cube The source cube.
