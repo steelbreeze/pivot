@@ -55,7 +55,7 @@ export function join<TRow extends Row>(dimension1: Dimension<TRow>, dimension2: 
  * @param yAxis The dimension to use as the yAxis.
  */
 export function cube<TRow extends Row>(table: Table<TRow>, xAxis: Dimension<TRow>, yAxis: Dimension<TRow>): Cube<TRow> {
-	return yAxis.map(s => table.filter(s.f)).map(slice => xAxis.map(s => slice.filter(s.f)));
+	return yAxis.map(yPoint => table.filter(yPoint.f)).map(slice => xAxis.map(xPoint => slice.filter(xPoint.f)));
 }
 
 /**
@@ -64,7 +64,7 @@ export function cube<TRow extends Row>(table: Table<TRow>, xAxis: Dimension<TRow
  * @param predicate A predicate to filter the cube by.
  */
 export function filter<TRow extends Row>(cube: Cube<TRow>, predicate: Predicate<TRow>): Cube<TRow> {
-	return cube.map(y => y.map(x => x.filter(predicate)));
+	return cube.map(row => row.map(cell => cell.filter(predicate)));
 }
 
 /**
@@ -73,7 +73,7 @@ export function filter<TRow extends Row>(cube: Cube<TRow>, predicate: Predicate<
  * @param selector A callback function to create a result from each cell of the cube.
  */
 export function map<TRow extends Row, TResult>(cube: Cube<TRow>, selector: Func1<Table<TRow>, TResult>): Array<Array<TResult>> {
-	return cube.map(y => y.map(selector));
+	return cube.map(row => row.map(selector));
 }
 
 /**
