@@ -80,7 +80,7 @@ export function map<TRow extends Row, TResult>(cube: Cube<TRow>, selector: Func1
  * A generator, used to transform the source data in a cube to another representation.
  * @param selector A function to transform a source record into the desired result.
  */
-export function select<TRow extends Row, TResult>(selector: Func1<TRow, TResult>): Func1<Table<TRow>, TResult[]> {
+export function select<TRow extends Row, TResult>(selector: Func1<TRow, TResult>): Func1<Table<TRow>, Array<TResult>> {
 	return table => table.map(selector);
 }
 
