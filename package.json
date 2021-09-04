@@ -6,7 +6,7 @@
   "type": "module",
   "module": "lib/node/index.js",
   "exports": {
-    "default": "./lib/node/index.js"
+    "import": "./lib/node/index.js"
   },
   "typings": "lib/node/index.d.ts",
   "directories": {
