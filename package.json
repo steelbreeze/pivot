@@ -2,9 +2,13 @@
   "name": "@steelbreeze/pivot",
   "version": "1.0.1",
   "description": "Minimal TypeScript / JavaScript pivot table library",
-	"main": "lib/node/index.js",
-	"module": "lib/node/index.js",
-	"typings": "lib/node/index.d.ts",
+  "main": "lib/node/index.js",
+  "type": "module",
+  "module": "lib/node/index.js",
+  "exports": {
+    "default": "./lib/node/index.js"
+  },
+  "typings": "lib/node/index.d.ts",
   "directories": {
     "lib": "lib/node",
     "dist": "lib/web"
