@@ -8,13 +8,25 @@ The library also provides a modest set of numerical selectors. Suggestions for a
 ## Why create another pivot table library?
 There are plenty of pivot table libraries in existence, so why create another one? Well, this is a spin-off from the [steelbreeze/landscape](https://github.com/steelbreeze/landscape) project, where instead of aggregating numerical data from the pivot cube, non-numerical data is needed.
 
+## Installation
+### NPM
+For installation via the node package manager:
+```
+npm i @steelbreeze/pivot
+```
+### Web
+For web via a CDN:
+```javascript
+import * as pivot from 'https://cdn.skypack.dev/@steelbreeze/pivot';
+```
+
 ## Documentation
 The documentation can be found [here](http://steelbreeze.net/pivot/api/v1).
 
 ## Example
 The following is the result of pivoting publicly available information about the Fulham Football Club [men's squad](https://web.archive.org/web/20210516151437/https://www.fulhamfc.com/teams) at the end of the 2020/21 season, calculating the average age of players by position and country.
 ```typescript
-import * as pivot from '..';
+import * as pivot from '@steelbreeze/pivot';
 
 // create dimensions derived from the squad data
 const country = pivot.deriveDimension(squad, 'country');
