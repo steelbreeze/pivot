@@ -3,11 +3,6 @@
   "version": "1.0.2",
   "description": "Minimal TypeScript / JavaScript pivot table library",
   "main": "lib/node/index.js",
-  "type": "module",
-  "module": "lib/node/index.js",
-  "exports": {
-    "import": "./lib/node/index.js"
-  },
   "typings": "lib/node/index.d.ts",
   "directories": {
     "lib": "lib/node",

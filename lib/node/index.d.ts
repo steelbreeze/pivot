@@ -21,6 +21,13 @@ export declare type Table<TRow extends Row> = Array<TRow>;
 /** A cube of data. */
 export declare type Cube<TRow extends Row> = Array<Array<Table<TRow>>>;
 /**
+ * Creates a dimension from an array of values.
+ * @param values The source values.
+ * @param key The name to give this dimension.
+ * @param get An optional callback function used to convert values in the source table to those in the dimension when pivoting.
+ */
+export declare function dimension<TRow extends Row>(values: Array<any>, key: string, get?: Func1<TRow, any>): Dimension<TRow>;
+/**
  * Creates a derived dimension based on the contents of column in a table.
  * @param table The source table, an array of objects.
  * @param key The name to give this dimension.
@@ -30,13 +37,6 @@ export declare function deriveDimension<TRow extends Row>(table: Table<TRow>, ke
     get?: Func1<TRow, any>;
     sort?: Func2<any, any, number>;
 }): Dimension<TRow>;
-/**
- * Creates a dimension from an array of values.
- * @param values The source values.
- * @param key The name to give this dimension.
- * @param get An optional callback function used to convert values in the source table to those in the dimension when pivoting.
- */
-export declare function dimension<TRow extends Row>(values: Array<any>, key: string, get?: Func1<TRow, any>): Dimension<TRow>;
 /**
  * Join two dimensions together .
  * @param dimension1 The first dimension.
@@ -66,7 +66,7 @@ export declare function map<TRow extends Row, TResult>(cube: Cube<TRow>, selecto
  * A generator, used to transform the source data in a cube to another representation.
  * @param selector A function to transform a source record into the desired result.
  */
-export declare function select<TRow extends Row, TResult>(selector: Func1<TRow, TResult>): Func1<Table<TRow>, TResult[]>;
+export declare function select<TRow extends Row, TResult>(selector: Func1<TRow, TResult>): Func1<Table<TRow>, Array<TResult>>;
 /**
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row.
