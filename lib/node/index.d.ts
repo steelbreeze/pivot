@@ -16,6 +16,11 @@ export declare type Dimension<TRow extends Row> = Array<{
         value: any;
     }>;
 }>;
+/** A pair of axes */
+export declare type Axes<TRow extends Row> = {
+    x: Dimension<TRow>;
+    y: Dimension<TRow>;
+};
 /** A table of data. */
 export declare type Table<TRow extends Row> = Array<TRow>;
 /** A cube of data. */
@@ -46,10 +51,9 @@ export declare function join<TRow extends Row>(dimension1: Dimension<TRow>, dime
 /**
  * Pivots a table by two axes
  * @param table The source data, an array of rows.
- * @param xAxis The dimension to use as the xAxis.
- * @param yAxis The dimension to use as the yAxis.
+ * @param axes The dimensions to use for the x and y axes.
  */
-export declare function cube<TRow extends Row>(table: Table<TRow>, xAxis: Dimension<TRow>, yAxis: Dimension<TRow>): Cube<TRow>;
+export declare function cube<TRow extends Row>(table: Table<TRow>, axes: Axes<TRow>): Cube<TRow>;
 /**
  * Filters data within a cube.
  * @param cube The source cube.

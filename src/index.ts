@@ -13,6 +13,9 @@ export type Row = { [key in keyof any]: any };
 /** An dimension to pivot a table by. */
 export type Dimension<TRow extends Row> = Array<{ f: Predicate<TRow>, data: Array<{ key: string, value: any }> }>;
 
+/** A pair of axes */
+export type Axes<TRow extends Row> = { x: Dimension<TRow>, y: Dimension<TRow> };
+
 /** A table of data. */
 export type Table<TRow extends Row> = Array<TRow>;
 
@@ -25,7 +28,7 @@ export type Cube<TRow extends Row> = Array<Array<Table<TRow>>>;
  * @param key The name to give this dimension.
  * @param get An optional callback function used to convert values in the source table to those in the dimension when pivoting.
  */
- export function dimension<TRow extends Row>(values: Array<any>, key: string, get: Func1<TRow, any> = row => row[key]): Dimension<TRow> {
+export function dimension<TRow extends Row>(values: Array<any>, key: string, get: Func1<TRow, any> = row => row[key]): Dimension<TRow> {
 	return values.map(value => { return { f: row => get(row) === value, data: [{ key, value: value }] } });
 }
 
@@ -51,11 +54,10 @@ export function join<TRow extends Row>(dimension1: Dimension<TRow>, dimension2: 
 /**
  * Pivots a table by two axes
  * @param table The source data, an array of rows.
- * @param xAxis The dimension to use as the xAxis.
- * @param yAxis The dimension to use as the yAxis.
+ * @param axes The dimensions to use for the x and y axes.
  */
-export function cube<TRow extends Row>(table: Table<TRow>, xAxis: Dimension<TRow>, yAxis: Dimension<TRow>): Cube<TRow> {
-	return yAxis.map(yPoint => table.filter(yPoint.f)).map(slice => xAxis.map(xPoint => slice.filter(xPoint.f)));
+export function cube<TRow extends Row>(table: Table<TRow>, axes: Axes<TRow>): Cube<TRow> {
+	return axes.y.map(y => table.filter(y.f)).map(slice => axes.x.map(x => slice.filter(x.f)));
 }
 
 /**

@@ -6,7 +6,7 @@ const country = pivot.deriveDimension(squad, 'country');
 const position = pivot.deriveDimension(squad, 'position');
 
 // create the pivot cube from the squad data using position and country for x and y axes
-const cube = pivot.cube(squad, position, country);
+const cube = pivot.cube(squad, { x: position, y: country });
 
 // find the average age of players by position by country
 const result = pivot.map(cube, pivot.average(age));

@@ -77,7 +77,7 @@
 		const position = pivot.deriveDimension(squad, 'position');
 
 		// create the pivot cube
-		const cube = pivot.cube(squad, position, country);
+		const cube = pivot.cube(squad, { x: position, y: country });
 
 		// find the average age of players by position by country, select just the full name
 		const result = pivot.map(cube, pivot.select(player => `${player.givenName} ${player.familyName}`));
