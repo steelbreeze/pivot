@@ -29,11 +29,13 @@ The following is the result of pivoting publicly available information about the
 import * as pivot from '@steelbreeze/pivot';
 
 // create dimensions derived from the squad data
-const country = pivot.deriveDimension(squad, 'country');
-const position = pivot.deriveDimension(squad, 'position');
+const axes = {
+	x: pivot.deriveDimension(squad, 'position'),
+	y: pivot.deriveDimension(squad, 'country')
+};
 
 // create the pivot cube from the squad data using position and country for x and y axes
-const cube = pivot.cube(squad, position, country);
+const cube = pivot.cube(squad, axes);
 
 // find the average age of players by position by country
 const result = pivot.map(cube, pivot.average(age));

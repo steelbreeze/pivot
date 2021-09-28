@@ -36,14 +36,14 @@ export function dimension<TRow extends Row>(values: Array<any>, key: string, get
  * Creates a derived dimension based on the contents of column in a table.
  * @param table The source table, an array of objects.
  * @param key The name to give this dimension.
- * @param options An optional get callback to derive the dimension values and an optional sort callback.
+ * @param options An optional structure, containing two configuration parameters: get, a callback function used to convert values in the source table to those in the dimension when pivoting; sort, a method used to sort the values in the axis.
  */
 export function deriveDimension<TRow extends Row>(table: Table<TRow>, key: string, options: { get?: Func1<TRow, any>, sort?: Func2<any, any, number> } = {}): Dimension<TRow> {
 	return dimension(table.map(options.get || (row => row[key])).filter((value, index, source) => source.indexOf(value) === index).sort(options.sort), key, options.get);
 }
 
 /**
- * Join two dimensions together .
+ * Join two dimensions together.
  * @param dimension1 The first dimension.
  * @param dimension2 The second dimension.
  */
