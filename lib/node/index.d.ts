@@ -22,10 +22,8 @@ export interface Criterion<TRow extends Row> {
      */
     f: Predicate<TRow>;
 }
-/** The full critera for a point on a dimension due to the ability to have composite dimensions. */
-export declare type Criteria<TRow extends Row> = Array<Criterion<TRow>>;
 /** An dimension to pivot a table by. */
-export declare type Dimension<TRow extends Row> = Array<Criteria<TRow>>;
+export declare type Dimension<TRow extends Row> = Array<Array<Criterion<TRow>>>;
 /** A pair of axes */
 export interface Axes<TRow extends Row> {
     /** The x axis; columns in the resultant pivot table. */
@@ -57,11 +55,10 @@ export declare function dimension<TRow extends Row>(values: Array<any>, key: str
  */
 export declare function deriveDimension<TRow extends Row>(table: Table<TRow>, key: string, options?: Options<TRow>): Dimension<TRow>;
 /**
- * Join two dimensions together.
- * @param dimension1 The first dimension.
- * @param dimension2 The second dimension.
+ * Join dimensions together.
+ * @param dimensions The dimensions to combine into one
  */
-export declare function join<TRow extends Row>(dimension1: Dimension<TRow>, dimension2: Dimension<TRow>): Dimension<TRow>;
+export declare function join<TRow extends Row>(...dimensions: Array<Dimension<TRow>>): Dimension<TRow>;
 /**
  * Pivots a table by two axes
  * @param table The source data, an array of rows.

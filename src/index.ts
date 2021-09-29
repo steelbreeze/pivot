@@ -30,11 +30,8 @@ export interface Criterion<TRow extends Row> {
 	f: Predicate<TRow>;
 }
 
-/** The full critera for a point on a dimension due to the ability to have composite dimensions. */
-export type Criteria<TRow extends Row> = Array<Criterion<TRow>>;
-
 /** An dimension to pivot a table by. */
-export type Dimension<TRow extends Row> = Array<Criteria<TRow>>;
+export type Dimension<TRow extends Row> = Array<Array<Criterion<TRow>>>;
 
 /** A pair of axes */
 export interface Axes<TRow extends Row> {
@@ -78,12 +75,11 @@ export function deriveDimension<TRow extends Row>(table: Table<TRow>, key: strin
 }
 
 /**
- * Join two dimensions together.
- * @param dimension1 The first dimension.
- * @param dimension2 The second dimension.
+ * Create a composite dimension from others. This creates a cartesian product of the source dimensions criteria.
+ * @param dimensions An array of dimensions to combine into one.
  */
-export function join<TRow extends Row>(dimension1: Dimension<TRow>, dimension2: Dimension<TRow>): Dimension<TRow> {
-	return dimension1.reduce<Dimension<TRow>>((result, s1) => [...result, ...dimension2.map(s2 => [...s1, ...s2])], []);
+export function join<TRow extends Row>(...dimensions: Array<Dimension<TRow>>): Dimension<TRow> {
+	return dimensions.reduce((result, dimension) => result.flatMap(c1 => dimension.map(c2 => [...c1, ...c2])), [[]]);
 }
 
 /**
