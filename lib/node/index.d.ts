@@ -8,19 +8,29 @@ export declare type Predicate<TArg> = Func1<TArg, boolean>;
 export declare type Row = {
     [key in keyof any]: any;
 };
-/** An dimension to pivot a table by. */
-export declare type Dimension<TRow extends Row> = Array<{
+/** A key/value pair, used as a criterion in a point of a dimension. */
+export interface Pair<TKey, TValue> {
+    /** The key. */
+    key: TKey;
+    /** The value. */
+    value: TValue;
+}
+/** A point on dimension. */
+export interface Point<TRow extends Row> {
+    /** The predicate used to select items from the source data that match the criteria for this point. */
     f: Predicate<TRow>;
-    data: Array<{
-        key: string;
-        value: any;
-    }>;
-}>;
+    /** The criteria for this point. */
+    data: Array<Pair<string, any>>;
+}
+/** An dimension to pivot a table by. */
+export declare type Dimension<TRow extends Row> = Array<Point<TRow>>;
 /** A pair of axes */
-export declare type Axes<TRow extends Row> = {
+export interface Axes<TRow extends Row> {
+    /** The x axis; columns in the resultant pivot table. */
     x: Dimension<TRow>;
+    /** The y axis; rows in the resultant pivot table. */
     y: Dimension<TRow>;
-};
+}
 /** A table of data. */
 export declare type Table<TRow extends Row> = Array<TRow>;
 /** A cube of data. */

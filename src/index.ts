@@ -10,11 +10,35 @@ export type Predicate<TArg> = Func1<TArg, boolean>;
 /** A set of attributes, each entry addressable via a key. */
 export type Row = { [key in keyof any]: any };
 
+/** A key/value pair, used as a criterion in a point of a dimension. */
+export interface Pair<TKey, TValue> {
+	/** The key. */
+	key: TKey;
+
+	/** The value. */
+	value: TValue;
+}
+
+/** A point on dimension. */
+export interface Point<TRow extends Row> {
+	/** The predicate used to select items from the source data that match the criteria for this point. */
+	f: Predicate<TRow>;
+
+	/** The criteria for this point. */
+	data: Array<Pair<string, any>>;
+}
+
 /** An dimension to pivot a table by. */
-export type Dimension<TRow extends Row> = Array<{ f: Predicate<TRow>, data: Array<{ key: string, value: any }> }>;
+export type Dimension<TRow extends Row> = Array<Point<TRow>>;
 
 /** A pair of axes */
-export type Axes<TRow extends Row> = { x: Dimension<TRow>, y: Dimension<TRow> };
+export interface Axes<TRow extends Row> {
+	/** The x axis; columns in the resultant pivot table. */
+	x: Dimension<TRow>;
+
+	/** The y axis; rows in the resultant pivot table. */
+	y: Dimension<TRow>;
+}
 
 /** A table of data. */
 export type Table<TRow extends Row> = Array<TRow>;
