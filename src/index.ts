@@ -7,29 +7,34 @@ export type Func2<TArg1, TArg2, TResult> = (arg1: TArg1, arg2: TArg2) => TResult
 /** A function taking one argument and returning a boolean result. */
 export type Predicate<TArg> = Func1<TArg, boolean>;
 
-/** A set of attributes, each entry addressable via a key. */
-export type Row = { [key in keyof any]: any };
-
-/** A key/value pair, used as a criterion in a point of a dimension. */
-export interface Pair<TKey, TValue> {
-	/** The key. */
-	key: TKey;
-
-	/** The value. */
-	value: TValue;
+/** A set of attributes in a row of a table, each addressable via a key. */
+export interface Row {
+	[key: string]: any;
 }
 
-/** A point on dimension. */
-export interface Point<TRow extends Row> {
-	/** The predicate used to select items from the source data that match the criteria for this point. */
+/** A table of data. */
+export type Table<TRow extends Row> = Array<TRow>;
+
+/** A criterion used to test rows of data against. */
+export interface Criterion<TRow extends Row> {
+	/** The key, or column name to test. */
+	key: string;
+
+	/** The expected value. */
+	value: any;
+
+	/**
+	 * A predicate used to evaluate the criterion.
+	 * @hidden
+	 */
 	f: Predicate<TRow>;
-
-	/** The criteria for this point. */
-	data: Array<Pair<string, any>>;
 }
+
+/** The full critera for a point on a dimension due to the ability to have composite dimensions. */
+export type Criteria<TRow extends Row> = Array<Criterion<TRow>>;
 
 /** An dimension to pivot a table by. */
-export type Dimension<TRow extends Row> = Array<Point<TRow>>;
+export type Dimension<TRow extends Row> = Array<Criteria<TRow>>;
 
 /** A pair of axes */
 export interface Axes<TRow extends Row> {
@@ -40,11 +45,17 @@ export interface Axes<TRow extends Row> {
 	y: Dimension<TRow>;
 }
 
-/** A table of data. */
-export type Table<TRow extends Row> = Array<TRow>;
-
 /** A cube of data. */
 export type Cube<TRow extends Row> = Array<Array<Table<TRow>>>;
+
+/** Options passed into the deriveDimension function. */
+export interface Options<TRow extends Row> {
+	/** An optional user-defined function to derive a value from the source data to be used in the dimension. */
+	get?: Func1<TRow, any>;
+
+	/** An optional user-defined function to determin the ordering of the dimension. */
+	sort?: Func2<any, any, number>;
+}
 
 /**
  * Creates a dimension from an array of values.
@@ -53,7 +64,7 @@ export type Cube<TRow extends Row> = Array<Array<Table<TRow>>>;
  * @param get An optional callback function used to convert values in the source table to those in the dimension when pivoting.
  */
 export function dimension<TRow extends Row>(values: Array<any>, key: string, get: Func1<TRow, any> = row => row[key]): Dimension<TRow> {
-	return values.map(value => { return { f: row => get(row) === value, data: [{ key, value: value }] } });
+	return values.map(value => [{ key, value, f: row => get(row) === value }]);
 }
 
 /**
@@ -62,7 +73,7 @@ export function dimension<TRow extends Row>(values: Array<any>, key: string, get
  * @param key The name to give this dimension.
  * @param options An optional structure, containing two configuration parameters: get, a callback function used to convert values in the source table to those in the dimension when pivoting; sort, a method used to sort the values in the axis.
  */
-export function deriveDimension<TRow extends Row>(table: Table<TRow>, key: string, options: { get?: Func1<TRow, any>, sort?: Func2<any, any, number> } = {}): Dimension<TRow> {
+export function deriveDimension<TRow extends Row>(table: Table<TRow>, key: string, options: Options<TRow> = {}): Dimension<TRow> {
 	return dimension(table.map(options.get || (row => row[key])).filter((value, index, source) => source.indexOf(value) === index).sort(options.sort), key, options.get);
 }
 
@@ -72,7 +83,7 @@ export function deriveDimension<TRow extends Row>(table: Table<TRow>, key: strin
  * @param dimension2 The second dimension.
  */
 export function join<TRow extends Row>(dimension1: Dimension<TRow>, dimension2: Dimension<TRow>): Dimension<TRow> {
-	return dimension1.reduce<Dimension<TRow>>((result, s1) => [...result, ...dimension2.map(s2 => { return { f: (row: TRow) => s1.f(row) && s2.f(row), data: [...s1.data, ...s2.data] } })], []);
+	return dimension1.reduce<Dimension<TRow>>((result, s1) => [...result, ...dimension2.map(s2 => [...s1, ...s2])], []);
 }
 
 /**
@@ -81,7 +92,7 @@ export function join<TRow extends Row>(dimension1: Dimension<TRow>, dimension2: 
  * @param axes The dimensions to use for the x and y axes.
  */
 export function cube<TRow extends Row>(table: Table<TRow>, axes: Axes<TRow>): Cube<TRow> {
-	return axes.y.map(y => table.filter(y.f)).map(slice => axes.x.map(x => slice.filter(x.f)));
+	return axes.y.map(y => table.filter(row => y.every(criterion => criterion.f(row)))).map(slice => axes.x.map(x => slice.filter(row => x.every(criterion => criterion.f(row)))));
 }
 
 /**

@@ -84,9 +84,9 @@
 
 		document.getElementById("squad").innerHTML =
 			`<thead>` +
-			position[0].data.map((_c, ii) => `<tr>${country[0].data.map(() => `<td></td>`).join('')}${position.map(c => th(c.data[ii])).join('')}</tr>`).join('') +
+			position[0].map((_c, ii) => `<tr>${country[0].map(() => `<td></td>`).join('')}${position.map(c => th(c[ii])).join('')}</tr>`).join('') +
 			`</thead>` +
-			result.map((row, i) => `<tr>${country[i].data.map(th).join('')}${row.map(cell => td(cell || '', '')).join('')}</tr>`).join('');
+			result.map((row, i) => `<tr>${country[i].map(th).join('')}${row.map(cell => td(cell || '', '')).join('')}</tr>`).join('');
 
 		// generate a header cell in a table
 		function th(data) {

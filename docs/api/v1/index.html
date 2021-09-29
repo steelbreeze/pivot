@@ -63,19 +63,20 @@
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/axes.html" class="tsd-kind-icon">Axes</a></li>
-								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/pair.html" class="tsd-kind-icon">Pair</a></li>
-								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/point.html" class="tsd-kind-icon">Point</a></li>
+								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/criterion.html" class="tsd-kind-icon">Criterion</a></li>
+								<li class="tsd-kind-interface tsd-has-type-parameter"><a href="interfaces/options.html" class="tsd-kind-icon">Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/row.html" class="tsd-kind-icon">Row</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="index.html#criteria" class="tsd-kind-icon">Criteria</a></li>
 								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="index.html#cube" class="tsd-kind-icon">Cube</a></li>
 								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="index.html#dimension" class="tsd-kind-icon">Dimension</a></li>
 								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="index.html#func1" class="tsd-kind-icon">Func1</a></li>
 								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="index.html#func2" class="tsd-kind-icon">Func2</a></li>
 								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="index.html#predicate" class="tsd-kind-icon">Predicate</a></li>
-								<li class="tsd-kind-type-alias"><a href="index.html#row" class="tsd-kind-icon">Row</a></li>
 								<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="index.html#table" class="tsd-kind-icon">Table</a></li>
 							</ul>
 						</section>
@@ -100,12 +101,33 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Type aliases</h2>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
+					<a name="criteria" class="tsd-anchor"></a>
+					<h3>Criteria</h3>
+					<div class="tsd-signature tsd-kind-icon">Criteria&lt;TRow&gt;<span class="tsd-signature-symbol">:</span> <a href="interfaces/criterion.html" class="tsd-signature-type" data-tsd-kind="Interface">Criterion</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRow</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L34">index.ts:34</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The full critera for a point on a dimension due to the ability to have composite dimensions.</p>
+						</div>
+					</div>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>TRow<span class="tsd-signature-symbol">: </span><a href="interfaces/row.html" class="tsd-signature-type" data-tsd-kind="Interface">Row</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
 					<a name="cube" class="tsd-anchor"></a>
 					<h3>Cube</h3>
 					<div class="tsd-signature tsd-kind-icon">Cube&lt;TRow&gt;<span class="tsd-signature-symbol">:</span> <a href="index.html#table" class="tsd-signature-type" data-tsd-kind="Type alias">Table</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRow</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/aa4bf3c/src/index.ts#L47">index.ts:47</a></li>
+							<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L49">index.ts:49</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -116,17 +138,17 @@
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
 					<ul class="tsd-type-parameters">
 						<li>
-							<h4>TRow<span class="tsd-signature-symbol">: </span><a href="index.html#row" class="tsd-signature-type" data-tsd-kind="Type alias">Row</a></h4>
+							<h4>TRow<span class="tsd-signature-symbol">: </span><a href="interfaces/row.html" class="tsd-signature-type" data-tsd-kind="Interface">Row</a></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
 					<a name="dimension" class="tsd-anchor"></a>
 					<h3>Dimension</h3>
-					<div class="tsd-signature tsd-kind-icon">Dimension&lt;TRow&gt;<span class="tsd-signature-symbol">:</span> <a href="interfaces/point.html" class="tsd-signature-type" data-tsd-kind="Interface">Point</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRow</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></div>
+					<div class="tsd-signature tsd-kind-icon">Dimension&lt;TRow&gt;<span class="tsd-signature-symbol">:</span> <a href="index.html#criteria" class="tsd-signature-type" data-tsd-kind="Type alias">Criteria</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRow</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/aa4bf3c/src/index.ts#L32">index.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L37">index.ts:37</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -137,7 +159,7 @@
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
 					<ul class="tsd-type-parameters">
 						<li>
-							<h4>TRow<span class="tsd-signature-symbol">: </span><a href="index.html#row" class="tsd-signature-type" data-tsd-kind="Type alias">Row</a></h4>
+							<h4>TRow<span class="tsd-signature-symbol">: </span><a href="interfaces/row.html" class="tsd-signature-type" data-tsd-kind="Interface">Row</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -147,7 +169,7 @@
 					<div class="tsd-signature tsd-kind-icon">Func1&lt;TArg1, TResult&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>arg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TArg1</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">TResult</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/aa4bf3c/src/index.ts#L2">index.ts:2</a></li>
+							<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L2">index.ts:2</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -192,7 +214,7 @@
 					<div class="tsd-signature tsd-kind-icon">Func2&lt;TArg1, TArg2, TResult&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>arg1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TArg1</span>, arg2<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TArg2</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">TResult</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/aa4bf3c/src/index.ts#L5">index.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L5">index.ts:5</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -243,7 +265,7 @@
 					<div class="tsd-signature tsd-kind-icon">Predicate&lt;TArg&gt;<span class="tsd-signature-symbol">:</span> <a href="index.html#func1" class="tsd-signature-type" data-tsd-kind="Type alias">Func1</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TArg</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/aa4bf3c/src/index.ts#L8">index.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L8">index.ts:8</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -258,28 +280,13 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-type-alias">
-					<a name="row" class="tsd-anchor"></a>
-					<h3>Row</h3>
-					<div class="tsd-signature tsd-kind-icon">Row<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{</span><span class="tsd-signature-symbol">[ </span><span class="tsd-signature-type">key</span><span class="tsd-signature-symbol"> in </span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/aa4bf3c/src/index.ts#L11">index.ts:11</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>A set of attributes, each entry addressable via a key.</p>
-						</div>
-					</div>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
 					<a name="table" class="tsd-anchor"></a>
 					<h3>Table</h3>
 					<div class="tsd-signature tsd-kind-icon">Table&lt;TRow&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">TRow</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/aa4bf3c/src/index.ts#L44">index.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L16">index.ts:16</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -290,7 +297,7 @@
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
 					<ul class="tsd-type-parameters">
 						<li>
-							<h4>TRow<span class="tsd-signature-symbol">: </span><a href="index.html#row" class="tsd-signature-type" data-tsd-kind="Type alias">Row</a></h4>
+							<h4>TRow<span class="tsd-signature-symbol">: </span><a href="interfaces/row.html" class="tsd-signature-type" data-tsd-kind="Interface">Row</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -307,7 +314,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/aa4bf3c/src/index.ts#L125">index.ts:125</a></li>
+									<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L136">index.ts:136</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -318,7 +325,7 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>TRow<span class="tsd-signature-symbol">: </span><a href="index.html#row" class="tsd-signature-type" data-tsd-kind="Type alias">Row</a></h4>
+									<h4>TRow<span class="tsd-signature-symbol">: </span><a href="interfaces/row.html" class="tsd-signature-type" data-tsd-kind="Interface">Row</a></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -344,7 +351,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/aa4bf3c/src/index.ts#L133">index.ts:133</a></li>
+									<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L144">index.ts:144</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -355,7 +362,7 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>TRow<span class="tsd-signature-symbol">: </span><a href="index.html#row" class="tsd-signature-type" data-tsd-kind="Type alias">Row</a></h4>
+									<h4>TRow<span class="tsd-signature-symbol">: </span><a href="interfaces/row.html" class="tsd-signature-type" data-tsd-kind="Interface">Row</a></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -381,7 +388,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/aa4bf3c/src/index.ts#L83">index.ts:83</a></li>
+									<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L94">index.ts:94</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -392,7 +399,7 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>TRow<span class="tsd-signature-symbol">: </span><a href="index.html#row" class="tsd-signature-type" data-tsd-kind="Type alias">Row</a></h4>
+									<h4>TRow<span class="tsd-signature-symbol">: </span><a href="interfaces/row.html" class="tsd-signature-type" data-tsd-kind="Interface">Row</a></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -418,13 +425,13 @@
 					<a name="derivedimension" class="tsd-anchor"></a>
 					<h3>derive<wbr>Dimension</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">derive<wbr>Dimension&lt;TRow&gt;<span class="tsd-signature-symbol">(</span>table<span class="tsd-signature-symbol">: </span><a href="index.html#table" class="tsd-signature-type" data-tsd-kind="Type alias">Table</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRow</span><span class="tsd-signature-symbol">&gt;</span>, key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>get<span class="tsd-signature-symbol">?: </span><a href="index.html#func1" class="tsd-signature-type" data-tsd-kind="Type alias">Func1</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRow</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>sort<span class="tsd-signature-symbol">?: </span><a href="index.html#func2" class="tsd-signature-type" data-tsd-kind="Type alias">Func2</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index.html#dimension" class="tsd-signature-type" data-tsd-kind="Type alias">Dimension</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRow</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">derive<wbr>Dimension&lt;TRow&gt;<span class="tsd-signature-symbol">(</span>table<span class="tsd-signature-symbol">: </span><a href="index.html#table" class="tsd-signature-type" data-tsd-kind="Type alias">Table</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRow</span><span class="tsd-signature-symbol">&gt;</span>, key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><a href="interfaces/options.html" class="tsd-signature-type" data-tsd-kind="Interface">Options</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRow</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index.html#dimension" class="tsd-signature-type" data-tsd-kind="Type alias">Dimension</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRow</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/aa4bf3c/src/index.ts#L65">index.ts:65</a></li>
+									<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L76">index.ts:76</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -435,7 +442,7 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>TRow<span class="tsd-signature-symbol">: </span><a href="index.html#row" class="tsd-signature-type" data-tsd-kind="Type alias">Row</a></h4>
+									<h4>TRow<span class="tsd-signature-symbol">: </span><a href="interfaces/row.html" class="tsd-signature-type" data-tsd-kind="Interface">Row</a></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -453,18 +460,10 @@
 									</div>
 								</li>
 								<li>
-									<h5>options: <span class="tsd-signature-symbol">{ </span>get<span class="tsd-signature-symbol">?: </span><a href="index.html#func1" class="tsd-signature-type" data-tsd-kind="Type alias">Func1</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRow</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>sort<span class="tsd-signature-symbol">?: </span><a href="index.html#func2" class="tsd-signature-type" data-tsd-kind="Type alias">Func2</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = {}</span></h5>
+									<h5>options: <a href="interfaces/options.html" class="tsd-signature-type" data-tsd-kind="Interface">Options</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRow</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = {}</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>An optional structure, containing two configuration parameters: get, a callback function used to convert values in the source table to those in the dimension when pivoting; sort, a method used to sort the values in the axis.</p>
 									</div>
-									<ul class="tsd-parameters">
-										<li class="tsd-parameter">
-											<h5><span class="tsd-flag ts-flagOptional">Optional</span> get<span class="tsd-signature-symbol">?: </span><a href="index.html#func1" class="tsd-signature-type" data-tsd-kind="Type alias">Func1</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRow</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
-										</li>
-										<li class="tsd-parameter">
-											<h5><span class="tsd-flag ts-flagOptional">Optional</span> sort<span class="tsd-signature-symbol">?: </span><a href="index.html#func2" class="tsd-signature-type" data-tsd-kind="Type alias">Func2</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h5>
-										</li>
-									</ul>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="index.html#dimension" class="tsd-signature-type" data-tsd-kind="Type alias">Dimension</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRow</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -481,7 +480,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/aa4bf3c/src/index.ts#L55">index.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L66">index.ts:66</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -492,7 +491,7 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>TRow<span class="tsd-signature-symbol">: </span><a href="index.html#row" class="tsd-signature-type" data-tsd-kind="Type alias">Row</a></h4>
+									<h4>TRow<span class="tsd-signature-symbol">: </span><a href="interfaces/row.html" class="tsd-signature-type" data-tsd-kind="Interface">Row</a></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -530,7 +529,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/aa4bf3c/src/index.ts#L92">index.ts:92</a></li>
+									<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L103">index.ts:103</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -541,7 +540,7 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>TRow<span class="tsd-signature-symbol">: </span><a href="index.html#row" class="tsd-signature-type" data-tsd-kind="Type alias">Row</a></h4>
+									<h4>TRow<span class="tsd-signature-symbol">: </span><a href="interfaces/row.html" class="tsd-signature-type" data-tsd-kind="Interface">Row</a></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -573,7 +572,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/aa4bf3c/src/index.ts#L74">index.ts:74</a></li>
+									<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L85">index.ts:85</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -584,7 +583,7 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>TRow<span class="tsd-signature-symbol">: </span><a href="index.html#row" class="tsd-signature-type" data-tsd-kind="Type alias">Row</a></h4>
+									<h4>TRow<span class="tsd-signature-symbol">: </span><a href="interfaces/row.html" class="tsd-signature-type" data-tsd-kind="Interface">Row</a></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -616,7 +615,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/aa4bf3c/src/index.ts#L101">index.ts:101</a></li>
+									<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L112">index.ts:112</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -627,7 +626,7 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>TRow<span class="tsd-signature-symbol">: </span><a href="index.html#row" class="tsd-signature-type" data-tsd-kind="Type alias">Row</a></h4>
+									<h4>TRow<span class="tsd-signature-symbol">: </span><a href="interfaces/row.html" class="tsd-signature-type" data-tsd-kind="Interface">Row</a></h4>
 								</li>
 								<li>
 									<h4>TResult</h4>
@@ -662,7 +661,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/aa4bf3c/src/index.ts#L109">index.ts:109</a></li>
+									<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L120">index.ts:120</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -673,7 +672,7 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>TRow<span class="tsd-signature-symbol">: </span><a href="index.html#row" class="tsd-signature-type" data-tsd-kind="Type alias">Row</a></h4>
+									<h4>TRow<span class="tsd-signature-symbol">: </span><a href="interfaces/row.html" class="tsd-signature-type" data-tsd-kind="Interface">Row</a></h4>
 								</li>
 								<li>
 									<h4>TResult</h4>
@@ -702,7 +701,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/aa4bf3c/src/index.ts#L117">index.ts:117</a></li>
+									<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L128">index.ts:128</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -713,7 +712,7 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>TRow<span class="tsd-signature-symbol">: </span><a href="index.html#row" class="tsd-signature-type" data-tsd-kind="Type alias">Row</a></h4>
+									<h4>TRow<span class="tsd-signature-symbol">: </span><a href="interfaces/row.html" class="tsd-signature-type" data-tsd-kind="Interface">Row</a></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -745,10 +744,16 @@
 						<a href="interfaces/axes.html" class="tsd-kind-icon">Axes</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/pair.html" class="tsd-kind-icon">Pair</a>
+						<a href="interfaces/criterion.html" class="tsd-kind-icon">Criterion</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="interfaces/point.html" class="tsd-kind-icon">Point</a>
+						<a href="interfaces/options.html" class="tsd-kind-icon">Options</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/row.html" class="tsd-kind-icon">Row</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
+						<a href="index.html#criteria" class="tsd-kind-icon">Criteria</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
 						<a href="index.html#cube" class="tsd-kind-icon">Cube</a>
@@ -764,9 +769,6 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
 						<a href="index.html#predicate" class="tsd-kind-icon">Predicate</a>
-					</li>
-					<li class=" tsd-kind-type-alias">
-						<a href="index.html#row" class="tsd-kind-icon">Row</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-has-type-parameter">
 						<a href="index.html#table" class="tsd-kind-icon">Table</a>

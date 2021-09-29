@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Axes | Pivot</title>
+	<title>Criterion | Pivot</title>
 	<meta name="description" content="Documentation for Pivot">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -53,10 +53,10 @@
 					<a href="../index.html">Pivot</a>
 				</li>
 				<li>
-					<a href="axes.html">Axes</a>
+					<a href="criterion.html">Criterion</a>
 				</li>
 			</ul>
-			<h1>Interface Axes&lt;TRow&gt;</h1>
+			<h1>Interface Criterion&lt;TRow&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -66,7 +66,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A pair of axes</p>
+						<p>A criterion used to test rows of data against.</p>
 					</div>
 				</div>
 			</section>
@@ -82,7 +82,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Axes</span>
+						<span class="target">Criterion</span>
 					</li>
 				</ul>
 			</section>
@@ -93,8 +93,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="axes.html#x" class="tsd-kind-icon">x</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="axes.html#y" class="tsd-kind-icon">y</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="criterion.html#key" class="tsd-kind-icon">key</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="criterion.html#value" class="tsd-kind-icon">value</a></li>
 							</ul>
 						</section>
 					</div>
@@ -103,32 +103,32 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="x" class="tsd-anchor"></a>
-					<h3>x</h3>
-					<div class="tsd-signature tsd-kind-icon">x<span class="tsd-signature-symbol">:</span> <a href="../index.html#dimension" class="tsd-signature-type" data-tsd-kind="Type alias">Dimension</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRow</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="key" class="tsd-anchor"></a>
+					<h3>key</h3>
+					<div class="tsd-signature tsd-kind-icon">key<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L42">index.ts:42</a></li>
+							<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L21">index.ts:21</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The x axis; columns in the resultant pivot table.</p>
+							<p>The key, or column name to test.</p>
 						</div>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="y" class="tsd-anchor"></a>
-					<h3>y</h3>
-					<div class="tsd-signature tsd-kind-icon">y<span class="tsd-signature-symbol">:</span> <a href="../index.html#dimension" class="tsd-signature-type" data-tsd-kind="Type alias">Dimension</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TRow</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="value" class="tsd-anchor"></a>
+					<h3>value</h3>
+					<div class="tsd-signature tsd-kind-icon">value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L45">index.ts:45</a></li>
+							<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/6d82fda/src/index.ts#L24">index.ts:24</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The y axis; rows in the resultant pivot table.</p>
+							<p>The expected value.</p>
 						</div>
 					</div>
 				</section>
@@ -144,24 +144,24 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-has-type-parameter">
+						<a href="axes.html" class="tsd-kind-icon">Axes</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-has-type-parameter">
-						<a href="axes.html" class="tsd-kind-icon">Axes</a>
+						<a href="criterion.html" class="tsd-kind-icon">Criterion</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="axes.html#x" class="tsd-kind-icon">x</a>
+								<a href="criterion.html#key" class="tsd-kind-icon">key</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="axes.html#y" class="tsd-kind-icon">y</a>
+								<a href="criterion.html#value" class="tsd-kind-icon">value</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-has-type-parameter">
-						<a href="criterion.html" class="tsd-kind-icon">Criterion</a>
-					</li>
 					<li class=" tsd-kind-interface tsd-has-type-parameter">
 						<a href="options.html" class="tsd-kind-icon">Options</a>
 					</li>
