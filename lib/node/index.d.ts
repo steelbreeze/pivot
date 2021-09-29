@@ -55,8 +55,8 @@ export declare function dimension<TRow extends Row>(values: Array<any>, key: str
  */
 export declare function deriveDimension<TRow extends Row>(table: Table<TRow>, key: string, options?: Options<TRow>): Dimension<TRow>;
 /**
- * Join dimensions together.
- * @param dimensions The dimensions to combine into one
+ * Create a composite dimension from others. This creates a cartesian product of the source dimensions criteria.
+ * @param dimensions An array of dimensions to combine into one.
  */
 export declare function join<TRow extends Row>(...dimensions: Array<Dimension<TRow>>): Dimension<TRow>;
 /**
