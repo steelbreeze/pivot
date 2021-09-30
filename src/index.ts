@@ -79,7 +79,7 @@ export function deriveDimension<TRow extends Row>(table: Table<TRow>, key: strin
  * @param dimensions An array of dimensions to combine into one.
  */
 export function join<TRow extends Row>(...dimensions: Array<Dimension<TRow>>): Dimension<TRow> {
-	return dimensions.reduce((result, dimension) => result.flatMap(c1 => dimension.map(c2 => [...c1, ...c2])), [[]]);
+	return dimensions.reduce((result, dimension) => result.flatMap(c1 => dimension.map(c2 => [...c1, ...c2])));
 }
 
 /**
