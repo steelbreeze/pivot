@@ -10,21 +10,26 @@ export interface Row {
 }
 /** A table of data. */
 export declare type Table<TRow extends Row> = Array<TRow>;
-/** A criterion used to test rows of data against. */
-export interface Criterion<TRow extends Row> {
+/** A key and value for that key. */
+export interface Pair {
     /** The key, or column name to test. */
     key: string;
     /** The expected value. */
     value: any;
+}
+/** A criterion used to test rows of data against. */
+export interface Criterion<TRow extends Row> extends Pair {
     /**
-     * A predicate used to evaluate the criterion.
+     * A predicate based on the key and value used to evaluate the criterion.
      * @hidden
      */
     f: Predicate<TRow>;
 }
+/** The set of critera to used for a point on a dimension. */
+export declare type Criteria<TRow extends Row> = Array<Criterion<TRow>>;
 /** An dimension to pivot a table by. */
-export declare type Dimension<TRow extends Row> = Array<Array<Criterion<TRow>>>;
-/** A pair of axes */
+export declare type Dimension<TRow extends Row> = Array<Criteria<TRow>>;
+/** A pair of axes to be used in a pivot operation. */
 export interface Axes<TRow extends Row> {
     /** The x axis; columns in the resultant pivot table. */
     x: Dimension<TRow>;
