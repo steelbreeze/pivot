@@ -4,18 +4,20 @@ export declare type Func1<TArg1, TResult> = (arg: TArg1) => TResult;
 export declare type Func2<TArg1, TArg2, TResult> = (arg1: TArg1, arg2: TArg2) => TResult;
 /** A function taking one argument and returning a boolean result. */
 export declare type Predicate<TArg> = Func1<TArg, boolean>;
+/** The type of values used in data structures. */
+export declare type Value = any;
+/** The type of keys used to reference values in data structures. */
+export declare type Key = Exclude<keyof Value, symbol>;
 /** A set of attributes in a row of a table, each addressable via a key. */
-export interface Row {
-    [key: string]: any;
-}
-/** A table of data. */
-export declare type Table<TRow extends Row> = Array<TRow>;
+export declare type Row = {
+    [TKey in Key]: Value;
+};
 /** A key and value for that key. */
 export interface Pair {
     /** The key, or column name to test. */
-    key: string;
+    key: Key;
     /** The expected value. */
-    value: any;
+    value: Value;
 }
 /** A criterion used to test rows of data against. */
 export interface Criterion<TRow extends Row> extends Pair {
@@ -36,14 +38,16 @@ export interface Axes<TRow extends Row> {
     /** The y axis; rows in the resultant pivot table. */
     y: Dimension<TRow>;
 }
+/** A table of data. */
+export declare type Table<TRow extends Row> = Array<TRow>;
 /** A cube of data. */
 export declare type Cube<TRow extends Row> = Array<Array<Table<TRow>>>;
 /** Options passed into the deriveDimension function. */
 export interface Options<TRow extends Row> {
     /** An optional user-defined function to derive a value from the source data to be used in the dimension. */
-    get?: Func1<TRow, any>;
+    get?: Func1<TRow, Value>;
     /** An optional user-defined function to determin the ordering of the dimension. */
-    sort?: Func2<any, any, number>;
+    sort?: Func2<Value, Value, number>;
 }
 /**
  * Creates a dimension from an array of values.
@@ -51,14 +55,14 @@ export interface Options<TRow extends Row> {
  * @param key The name to give this dimension.
  * @param get An optional callback function used to convert values in the source table to those in the dimension when pivoting.
  */
-export declare function dimension<TRow extends Row>(values: Array<any>, key: string, get?: Func1<TRow, any>): Dimension<TRow>;
+export declare function dimension<TRow extends Row>(values: Array<Value>, key: Key, get?: Func1<TRow, Value>): Dimension<TRow>;
 /**
  * Creates a derived dimension based on the contents of column in a table.
  * @param table The source table, an array of objects.
  * @param key The name to give this dimension.
  * @param options An optional structure, containing two configuration parameters: get, a callback function used to convert values in the source table to those in the dimension when pivoting; sort, a method used to sort the values in the axis.
  */
-export declare function deriveDimension<TRow extends Row>(table: Table<TRow>, key: string, options?: Options<TRow>): Dimension<TRow>;
+export declare function deriveDimension<TRow extends Row>(table: Table<TRow>, key: Key, options?: Options<TRow>): Dimension<TRow>;
 /**
  * Create a composite dimension from others. This creates a cartesian product of the source dimensions criteria.
  * @param dimensions An array of dimensions to combine into one.
