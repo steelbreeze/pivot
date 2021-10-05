@@ -4,7 +4,7 @@ export declare type Func1<TArg1, TResult> = (arg: TArg1) => TResult;
 export declare type Func2<TArg1, TArg2, TResult> = (arg1: TArg1, arg2: TArg2) => TResult;
 /** A function taking one argument and returning a boolean result. */
 export declare type Predicate<TArg> = Func1<TArg, boolean>;
-/** The type of values used in data structures. */
+/** The type of values used in source data structures. */
 export declare type Value = any;
 /** The type of keys used to reference values in data structures. */
 export declare type Key = Exclude<keyof Value, symbol>;

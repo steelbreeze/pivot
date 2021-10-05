@@ -98,7 +98,15 @@ export function join<TRow extends Row>(...dimensions: Array<Dimension<TRow>>): D
  * @param axes The dimensions to use for the x and y axes.
  */
 export function cube<TRow extends Row>(table: Table<TRow>, axes: Axes<TRow>): Cube<TRow> {
-	return axes.y.map(y => table.filter(row => y.every(criterion => criterion.f(row)))).map(slice => axes.x.map(x => slice.filter(row => x.every(criterion => criterion.f(row)))));
+	return slice(table, axes.y).map(table => slice(table, axes.x));
+}
+
+/**
+ * Slices data by the criteria specified in a dimension.
+ * @hidden
+ */
+function slice<TRow extends Row>(table: Table<TRow>, axis: Dimension<TRow>): Array<Table<TRow>> {
+	return axis.map(criteria => table.filter(row => criteria.every(criterion => criterion.f(row))));
 }
 
 /**
