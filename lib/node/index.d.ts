@@ -9,9 +9,7 @@ export declare type Value = any;
 /** The type of keys used to reference values in data structures. */
 export declare type Key = Exclude<keyof Value, symbol>;
 /** A set of attributes in a row of a table, each addressable via a key. */
-export declare type Row = {
-    [TKey in Key]: Value;
-};
+export declare type Row = Record<Key, Value>;
 /** A key and value for that key. */
 export interface Pair {
     /** The key, or column name to test. */

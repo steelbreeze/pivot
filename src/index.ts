@@ -7,14 +7,14 @@ export type Func2<TArg1, TArg2, TResult> = (arg1: TArg1, arg2: TArg2) => TResult
 /** A function taking one argument and returning a boolean result. */
 export type Predicate<TArg> = Func1<TArg, boolean>;
 
-/** The type of values used in data structures. */
+/** The type of values used in source data structures. */
 export type Value = any;
 
 /** The type of keys used to reference values in data structures. */
 export type Key = Exclude<keyof Value, symbol>;
 
 /** A set of attributes in a row of a table, each addressable via a key. */
-export type Row = { [TKey in Key]: Value };
+export type Row = Record<Key, Value>;
 
 /** A key and value for that key. */
 export interface Pair {
