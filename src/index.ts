@@ -71,7 +71,7 @@ export interface Options<TRow extends Row> {
  * @param get An optional callback function used to convert values in the source table to those in the dimension when pivoting.
  */
 export function dimension<TRow extends Row>(values: Array<Value>, key: Key, get: Func1<TRow, Value> = row => row[key]): Dimension<TRow> {
-	return values.map(value => [{ key, value, f: row => get(row) === value }]);
+	return values.map<Criteria<TRow>>(value => [{ key, value, f: row => get(row) === value }]);
 }
 
 /**
