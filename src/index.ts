@@ -1,11 +1,8 @@
 /** A function taking one argument and returning a result. */
-export type Func1<TArg1, TResult> = (arg: TArg1) => TResult;
-
-/** A function taking two arguments and returning a result. */
-export type Func2<TArg1, TArg2, TResult> = (arg1: TArg1, arg2: TArg2) => TResult;
+export type Func<TArg, TResult> = (arg: TArg) => TResult;
 
 /** A function taking one argument and returning a boolean result. */
-export type Predicate<TArg> = Func1<TArg, boolean>;
+export type Predicate<TArg> = Func<TArg, boolean>;
 
 /** The type of values used in source data structures. */
 export type Value = any;
@@ -25,17 +22,8 @@ export interface Pair {
 	value: Value;
 }
 
-/** A criterion used to test rows of data against. */
-export interface Criterion<TRow extends Row> extends Pair {
-	/**
-	 * A predicate based on the key and value used to evaluate the criterion.
-	 * @hidden
-	 */
-	f: Predicate<TRow>;
-}
-
 /** The set of critera to used for a point on a dimension. */
-export type Criteria<TRow extends Row> = Array<Criterion<TRow>>;
+export type Criteria<TRow extends Row> = Array<Predicate<TRow> & Pair>;
 
 /** An dimension to pivot a table by. */
 export type Dimension<TRow extends Row> = Array<Criteria<TRow>>;
@@ -55,38 +43,32 @@ export type Table<TRow extends Row> = Array<TRow>;
 /** A cube of data. */
 export type Cube<TRow extends Row> = Array<Array<Table<TRow>>>;
 
-/** Options passed into the deriveDimension function. */
-export interface Options<TRow extends Row> {
-	/** An optional user-defined function to derive a value from the source data to be used in the dimension. */
-	get?: Func1<TRow, Value>;
-
-	/** An optional user-defined function to determin the ordering of the dimension. */
-	sort?: Func2<Value, Value, number>;
+/**
+ * Returns a distinct list of values for a column of a table.
+ * @param table The source data, a table of rows.
+ * @param key The column name to find the distinct values for.
+ * @param getValue An optional callback to derive values from the source data.
+ * @returns Returns the distinct set of values for the key
+ */
+export function distinct<TRow extends Row>(table: Table<TRow>, key: Key, getValue: Func<TRow, Value> = row => row[key]): Array<Value> {
+	return table.map(getValue).filter((element, index, source) => source.indexOf(element) === index);
 }
 
 /**
  * Creates a dimension from an array of values.
- * @param values The source values.
+ * @param values A distinct list of values for the dimension.
  * @param key The name to give this dimension.
- * @param get An optional callback function used to convert values in the source table to those in the dimension when pivoting.
+ * @param getValue An optional callback to derive values from the source data.
+ * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export function dimension<TRow extends Row>(values: Array<Value>, key: Key, get: Func1<TRow, Value> = row => row[key]): Dimension<TRow> {
-	return values.map<Criteria<TRow>>(value => [{ key, value, f: row => get(row) === value }]);
-}
-
-/**
- * Creates a derived dimension based on the contents of column in a table.
- * @param table The source table, an array of objects.
- * @param key The name to give this dimension.
- * @param options An optional structure, containing two configuration parameters: get, a callback function used to convert values in the source table to those in the dimension when pivoting; sort, a method used to sort the values in the axis.
- */
-export function deriveDimension<TRow extends Row>(table: Table<TRow>, key: Key, options: Options<TRow> = {}): Dimension<TRow> {
-	return dimension(table.map(options.get || (row => row[key])).filter((value, index, source) => source.indexOf(value) === index).sort(options.sort), key, options.get);
+export function dimension<TRow extends Row>(values: Array<Value>, key: Key, getValue: Func<TRow, Value> = row => row[key]): Dimension<TRow> {
+	return values.map<Criteria<TRow>>(value => [Object.assign((row: TRow) => getValue(row) === value, { key, value })]);
 }
 
 /**
  * Create a composite dimension from others. This creates a cartesian product of the source dimensions criteria.
  * @param dimensions An array of dimensions to combine into one.
+ * @returns Returns a complex dimension with criteria being the cartesian product of the source dimensions.
  */
 export function join<TRow extends Row>(...dimensions: Array<Dimension<TRow>>): Dimension<TRow> {
 	return dimensions.reduce((result, dimension) => result.flatMap(c1 => dimension.map(c2 => [...c1, ...c2])));
@@ -96,6 +78,7 @@ export function join<TRow extends Row>(...dimensions: Array<Dimension<TRow>>): D
  * Pivots a table by two axes
  * @param table The source data, an array of rows.
  * @param axes The dimensions to use for the x and y axes.
+ * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
 export function cube<TRow extends Row>(table: Table<TRow>, axes: Axes<TRow>): Cube<TRow> {
 	return slice(table, axes.y).map(table => slice(table, axes.x));
@@ -103,16 +86,19 @@ export function cube<TRow extends Row>(table: Table<TRow>, axes: Axes<TRow>): Cu
 
 /**
  * Slices data by the criteria specified in a dimension.
- * @hidden
+ * @param table The source table, an array of objects.
+ * @param dimension A dimension to slice the source table by.
+ * @returns A set of tables, filtered by the dimensions criteria.
  */
-function slice<TRow extends Row>(table: Table<TRow>, axis: Dimension<TRow>): Array<Table<TRow>> {
-	return axis.map(criteria => table.filter(row => criteria.every(criterion => criterion.f(row))));
+export function slice<TRow extends Row>(table: Table<TRow>, dimension: Dimension<TRow>): Array<Table<TRow>> {
+	return dimension.map(criteria => table.filter(row => criteria.every(criterion => criterion(row))));
 }
 
 /**
  * Filters data within a cube.
  * @param cube The source cube.
  * @param predicate A predicate to filter the cube by.
+ * @returns Returns a copy of the cube, with the contents of each cell filtered by the predicate.
  */
 export function filter<TRow extends Row>(cube: Cube<TRow>, predicate: Predicate<TRow>): Cube<TRow> {
 	return cube.map(row => row.map(cell => cell.filter(predicate)));
@@ -123,7 +109,7 @@ export function filter<TRow extends Row>(cube: Cube<TRow>, predicate: Predicate<
  * @param cube The source cube.
  * @param selector A callback function to create a result from each cell of the cube.
  */
-export function map<TRow extends Row, TResult>(cube: Cube<TRow>, selector: Func1<Table<TRow>, TResult>): Array<Array<TResult>> {
+export function map<TRow extends Row, TResult>(cube: Cube<TRow>, selector: Func<Table<TRow>, TResult>): Array<Array<TResult>> {
 	return cube.map(row => row.map(selector));
 }
 
@@ -131,7 +117,7 @@ export function map<TRow extends Row, TResult>(cube: Cube<TRow>, selector: Func1
  * A generator, used to transform the source data in a cube to another representation.
  * @param selector A function to transform a source record into the desired result.
  */
-export function select<TRow extends Row, TResult>(selector: Func1<TRow, TResult>): Func1<Table<TRow>, Array<TResult>> {
+export function select<TRow extends Row, TResult>(selector: Func<TRow, TResult>): Func<Table<TRow>, Array<TResult>> {
 	return table => table.map(selector);
 }
 
@@ -139,7 +125,7 @@ export function select<TRow extends Row, TResult>(selector: Func1<TRow, TResult>
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row.
  */
-export function sum<TRow extends Row>(selector: Func1<TRow, number>): Func1<Table<TRow>, number | null> {
+export function sum<TRow extends Row>(selector: Func<TRow, number>): Func<Table<TRow>, number | null> {
 	return table => table ? table.reduce((total, row) => total + selector(row), 0) : null;
 }
 
@@ -147,7 +133,7 @@ export function sum<TRow extends Row>(selector: Func1<TRow, number>): Func1<Tabl
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube .
  * @param selector A callback function to derive a numerical value for each row.
  */
-export function average<TRow extends Row>(selector: Func1<TRow, number>): Func1<Table<TRow>, number | null> {
+export function average<TRow extends Row>(selector: Func<TRow, number>): Func<Table<TRow>, number | null> {
 	return table => table ? sum(selector)(table)! / count(table)! : null;
 }
 

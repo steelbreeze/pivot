@@ -1,7 +1,7 @@
 # pivot
 [![Maintainability](https://api.codeclimate.com/v1/badges/d2fd7facda5a61d2b66a/maintainability)](https://codeclimate.com/github/steelbreeze/pivot/maintainability)
 
-A minimalist pivot table library for TypeScript/JavaScript. While small (just 978 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite dimensions, filtering.
+A minimalist pivot table library for TypeScript/JavaScript. While small (just 960 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite dimensions, filtering.
 
 The library also provides a modest set of numerical selectors. Suggestions for additions, or better still contributions, are welcome.
 
@@ -21,7 +21,7 @@ import * as pivot from 'https://cdn.skypack.dev/@steelbreeze/pivot';
 ```
 
 ## Documentation
-The documentation can be found [here](http://steelbreeze.net/pivot/api/v1).
+The documentation can be found [here](http://steelbreeze.net/pivot/api/v2).
 
 ## Example
 The following is the result of pivoting publicly available information about the Fulham Football Club [men's squad](https://web.archive.org/web/20210516151437/https://www.fulhamfc.com/teams) at the end of the 2020/21 season, calculating the average age of players by position and country.
@@ -30,8 +30,8 @@ import * as pivot from '@steelbreeze/pivot';
 
 // create dimensions derived from the squad data
 const axes = {
-	x: pivot.deriveDimension(squad, 'position'),
-	y: pivot.deriveDimension(squad, 'country')
+	x: pivot.dimension(pivot.distinct(squad, 'position').sort(), 'position'),
+	y: pivot.dimension(pivot.distinct(squad, 'country').sort(), 'country')
 };
 
 // create the pivot cube from the squad data using position and country for x and y axes
@@ -93,3 +93,5 @@ In the example above, the dimensions are derived from the values seen within the
 ### Composite dimensions
 Dimensions can be merged with a call to ```join```.
 If the criteria for one dimension was [a, b] and another was [c, d], then the combined dimension would be [ac, ad, bc, bd].
+## Hypercubes
+While the library is geared around simple cubes, pivoted on an x and y axis, hypercubes are possible by making repeated calls to the ```slice``` function.

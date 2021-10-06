@@ -3,8 +3,8 @@ import * as pivot from '..';
 
 // create dimensions derived from the squad data
 const axes = {
-	x: pivot.deriveDimension(squad, 'position'),
-	y: pivot.deriveDimension(squad, 'country')
+	x: pivot.dimension(pivot.distinct(squad, 'position').sort(), 'position'),
+	y: pivot.dimension(pivot.distinct(squad, 'country').sort(), 'country')
 };
 
 // create the pivot cube from the squad data using position and country for x and y axes
