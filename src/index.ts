@@ -51,7 +51,17 @@ export type Cube<TRow extends Row> = Array<Array<Table<TRow>>>;
  * @returns Returns the distinct set of values for the key
  */
 export function distinct<TRow extends Row>(table: Table<TRow>, key: Key, getValue: Func<TRow, Value> = row => row[key]): Array<Value> {
-	return table.map(getValue).filter((element, index, source) => source.indexOf(element) === index);
+	const unique: Array<Value> = [];
+
+	for(const row of table) {
+		const value = getValue(row);
+	
+		if(!unique.includes(value)) {
+			unique.push(value);
+		}
+	}
+	
+	return unique;
 }
 
 /**
@@ -62,7 +72,7 @@ export function distinct<TRow extends Row>(table: Table<TRow>, key: Key, getValu
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
 export function dimension<TRow extends Row>(values: Array<Value>, key: Key, getValue: Func<TRow, Value> = row => row[key]): Dimension<TRow> {
-	return values.map<Criteria<TRow>>(value => [Object.assign((row: TRow) => getValue(row) === value, { key, value })]);
+	return values.map(value => [Object.assign((row: TRow) => getValue(row) === value, { key, value })]);
 }
 
 /**
