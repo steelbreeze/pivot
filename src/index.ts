@@ -51,17 +51,7 @@ export type Cube<TRow extends Row> = Array<Array<Table<TRow>>>;
  * @returns Returns the distinct set of values for the key
  */
 export function distinct<TRow extends Row>(table: Table<TRow>, key: Key, getValue: Func<TRow, Value> = row => row[key]): Array<Value> {
-	const unique: Array<Value> = [];
-
-	for(const row of table) {
-		const value = getValue(row);
-	
-		if(!unique.includes(value)) {
-			unique.push(value);
-		}
-	}
-	
-	return unique;
+	return table.map(getValue).filter((value, index, source) => source.indexOf(value) === index);
 }
 
 /**
