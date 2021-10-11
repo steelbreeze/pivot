@@ -15,10 +15,8 @@ export interface Pair {
     /** The expected value. */
     value: Value;
 }
-/** The set of critera to used for a point on a dimension. */
-export declare type Criteria<TRow extends Row> = Array<Predicate<TRow> & Pair>;
 /** An dimension to pivot a table by. */
-export declare type Dimension<TRow extends Row> = Array<Criteria<TRow>>;
+export declare type Dimension<TRow extends Row> = Array<Array<Predicate<TRow> & Pair>>;
 /** A pair of axes to be used in a pivot operation. */
 export interface Axes<TRow extends Row> {
     /** The x axis; columns in the resultant pivot table. */

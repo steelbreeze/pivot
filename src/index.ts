@@ -22,11 +22,8 @@ export interface Pair {
 	value: Value;
 }
 
-/** The set of critera to used for a point on a dimension. */
-export type Criteria<TRow extends Row> = Array<Predicate<TRow> & Pair>;
-
 /** An dimension to pivot a table by. */
-export type Dimension<TRow extends Row> = Array<Criteria<TRow>>;
+export type Dimension<TRow extends Row> = Array<Array<Predicate<TRow> & Pair>>;
 
 /** A pair of axes to be used in a pivot operation. */
 export interface Axes<TRow extends Row> {
