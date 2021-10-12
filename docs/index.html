@@ -73,8 +73,8 @@
 		];
 
 		// create axes out of the dimensions derived from the squad data
-		const country = pivot.deriveDimension(squad, 'country');
-		const position = pivot.deriveDimension(squad, 'position');
+		const country = pivot.dimension(pivot.distinct(squad, 'country').sort(), 'country');
+		const position = pivot.dimension(pivot.distinct(squad, 'position').sort(), 'position');
 
 		// create the pivot cube
 		const cube = pivot.cube(squad, { x: position, y: country });
