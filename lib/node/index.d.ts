@@ -2,14 +2,14 @@
 export declare type Func<TArg, TResult> = (arg: TArg) => TResult;
 /** A function taking one argument and returning a boolean result. */
 export declare type Predicate<TArg> = Func<TArg, boolean>;
+/** A two-dimensional array of values. */
+export declare type Matrix<TValue> = Array<Array<TValue>>;
 /** The type of values used in source data structures. */
 export declare type Value = any;
 /** The type of keys used to reference values in data structures. */
 export declare type Key = Exclude<keyof Value, symbol>;
 /** A set of attributes in a row of a table, each addressable via a key. */
 export declare type Row = Record<Key, Value>;
-/** A two-dimensional array. */
-export declare type Matrix<TValue> = Array<Array<TValue>>;
 /** A key and value for that key. */
 export interface Pair {
     /** The key, or column name to test. */

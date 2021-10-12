@@ -5,7 +5,7 @@ export type Func<TArg, TResult> = (arg: TArg) => TResult;
 export type Predicate<TArg> = Func<TArg, boolean>;
 
 /** A two-dimensional array of values. */
-export type Matrix<TSource> = Array<Array<TSource>>;
+export type Matrix<TValue> = Array<Array<TValue>>;
 
 /** The type of values used in source data structures. */
 export type Value = any;
