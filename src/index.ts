@@ -4,6 +4,9 @@ export type Func<TArg, TResult> = (arg: TArg) => TResult;
 /** A function taking one argument and returning a boolean result. */
 export type Predicate<TArg> = Func<TArg, boolean>;
 
+/** A two-dimensional array of values. */
+export type Matrix<TSource> = Array<Array<TSource>>;
+
 /** The type of values used in source data structures. */
 export type Value = any;
 
@@ -23,7 +26,7 @@ export interface Pair {
 }
 
 /** An dimension to pivot a table by. */
-export type Dimension<TRow extends Row> = Array<Array<Predicate<TRow> & Pair>>;
+export type Dimension<TRow extends Row> = Matrix<Predicate<TRow> & Pair>;
 
 /** A pair of axes to be used in a pivot operation. */
 export interface Axes<TRow extends Row> {
@@ -38,7 +41,7 @@ export interface Axes<TRow extends Row> {
 export type Table<TRow extends Row> = Array<TRow>;
 
 /** A cube of data. */
-export type Cube<TRow extends Row> = Array<Array<Table<TRow>>>;
+export type Cube<TRow extends Row> = Matrix<Table<TRow>>;
 
 /**
  * Returns a distinct list of values for a column of a table.
@@ -102,12 +105,12 @@ export function filter<TRow extends Row>(cube: Cube<TRow>, predicate: Predicate<
 }
 
 /**
- * Queries data from a cube.
- * @param cube The source cube.
+ * Queries data from a cube, or any matrix structure.
+ * @param source The source data.
  * @param selector A callback function to create a result from each cell of the cube.
  */
-export function map<TRow extends Row, TResult>(cube: Cube<TRow>, selector: Func<Table<TRow>, TResult>): Array<Array<TResult>> {
-	return cube.map(row => row.map(selector));
+export function map<TSource, TResult>(source: Matrix<TSource>, selector: Func<TSource, TResult>): Matrix<TResult> {
+	return source.map(row => row.map(selector));
 }
 
 /**

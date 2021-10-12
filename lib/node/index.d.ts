@@ -8,6 +8,8 @@ export declare type Value = any;
 export declare type Key = Exclude<keyof Value, symbol>;
 /** A set of attributes in a row of a table, each addressable via a key. */
 export declare type Row = Record<Key, Value>;
+/** A two-dimensional array. */
+export declare type Matrix<TValue> = Array<Array<TValue>>;
 /** A key and value for that key. */
 export interface Pair {
     /** The key, or column name to test. */
@@ -16,7 +18,7 @@ export interface Pair {
     value: Value;
 }
 /** An dimension to pivot a table by. */
-export declare type Dimension<TRow extends Row> = Array<Array<Predicate<TRow> & Pair>>;
+export declare type Dimension<TRow extends Row> = Matrix<Predicate<TRow> & Pair>;
 /** A pair of axes to be used in a pivot operation. */
 export interface Axes<TRow extends Row> {
     /** The x axis; columns in the resultant pivot table. */
@@ -27,7 +29,7 @@ export interface Axes<TRow extends Row> {
 /** A table of data. */
 export declare type Table<TRow extends Row> = Array<TRow>;
 /** A cube of data. */
-export declare type Cube<TRow extends Row> = Array<Array<Table<TRow>>>;
+export declare type Cube<TRow extends Row> = Matrix<Table<TRow>>;
 /**
  * Returns a distinct list of values for a column of a table.
  * @param table The source data, a table of rows.
@@ -72,11 +74,11 @@ export declare function slice<TRow extends Row>(table: Table<TRow>, dimension: D
  */
 export declare function filter<TRow extends Row>(cube: Cube<TRow>, predicate: Predicate<TRow>): Cube<TRow>;
 /**
- * Queries data from a cube.
- * @param cube The source cube.
+ * Queries data from a cube, or any matrix structure.
+ * @param source The source data.
  * @param selector A callback function to create a result from each cell of the cube.
  */
-export declare function map<TRow extends Row, TResult>(cube: Cube<TRow>, selector: Func<Table<TRow>, TResult>): Array<Array<TResult>>;
+export declare function map<TSource, TResult>(source: Matrix<TSource>, selector: Func<TSource, TResult>): Matrix<TResult>;
 /**
  * A generator, used to transform the source data in a cube to another representation.
  * @param selector A function to transform a source record into the desired result.
