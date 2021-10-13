@@ -18,7 +18,7 @@ export interface Pair {
     value: Value;
 }
 /** An dimension to pivot a table by. */
-export declare type Dimension<TRow extends Row> = Matrix<Predicate<TRow> & Pair>;
+export declare type Dimension<TRow extends Row> = Array<Array<Predicate<TRow> & Pair>>;
 /** A pair of axes to be used in a pivot operation. */
 export interface Axes<TRow extends Row> {
     /** The x axis; columns in the resultant pivot table. */
