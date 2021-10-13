@@ -16,17 +16,20 @@ export type Key = Exclude<keyof Value, symbol>;
 /** A set of attributes in a row of a table, each addressable via a key. */
 export type Row = Record<Key, Value>;
 
-/** A key and value for that key. */
-export interface Pair {
+/** A criterion used in the criteria of a dimension. */
+export interface Criterion<TRow extends Row> {
 	/** The key, or column name to test. */
 	key: Key;
 
 	/** The expected value. */
 	value: Value;
+
+	/** The predicate used to perform the test. */
+	predicate: Predicate<TRow>;
 }
 
-/** An dimension to pivot a table by. */
-export type Dimension<TRow extends Row> = Array<Array<Predicate<TRow> & Pair>>;
+/** An dimension to pivot a table by; this is a set of criteria for the dimension, each criteria being a set of criterion. */
+export type Dimension<TRow extends Row> = Array<Array<Criterion<TRow>>>;
 
 /** A pair of axes to be used in a pivot operation. */
 export interface Axes<TRow extends Row> {
@@ -62,7 +65,7 @@ export function distinct<TRow extends Row>(table: Table<TRow>, key: Key, getValu
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
 export function dimension<TRow extends Row>(values: Array<Value>, key: Key, getValue: Func<TRow, Value> = row => row[key]): Dimension<TRow> {
-	return values.map(value => [Object.assign((row: TRow) => getValue(row) === value, { key, value })]);
+	return values.map(value => [{ key, value, predicate: row => getValue(row) === value }]);
 }
 
 /**
@@ -91,7 +94,7 @@ export function cube<TRow extends Row>(table: Table<TRow>, axes: Axes<TRow>): Cu
  * @returns A set of tables, filtered by the dimensions criteria.
  */
 export function slice<TRow extends Row>(table: Table<TRow>, dimension: Dimension<TRow>): Array<Table<TRow>> {
-	return dimension.map(criteria => table.filter(row => criteria.every(criterion => criterion(row))));
+	return dimension.map(criteria => table.filter(row => criteria.every(criterion => criterion.predicate(row))));
 }
 
 /**
