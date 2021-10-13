@@ -87,8 +87,7 @@ const result = pivot.map(cube, pivot.select(player => `${player.givenName}&nbsp;
 
 > Data and calculations correct as of: 2021-05-23.
 
-## Dimension manipulation
-### Composite dimensions
+## Composite dimensions
 Dimensions can be merged with a call to ```join```.
 If the criteria for one dimension was [a, b] and another was [c, d], then the combined dimension would be [ac, ad, bc, bd].
 ## Hypercubes
