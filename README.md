@@ -88,8 +88,6 @@ const result = pivot.map(cube, pivot.select(player => `${player.givenName}&nbsp;
 > Data and calculations correct as of: 2021-05-23.
 
 ## Dimension manipulation
-### Custom dimensions
-In the example above, the dimensions are derived from the values seen within the data using ```deriveDimension```. Should you wish to use custom dimensions, you can call ```dimension``` and pass in the desired values.
 ### Composite dimensions
 Dimensions can be merged with a call to ```join```.
 If the criteria for one dimension was [a, b] and another was [c, d], then the combined dimension would be [ac, ad, bc, bd].
@@ -102,5 +100,5 @@ slice(table, axes.y).map(table => slice(table, axes.x));
 ```
 An x/y/z cube can be created as follows:
 ```typescript
-slice(table, zAxis).map(table => slice(table, yAxis)).map(table => slice(table, xAxis));
+slice(table, z).map(table => slice(table, y)).map(table => slice(table, x));
 ```
