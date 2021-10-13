@@ -95,3 +95,12 @@ Dimensions can be merged with a call to ```join```.
 If the criteria for one dimension was [a, b] and another was [c, d], then the combined dimension would be [ac, ad, bc, bd].
 ## Hypercubes
 While the library is geared around simple cubes, pivoted on an x and y axis, hypercubes are possible by making repeated calls to the ```slice``` function.
+
+The x/y cube is generated internally with the following code:
+```typescript
+slice(table, axes.y).map(table => slice(table, axes.x));
+```
+An x/y/z cube can be created as follows:
+```typescript
+slice(table, zAxis).map(table => slice(table, yAxis)).map(table => slice(table, xAxis));
+```
