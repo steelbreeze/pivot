@@ -28,8 +28,11 @@ export interface Criterion<TRow extends Row> {
 	predicate: Predicate<TRow>;
 }
 
-/** An dimension to pivot a table by; this is a set of criteria for the dimension, each criteria being a set of criterion. */
-export type Dimension<TRow extends Row> = Array<Array<Criterion<TRow>>>;
+/** The set of criterion used to select items for a row or column within a cube. */
+export type Criteria<TRow extends Row> = Array<Criterion<TRow>>;
+
+/** An dimension to pivot a table by; this is a set of criteria for the dimension. */
+export type Dimension<TRow extends Row> = Array<Criteria<TRow>>;
 
 /** A pair of axes to be used in a pivot operation. */
 export interface Axes<TRow extends Row> {
