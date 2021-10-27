@@ -1,7 +1,7 @@
 # pivot
 [![Maintainability](https://api.codeclimate.com/v1/badges/c8ed29d6e2fa0bc0d582/maintainability)](https://codeclimate.com/github/steelbreeze/pivot/maintainability)
 
-A minimalist pivot table library for TypeScript/JavaScript. While small (just 963 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite dimensions, filtering; even hypercubes can be created.
+A minimalist pivot table library for TypeScript/JavaScript. While small (just 940 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite dimensions, filtering.
 
 The library also provides a modest set of numerical selectors. Suggestions for additions, or better still contributions, are welcome.
 
@@ -90,14 +90,3 @@ const result = pivot.map(cube, pivot.select(player => `${player.givenName}&nbsp;
 ## Composite dimensions
 Dimensions can be merged with a call to ```join```.
 If the criteria for one dimension was [a, b] and another was [c, d], then the combined dimension would be [ac, ad, bc, bd].
-## Hypercubes
-While the library is geared around simple cubes, pivoted on an x and y axis, hypercubes are possible by making repeated calls to the ```slice``` function.
-
-The x/y cube is generated internally with the following code:
-```typescript
-slice(table, axes.y).map(table => slice(table, axes.x));
-```
-An x/y/z cube can be created as follows:
-```typescript
-slice(table, z).map(table => slice(table, y)).map(table => slice(table, x));
-```

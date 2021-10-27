@@ -87,17 +87,15 @@ export function join<TRow extends Row>(...dimensions: Array<Dimension<TRow>>): D
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
 export function cube<TRow extends Row>(table: Table<TRow>, axes: Axes<TRow>): Cube<TRow> {
-	return slice(table, axes.y).map(table => slice(table, axes.x));
+	return slice(axes.y)(table).map(slice(axes.x));
 }
 
 /**
- * Slices data by the criteria specified in a dimension.
- * @param table The source table, an array of objects.
- * @param dimension A dimension to slice the source table by.
- * @returns A set of tables, filtered by the dimensions criteria.
+ * Generates a function to slice data by the criteria specified in a dimension.
+ * @hidden
  */
-export function slice<TRow extends Row>(table: Table<TRow>, dimension: Dimension<TRow>): Array<Table<TRow>> {
-	return dimension.map(criteria => table.filter(row => criteria.every(criterion => criterion.predicate(row))));
+function slice<TRow extends Row>(dimension: Dimension<TRow>): Func<Table<TRow>, Array<Table<TRow>>> {
+	return table => dimension.map(criteria => table.filter(row => criteria.every(criterion => criterion.predicate(row))));
 }
 
 /**

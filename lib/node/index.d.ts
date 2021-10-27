@@ -64,13 +64,6 @@ export declare function join<TRow extends Row>(...dimensions: Array<Dimension<TR
  */
 export declare function cube<TRow extends Row>(table: Table<TRow>, axes: Axes<TRow>): Cube<TRow>;
 /**
- * Slices data by the criteria specified in a dimension.
- * @param table The source table, an array of objects.
- * @param dimension A dimension to slice the source table by.
- * @returns A set of tables, filtered by the dimensions criteria.
- */
-export declare function slice<TRow extends Row>(table: Table<TRow>, dimension: Dimension<TRow>): Array<Table<TRow>>;
-/**
  * Filters data within a cube.
  * @param cube The source cube.
  * @param predicate A predicate to filter the cube by.
