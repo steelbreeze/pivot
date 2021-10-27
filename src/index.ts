@@ -56,9 +56,8 @@ export type Cube<TRow extends Row> = Matrix<Table<TRow>>;
  * @param getValue An optional callback to derive values from the source data.
  * @returns Returns the distinct set of values for the key
  */
-export function distinct<TRow extends Row>(table: Table<TRow>, key: Key, getValue: Func<TRow, Value> = row => row[key]): Array<Value> {
-	return table.map(getValue).filter((value, index, source) => source.indexOf(value) === index);
-}
+export const distinct = <TRow extends Row>(table: Table<TRow>, key: Key, getValue: Func<TRow, Value> = row => row[key]): Array<Value> =>
+	table.map(getValue).filter((value, index, source) => source.indexOf(value) === index);
 
 /**
  * Creates a dimension from an array of values.
@@ -67,18 +66,16 @@ export function distinct<TRow extends Row>(table: Table<TRow>, key: Key, getValu
  * @param getValue An optional callback to derive values from the source data.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export function dimension<TRow extends Row>(values: Array<Value>, key: Key, getValue: Func<TRow, Value> = row => row[key]): Dimension<TRow> {
-	return values.map(value => [{ key, value, predicate: row => getValue(row) === value }]);
-}
+export const dimension = <TRow extends Row>(values: Array<Value>, key: Key, getValue: Func<TRow, Value> = row => row[key]): Dimension<TRow> =>
+	values.map(value => [{ key, value, predicate: row => getValue(row) === value }]);
 
 /**
  * Create a composite dimension from others. This creates a cartesian product of the source dimensions criteria.
  * @param dimensions An array of dimensions to combine into one.
  * @returns Returns a complex dimension with criteria being the cartesian product of the source dimensions.
  */
-export function join<TRow extends Row>(...dimensions: Array<Dimension<TRow>>): Dimension<TRow> {
-	return dimensions.reduce((result, dimension) => result.flatMap(c1 => dimension.map(c2 => [...c1, ...c2])));
-}
+export const join = <TRow extends Row>(...dimensions: Array<Dimension<TRow>>): Dimension<TRow> =>
+	dimensions.reduce((result, dimension) => result.flatMap(c1 => dimension.map(c2 => [...c1, ...c2])));
 
 /**
  * Pivots a table by two axes
@@ -86,17 +83,15 @@ export function join<TRow extends Row>(...dimensions: Array<Dimension<TRow>>): D
  * @param axes The dimensions to use for the x and y axes.
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
-export function cube<TRow extends Row>(table: Table<TRow>, axes: Axes<TRow>): Cube<TRow> {
-	return slice(axes.y)(table).map(slice(axes.x));
-}
+export const cube = <TRow extends Row>(table: Table<TRow>, axes: Axes<TRow>): Cube<TRow> =>
+	slice(axes.y)(table).map(slice(axes.x));
 
 /**
  * Generates a function to slice data by the criteria specified in a dimension.
  * @hidden
  */
-function slice<TRow extends Row>(dimension: Dimension<TRow>): Func<Table<TRow>, Array<Table<TRow>>> {
-	return table => dimension.map(criteria => table.filter(row => criteria.every(criterion => criterion.predicate(row))));
-}
+const slice = <TRow extends Row>(dimension: Dimension<TRow>): Func<Table<TRow>, Array<Table<TRow>>> =>
+	table => dimension.map(criteria => table.filter(row => criteria.every(criterion => criterion.predicate(row))));
 
 /**
  * Filters data within a cube.
@@ -104,47 +99,41 @@ function slice<TRow extends Row>(dimension: Dimension<TRow>): Func<Table<TRow>, 
  * @param predicate A predicate to filter the cube by.
  * @returns Returns a copy of the cube, with the contents of each cell filtered by the predicate.
  */
-export function filter<TRow extends Row>(cube: Cube<TRow>, predicate: Predicate<TRow>): Cube<TRow> {
-	return cube.map(row => row.map(cell => cell.filter(predicate)));
-}
+export const filter = <TRow extends Row>(cube: Cube<TRow>, predicate: Predicate<TRow>): Cube<TRow> =>
+	cube.map(row => row.map(cell => cell.filter(predicate)));
 
 /**
  * Queries data from a cube, or any matrix structure.
  * @param source The source data.
  * @param selector A callback function to create a result from each cell of the cube.
  */
-export function map<TSource, TResult>(source: Matrix<TSource>, selector: Func<TSource, TResult>): Matrix<TResult> {
-	return source.map(row => row.map(selector));
-}
+export const map = <TSource, TResult>(source: Matrix<TSource>, selector: Func<TSource, TResult>): Matrix<TResult> =>
+	source.map(row => row.map(selector));
 
 /**
  * A generator, used to transform the source data in a cube to another representation.
  * @param selector A function to transform a source record into the desired result.
  */
-export function select<TRow extends Row, TResult>(selector: Func<TRow, TResult>): Func<Table<TRow>, Array<TResult>> {
-	return table => table.map(selector);
-}
+export const select = <TRow extends Row, TResult>(selector: Func<TRow, TResult>): Func<Table<TRow>, Array<TResult>> =>
+	table => table.map(selector);
 
 /**
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row.
  */
-export function sum<TRow extends Row>(selector: Func<TRow, number>): Func<Table<TRow>, number | null> {
-	return table => table ? table.reduce((total, row) => total + selector(row), 0) : null;
-}
+export const sum = <TRow extends Row>(selector: Func<TRow, number>): Func<Table<TRow>, number | null> =>
+	table => table ? table.reduce((total, row) => total + selector(row), 0) : null;
 
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube .
  * @param selector A callback function to derive a numerical value for each row.
  */
-export function average<TRow extends Row>(selector: Func<TRow, number>): Func<Table<TRow>, number | null> {
-	return table => table ? sum(selector)(table)! / count(table)! : null;
-}
+export const average = <TRow extends Row>(selector: Func<TRow, number>): Func<Table<TRow>, number | null> =>
+	table => table ? sum(selector)(table)! / count(table)! : null;
 
 /**
  * Counts the number of items in a table.
  * @param table The source table.
  */
-export function count<TRow extends Row>(table: Table<TRow>): number | null {
-	return table.length || null;
-}
+export const count = <TRow extends Row>(table: Table<TRow>): number | null =>
+	table.length || null;

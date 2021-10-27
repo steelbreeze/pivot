@@ -41,7 +41,7 @@ export declare type Cube<TRow extends Row> = Matrix<Table<TRow>>;
  * @param getValue An optional callback to derive values from the source data.
  * @returns Returns the distinct set of values for the key
  */
-export declare function distinct<TRow extends Row>(table: Table<TRow>, key: Key, getValue?: Func<TRow, Value>): Array<Value>;
+export declare const distinct: <TRow extends Row>(table: Table<TRow>, key: Key, getValue?: Func<TRow, any>) => Array<Value>;
 /**
  * Creates a dimension from an array of values.
  * @param values A distinct list of values for the dimension.
@@ -49,50 +49,50 @@ export declare function distinct<TRow extends Row>(table: Table<TRow>, key: Key,
  * @param getValue An optional callback to derive values from the source data.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export declare function dimension<TRow extends Row>(values: Array<Value>, key: Key, getValue?: Func<TRow, Value>): Dimension<TRow>;
+export declare const dimension: <TRow extends Row>(values: Array<Value>, key: Key, getValue?: Func<TRow, any>) => Dimension<TRow>;
 /**
  * Create a composite dimension from others. This creates a cartesian product of the source dimensions criteria.
  * @param dimensions An array of dimensions to combine into one.
  * @returns Returns a complex dimension with criteria being the cartesian product of the source dimensions.
  */
-export declare function join<TRow extends Row>(...dimensions: Array<Dimension<TRow>>): Dimension<TRow>;
+export declare const join: <TRow extends Row>(...dimensions: Dimension<TRow>[]) => Dimension<TRow>;
 /**
  * Pivots a table by two axes
  * @param table The source data, an array of rows.
  * @param axes The dimensions to use for the x and y axes.
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
-export declare function cube<TRow extends Row>(table: Table<TRow>, axes: Axes<TRow>): Cube<TRow>;
+export declare const cube: <TRow extends Row>(table: Table<TRow>, axes: Axes<TRow>) => Cube<TRow>;
 /**
  * Filters data within a cube.
  * @param cube The source cube.
  * @param predicate A predicate to filter the cube by.
  * @returns Returns a copy of the cube, with the contents of each cell filtered by the predicate.
  */
-export declare function filter<TRow extends Row>(cube: Cube<TRow>, predicate: Predicate<TRow>): Cube<TRow>;
+export declare const filter: <TRow extends Row>(cube: Cube<TRow>, predicate: Predicate<TRow>) => Cube<TRow>;
 /**
  * Queries data from a cube, or any matrix structure.
  * @param source The source data.
  * @param selector A callback function to create a result from each cell of the cube.
  */
-export declare function map<TSource, TResult>(source: Matrix<TSource>, selector: Func<TSource, TResult>): Matrix<TResult>;
+export declare const map: <TSource, TResult>(source: Matrix<TSource>, selector: Func<TSource, TResult>) => Matrix<TResult>;
 /**
  * A generator, used to transform the source data in a cube to another representation.
  * @param selector A function to transform a source record into the desired result.
  */
-export declare function select<TRow extends Row, TResult>(selector: Func<TRow, TResult>): Func<Table<TRow>, Array<TResult>>;
+export declare const select: <TRow extends Row, TResult>(selector: Func<TRow, TResult>) => Func<Table<TRow>, TResult[]>;
 /**
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row.
  */
-export declare function sum<TRow extends Row>(selector: Func<TRow, number>): Func<Table<TRow>, number | null>;
+export declare const sum: <TRow extends Row>(selector: Func<TRow, number>) => Func<Table<TRow>, number | null>;
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube .
  * @param selector A callback function to derive a numerical value for each row.
  */
-export declare function average<TRow extends Row>(selector: Func<TRow, number>): Func<Table<TRow>, number | null>;
+export declare const average: <TRow extends Row>(selector: Func<TRow, number>) => Func<Table<TRow>, number | null>;
 /**
  * Counts the number of items in a table.
  * @param table The source table.
  */
-export declare function count<TRow extends Row>(table: Table<TRow>): number | null;
+export declare const count: <TRow extends Row>(table: Table<TRow>) => number | null;
