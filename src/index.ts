@@ -70,6 +70,16 @@ export const dimension = <TRow extends Row>(values: Array<Value>, key: Key, getV
 	values.map(value => [{ key, value, predicate: row => getValue(row) === value }]);
 
 /**
+ * Derives additional criteria in a dimension based on existing.
+ * For example, this enables hierarchies to be displayed on axes.
+ * @param dimension The source dimension.
+ * @param getCriterion A callback function to derive the new criterion from an existing criterion.
+ * @returns Returns the new expanded dimension
+ */
+export const expand = <TRow extends Row>(dimension: Dimension<TRow>, getCriterion: Func<Criterion<TRow>, Criterion<TRow>>): Dimension<TRow> =>
+	dimension.map(criteria => [getCriterion(criteria[0]), ...criteria]);
+
+/**
  * Create a composite dimension from others. This creates a cartesian product of the source dimensions criteria.
  * @param dimensions An array of dimensions to combine into one.
  * @returns Returns a complex dimension with criteria being the cartesian product of the source dimensions.
