@@ -80,14 +80,6 @@ export const expand = <TRow extends Row>(dimension: Dimension<TRow>, getCriterio
 	dimension.map(criteria => [getCriterion(criteria[0]), ...criteria]);
 
 /**
- * Create a composite dimension from others. This creates a cartesian product of the source dimensions criteria.
- * @param dimensions An array of dimensions to combine into one.
- * @returns Returns a complex dimension with criteria being the cartesian product of the source dimensions.
- */
-export const join = <TRow extends Row>(...dimensions: Array<Dimension<TRow>>): Dimension<TRow> =>
-	dimensions.reduce((result, dimension) => result.flatMap(c1 => dimension.map(c2 => [...c1, ...c2])));
-
-/**
  * Pivots a table by two axes
  * @param table The source data, an array of rows.
  * @param axes The dimensions to use for the x and y axes.
