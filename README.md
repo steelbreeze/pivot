@@ -86,7 +86,3 @@ const result = pivot.map(cube, pivot.select(player => `${player.givenName}&nbsp;
 |**USA**|Tim&nbsp;Ream, Antonee&nbsp;Robinson|||
 
 > Data and calculations correct as of: 2021-05-23.
-
-## Composite dimensions
-Dimensions can be merged with a call to ```join```.
-If the criteria for one dimension was [a, b] and another was [c, d], then the combined dimension would be [ac, ad, bc, bd].
