@@ -51,13 +51,10 @@ export declare const distinct: <TRow extends Row>(table: Table<TRow>, key: Key, 
  */
 export declare const dimension: <TRow extends Row>(values: Array<Value>, key: Key, getValue?: Func<TRow, any>) => Dimension<TRow>;
 /**
- * Derives additional criteria in a dimension based on existing.
- * For example, this enables hierarchies to be displayed on axes.
- * @param dimension The source dimension.
- * @param getCriterion A callback function to derive the new criterion from an existing criterion.
- * @returns Returns the new expanded dimension
+ * Generates a function to use in Dimension.map to expand a dimension by deriving higher order criteria
+ * @param callbackfn A user-defined callback to derive new criterion from existing criteria.
  */
-export declare const expand: <TRow extends Row>(dimension: Dimension<TRow>, getCriterion: Func<Criterion<TRow>, Criterion<TRow>>) => Dimension<TRow>;
+export declare const expand: <TRow extends Row>(callbackfn: Func<Criteria<TRow>, Criterion<TRow>>) => Func<Criteria<TRow>, Criteria<TRow>>;
 /**
  * Pivots a table by two axes
  * @param table The source data, an array of rows.
