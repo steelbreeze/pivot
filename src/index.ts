@@ -64,10 +64,11 @@ export const distinct = <TRow extends Row>(table: Table<TRow>, key: Key, getValu
  * @param values A distinct list of values for the dimension.
  * @param key The name to give this dimension.
  * @param getValue An optional callback to derive values from the source data.
+ * @param getCriteria An optional callback to build the dimensions criteria.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export const dimension = <TRow extends Row>(values: Array<Value>, key: Key, getValue: Func<TRow, Value> = row => row[key]): Dimension<TRow> =>
-	values.map(value => [{ key, value, predicate: row => getValue(row) === value }]);
+export const dimension = <TRow extends Row>(values: Array<Value>, key: Key, getValue: Func<TRow, Value> = row => row[key], getCriteria: Func<Value, Criteria<TRow>> = value => [{ key, value, predicate: row => getValue(row) === value }] ): Dimension<TRow> =>
+	values.map(getCriteria);
 
 /**
  * Generates a function to use in Dimension.map to expand a dimension by deriving higher order criteria
