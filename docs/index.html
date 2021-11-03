@@ -103,6 +103,10 @@
 			return `<td${c ? ` class="${c}"` : ``}>${t.join(', ')}</td>`;
 		}
 
+		function getValue(key) {
+			return row => row[key];
+		}
+
 	</script>
 </body>
 

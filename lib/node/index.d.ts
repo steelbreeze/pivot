@@ -46,10 +46,10 @@ export declare const distinct: <TRow extends Row>(table: Table<TRow>, key: Key, 
  * Creates a dimension from an array of values.
  * @param values A distinct list of values for the dimension.
  * @param key The name to give this dimension.
- * @param getValue An optional callback to derive values from the source data.
+ * @param getCriteria An optional callback to build the dimensions criteria.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export declare const dimension: <TRow extends Row>(values: Array<Value>, key: Key, getValue?: Func<TRow, any>, getCriteria?: Func<any, Criteria<TRow>>) => Dimension<TRow>;
+export declare const dimension: <TRow extends Row>(values: Array<Value>, key: Key, getCriteria?: Func<any, Criteria<TRow>>) => Dimension<TRow>;
 /**
  * Generates a function to use in Dimension.map to expand a dimension by deriving higher order criteria
  * @param getCriterion A user-defined callback to derive new criterion from existing criteria.
