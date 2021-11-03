@@ -78,7 +78,7 @@
 
 		// create axes out of the dimensions derived from the squad data
 		const country = pivot.dimension(pivot.distinct(squad, 'country').sort(), 'country');
-		const position = pivot.dimension(pivot.distinct(squad, 'position').sort(), 'position').map(pivot.expand(() => ({ key: "Label", value: "Position", predicate: () => true })));
+		const position = pivot.dimension(pivot.distinct(squad, 'position').sort(), 'position', labelled("position"));
 
 		// create the pivot cube
 		const cube = pivot.cube(squad, { x: position, y: country });
@@ -107,6 +107,12 @@
 			return row => row[key];
 		}
 
+		function labelled(key) {
+			return value => [
+				{ key: 'Label', value: key, predicate: () => true },
+				{ key, value, predicate: row => row['position'] === value }
+			];
+		}
 	</script>
 </body>
 
