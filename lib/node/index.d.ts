@@ -58,6 +58,11 @@ export declare const dimension: <TRow extends Row>(values: Array<Value>, key: Ke
  */
 export declare const cube: <TRow extends Row>(table: Table<TRow>, axes: Axes<TRow>) => Cube<TRow>;
 /**
+ * Generates a function to slice data by the criteria specified in a dimension.
+ * @hidden
+ */
+export declare const slice: <TRow extends Row>(dimension: Dimension<TRow>) => Func<Table<TRow>, Table<TRow>[]>;
+/**
  * Filters data within a cube.
  * @param cube The source cube.
  * @param predicate A predicate to filter the cube by.
