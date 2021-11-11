@@ -10,7 +10,7 @@ const axes = {
 // create the pivot cube from the squad data using position and country for x and y axes
 const cube = pivot.cube(squad, axes);
 
-//const filtered = pivot.filter(cube, player => player.position === "Forward");
+//const filtered = pivot.map(cube, pivot.filter(player => player.position === "Forward"));
 
 // find the average age of players by position by country
 const result = pivot.map(cube, pivot.average(age));

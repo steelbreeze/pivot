@@ -1,8 +1,8 @@
 /** A function taking one argument and returning a result. */
-export type Func<TArg, TResult> = (arg: TArg) => TResult;
+export type Function<TArg, TResult> = (arg: TArg) => TResult;
 
 /** A function taking one argument and returning a boolean result. */
-export type Predicate<TArg> = Func<TArg, boolean>;
+export type Predicate<TArg> = Function<TArg, boolean>;
 
 /** A two-dimensional array of values. */
 export type Matrix<TValue> = Array<Array<TValue>>;
@@ -56,7 +56,7 @@ export type Cube<TRow extends Row> = Matrix<Table<TRow>>;
  * @param getValue An optional callback to derive values from the source data.
  * @returns Returns the distinct set of values for the key
  */
-export const distinct = <TRow extends Row>(table: Table<TRow>, key: Key, getValue: Func<TRow, Value> = row => row[key]): Array<Value> =>
+export const distinct = <TRow extends Row>(table: Table<TRow>, key: Key, getValue: Function<TRow, Value> = row => row[key]): Array<Value> =>
 	table.map(getValue).filter((value, index, source) => source.indexOf(value) === index);
 
 /**
@@ -66,7 +66,7 @@ export const distinct = <TRow extends Row>(table: Table<TRow>, key: Key, getValu
  * @param getCriteria An optional callback to build the dimensions criteria.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export const dimension = <TRow extends Row>(values: Array<Value>, key: Key, getCriteria: Func<Value, Criteria<TRow>> = value => [{ key, value, predicate: row => row[key] === value }]): Dimension<TRow> =>
+export const dimension = <TRow extends Row>(values: Array<Value>, key: Key, getCriteria: Function<Value, Criteria<TRow>> = value => [{ key, value, predicate: row => row[key] === value }]): Dimension<TRow> =>
 	values.map(getCriteria);
 
 /**
@@ -83,45 +83,43 @@ export const cube = <TRow extends Row>(table: Table<TRow>, axes: Axes<TRow>): Cu
  * @param dimension The dimension to generate the slicer for.
  * @returns Returns a function that will take a table and slice it into an array of tables each conforming to the criteria of a point on a dimension.
   */
-export const slice = <TRow extends Row>(dimension: Dimension<TRow>): Func<Table<TRow>, Array<Table<TRow>>> =>
+export const slice = <TRow extends Row>(dimension: Dimension<TRow>): Function<Table<TRow>, Array<Table<TRow>>> =>
 	table => dimension.map(criteria => table.filter(row => criteria.every(criterion => criterion.predicate(row))));
-
-/**
- * Filters data within a cube.
- * @param cube The source cube.
- * @param predicate A predicate to filter the cube by.
- * @returns Returns a copy of the cube, with the contents of each cell filtered by the predicate.
- */
-export const filter = <TRow extends Row>(cube: Cube<TRow>, predicate: Predicate<TRow>): Cube<TRow> =>
-	map(cube, cell => cell.filter(predicate));
 
 /**
  * Queries data from a cube, or any matrix structure.
  * @param source The source data.
  * @param selector A callback function to create a result from each cell of the cube.
  */
-export const map = <TSource, TResult>(source: Matrix<TSource>, selector: Func<TSource, TResult>): Matrix<TResult> =>
+export const map = <TRow extends Row, TResult>(source: Cube<TRow>, selector: Function<Table<TRow>, TResult>): Matrix<TResult> =>
 	source.map(row => row.map(selector));
+
+/**
+ * A generator, used to filter data within a cube.
+ * @param predicate A predicate to test a row of data to see if it should be included in the filter results.
+ */
+export const filter = <TRow extends Row>(predicate: Predicate<TRow>): Function<Table<TRow>, Table<TRow>> =>
+	table => table.filter(predicate);
 
 /**
  * A generator, used to transform the source data in a cube to another representation.
  * @param selector A function to transform a source record into the desired result.
  */
-export const select = <TRow extends Row, TResult>(selector: Func<TRow, TResult>): Func<Table<TRow>, Array<TResult>> =>
+export const select = <TRow extends Row, TResult>(selector: Function<TRow, TResult>): Function<Table<TRow>, Array<TResult>> =>
 	table => table.map(selector);
 
 /**
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row.
  */
-export const sum = <TRow extends Row>(selector: Func<TRow, number>): Func<Table<TRow>, number | null> =>
+export const sum = <TRow extends Row>(selector: Function<TRow, number>): Function<Table<TRow>, number | null> =>
 	table => table ? table.reduce((total, row) => total + selector(row), 0) : null;
 
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube .
  * @param selector A callback function to derive a numerical value for each row.
  */
-export const average = <TRow extends Row>(selector: Func<TRow, number>): Func<Table<TRow>, number | null> =>
+export const average = <TRow extends Row>(selector: Function<TRow, number>): Function<Table<TRow>, number | null> =>
 	table => table ? sum(selector)(table)! / count(table)! : null;
 
 /**
