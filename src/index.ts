@@ -50,6 +50,12 @@ export type Table<TRow extends Row> = Array<TRow>;
 export type Cube<TRow extends Row> = Matrix<Table<TRow>>;
 
 /**
+ * Function to pass into Array.prototype.filter to return only unique values.
+ */
+export const unique = <TValue>(value: TValue, index: number, array: Array<TValue>): boolean =>
+	array.indexOf(value) === index;
+
+/**
  * Returns a distinct list of values for a column of a table.
  * @param table The source data, a table of rows.
  * @param key The column name to find the distinct values for.
@@ -57,7 +63,7 @@ export type Cube<TRow extends Row> = Matrix<Table<TRow>>;
  * @returns Returns the distinct set of values for the key
  */
 export const distinct = <TRow extends Row>(table: Table<TRow>, key: Key, getValue: Function<TRow, Value> = row => row[key]): Array<Value> =>
-	table.map(getValue).filter((value, index, source) => source.indexOf(value) === index);
+	table.map(getValue).filter(unique);
 
 /**
  * Creates a dimension from an array of values.

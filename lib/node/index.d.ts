@@ -35,6 +35,10 @@ export declare type Table<TRow extends Row> = Array<TRow>;
 /** A cube of data. */
 export declare type Cube<TRow extends Row> = Matrix<Table<TRow>>;
 /**
+ * Function to pass into Array.prototype.filter to return only unique values.
+ */
+export declare const unique: <TValue>(value: TValue, index: number, array: TValue[]) => boolean;
+/**
  * Returns a distinct list of values for a column of a table.
  * @param table The source data, a table of rows.
  * @param key The column name to find the distinct values for.
