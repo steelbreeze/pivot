@@ -16,14 +16,17 @@ export type Key = Exclude<keyof Value, symbol>;
 /** A set of attributes in a row of a table, each addressable via a key. */
 export type Row = Record<Key, Value>;
 
-/** A criterion used in the criteria of a dimension. */
-export interface Criterion<TRow extends Row> {
-	/** The key, or column name to test. */
+/** A key/value pair. */
+export interface Pair {
+	/** The key. */
 	key: Key;
 
-	/** The expected value. */
+	/** The value. */
 	value: Value;
+}
 
+/** A criterion used in the criteria of a dimension. */
+export interface Criterion<TRow extends Row> extends Pair {
 	/** The predicate used to perform the test. */
 	predicate: Predicate<TRow>;
 }
