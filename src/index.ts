@@ -1,23 +1,7 @@
-/** A function taking one argument and returning a result. */
-export type Function<TArg, TResult> = (arg: TArg) => TResult;
-
-/** A function taking one argument and returning a boolean result. */
-export type Predicate<TArg> = Function<TArg, boolean>;
-
-/** A two-dimensional array of values. */
-export type Matrix<TValue> = Array<Array<TValue>>;
+import { Function, Predicate, Pair } from './types';
 
 /** The type of keys supported. */
 export type Key = string | number;
-
-/** A key/value pair. */
-export interface Pair {
-	/** The key. */
-	key: Key;
-
-	/** The value. */
-	value: any;
-}
 
 /** A criterion used in the criteria of a dimension. */
 export interface Criterion<TRow> extends Pair {
@@ -40,11 +24,8 @@ export interface Axes<TRow> {
 	y: Dimension<TRow>;
 }
 
-/** A table of data. */
-export type Table<TRow> = Array<TRow>;
-
 /** A cube of data. */
-export type Cube<TRow> = Matrix<Table<TRow>>;
+export type Cube<TValue> = Array<Array<Array<TValue>>>;
 
 /**
  * Function to pass into Array.prototype.filter to return only unique values.
@@ -59,7 +40,7 @@ export const unique = <TValue>(value: TValue, index: number, array: Array<TValue
  * @param getValue An optional callback to derive values from the source data.
  * @returns Returns the distinct set of values for the key
  */
-export const distinct = <TRow extends Record<Key, any>>(table: Table<TRow>, key: Key, getValue: Function<TRow, any> = row => row[key]): Array<any> =>
+export const distinct = <TRow extends Record<Key, any>>(table: Array<TRow>, key: Key, getValue: Function<TRow, any> = row => row[key]): Array<any> =>
 	table.map(getValue).filter(unique);
 
 /**
@@ -78,7 +59,7 @@ export const dimension = <TRow extends Record<Key, any>>(values: Array<any>, key
  * @param axes The dimensions to use for the x and y axes.
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
-export const cube = <TRow>(table: Table<TRow>, axes: Axes<TRow>): Cube<TRow> =>
+export const cube = <TRow>(table: Array<TRow>, axes: Axes<TRow>): Cube<TRow> =>
 	slice(axes.y)(table).map(slice(axes.x));
 
 /**
@@ -86,48 +67,48 @@ export const cube = <TRow>(table: Table<TRow>, axes: Axes<TRow>): Cube<TRow> =>
  * @param dimension The dimension to generate the slicer for.
  * @returns Returns a function that will take a table and slice it into an array of tables each conforming to the criteria of a point on a dimension.
   */
-export const slice = <TRow>(dimension: Dimension<TRow>): Function<Table<TRow>, Array<Table<TRow>>> =>
-	table => dimension.map(criteria => table.filter(row => criteria.every(criterion => criterion.predicate(row))));
+export const slice = <TValue>(dimension: Dimension<TValue>): Function<Array<TValue>, Array<Array<TValue>>> =>
+	values => dimension.map(criteria => values.filter(value => criteria.every(criterion => criterion.predicate(value))));
 
 /**
  * Queries data from a cube, or any matrix structure.
  * @param source The source data.
  * @param selector A callback function to create a result from each cell of the cube.
  */
-export const map = <TRow, TResult>(source: Cube<TRow>, selector: Function<Table<TRow>, TResult>): Matrix<TResult> =>
+export const map = <TRow, TResult>(source: Cube<TRow>, selector: Function<Array<TRow>, TResult>): Array<Array<TResult>> =>
 	source.map(row => row.map(selector));
 
 /**
  * A generator, used to filter data within a cube.
  * @param predicate A predicate to test a row of data to see if it should be included in the filter results.
  */
-export const filter = <TRow>(predicate: Predicate<TRow>): Function<Table<TRow>, Table<TRow>> =>
+export const filter = <TRow>(predicate: Predicate<TRow>): Function<Array<TRow>, Array<TRow>> =>
 	table => table.filter(predicate);
 
 /**
  * A generator, used to transform the source data in a cube to another representation.
  * @param selector A function to transform a source record into the desired result.
  */
-export const select = <TRow, TResult>(selector: Function<TRow, TResult>): Function<Table<TRow>, Array<TResult>> =>
+export const select = <TRow, TResult>(selector: Function<TRow, TResult>): Function<Array<TRow>, Array<TResult>> =>
 	table => table.map(selector);
 
 /**
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row.
  */
-export const sum = <TRow>(selector: Function<TRow, number>): Function<Table<TRow>, number | null> =>
+export const sum = <TRow>(selector: Function<TRow, number>): Function<Array<TRow>, number | null> =>
 	table => table ? table.reduce((total, row) => total + selector(row), 0) : null;
 
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube .
  * @param selector A callback function to derive a numerical value for each row.
  */
-export const average = <TRow>(selector: Function<TRow, number>): Function<Table<TRow>, number | null> =>
+export const average = <TRow>(selector: Function<TRow, number>): Function<Array<TRow>, number | null> =>
 	table => table ? sum(selector)(table)! / count(table)! : null;
 
 /**
  * Counts the number of items in a table.
  * @param table The source table.
  */
-export const count = <TRow>(table: Table<TRow>): number | null =>
+export const count = <TRow>(table: Array<TRow>): number | null =>
 	table.length || null;
