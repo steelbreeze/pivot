@@ -7,8 +7,8 @@ export type Predicate<TArg> = Function<TArg, boolean>;
 /** A two-dimensional array of values. */
 export type Matrix<TValue> = Array<Array<TValue>>;
 
-/** The type of object keys supported. */
-export type Key = Exclude<keyof any, symbol>;
+/** The type of keys supported. */
+export type Key = string | number;
 
 /** A key/value pair. */
 export interface Pair {
@@ -18,9 +18,6 @@ export interface Pair {
 	/** The value. */
 	value: any;
 }
-
-/** A base type for tables supported. */
-export type Row = { [key in Key]: any };
 
 /** A criterion used in the criteria of a dimension. */
 export interface Criterion<TRow> extends Pair {
@@ -62,7 +59,7 @@ export const unique = <TValue>(value: TValue, index: number, array: Array<TValue
  * @param getValue An optional callback to derive values from the source data.
  * @returns Returns the distinct set of values for the key
  */
-export const distinct = <TRow extends Row>(table: Table<TRow>, key: Key, getValue: Function<TRow, any> = row => row[key]): Array<any> =>
+export const distinct = <TRow extends Record<Key, any>>(table: Table<TRow>, key: Key, getValue: Function<TRow, any> = row => row[key]): Array<any> =>
 	table.map(getValue).filter(unique);
 
 /**
@@ -72,7 +69,7 @@ export const distinct = <TRow extends Row>(table: Table<TRow>, key: Key, getValu
  * @param getCriteria An optional callback to build the dimensions criteria.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export const dimension = <TRow extends Row>(values: Array<any>, key: Key, getCriteria: Function<any, Criteria<TRow>> = value => [{ key, value, predicate: row => row[key] === value }]): Dimension<TRow> =>
+export const dimension = <TRow extends Record<Key, any>>(values: Array<any>, key: Key, getCriteria: Function<any, Criteria<TRow>> = value => [{ key, value, predicate: row => row[key] === value }]): Dimension<TRow> =>
 	values.map(getCriteria);
 
 /**

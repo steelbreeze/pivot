@@ -4,8 +4,8 @@ export declare type Function<TArg, TResult> = (arg: TArg) => TResult;
 export declare type Predicate<TArg> = Function<TArg, boolean>;
 /** A two-dimensional array of values. */
 export declare type Matrix<TValue> = Array<Array<TValue>>;
-/** The type of object keys supported. */
-export declare type Key = Exclude<keyof any, symbol>;
+/** The type of keys supported. */
+export declare type Key = string | number;
 /** A key/value pair. */
 export interface Pair {
     /** The key. */
@@ -13,10 +13,6 @@ export interface Pair {
     /** The value. */
     value: any;
 }
-/** A base type for tables supported. */
-export declare type Row = {
-    [key in Key]: any;
-};
 /** A criterion used in the criteria of a dimension. */
 export interface Criterion<TRow> extends Pair {
     /** The predicate used to perform the test. */
@@ -48,7 +44,7 @@ export declare const unique: <TValue>(value: TValue, index: number, array: TValu
  * @param getValue An optional callback to derive values from the source data.
  * @returns Returns the distinct set of values for the key
  */
-export declare const distinct: <TRow extends Row>(table: Table<TRow>, key: Key, getValue?: Function<TRow, any>) => Array<any>;
+export declare const distinct: <TRow extends Record<Key, any>>(table: Table<TRow>, key: Key, getValue?: Function<TRow, any>) => Array<any>;
 /**
  * Creates a dimension from an array of values.
  * @param values A distinct list of values for the dimension.
@@ -56,7 +52,7 @@ export declare const distinct: <TRow extends Row>(table: Table<TRow>, key: Key, 
  * @param getCriteria An optional callback to build the dimensions criteria.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export declare const dimension: <TRow extends Row>(values: Array<any>, key: Key, getCriteria?: Function<any, Criteria<TRow>>) => Dimension<TRow>;
+export declare const dimension: <TRow extends Record<Key, any>>(values: Array<any>, key: Key, getCriteria?: Function<any, Criteria<TRow>>) => Dimension<TRow>;
 /**
  * Pivots a table by two axes
  * @param table The source data, an array of rows.
