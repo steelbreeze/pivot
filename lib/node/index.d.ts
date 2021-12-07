@@ -1,4 +1,4 @@
-import { Function, Predicate, Pair } from './types';
+import { Function, Predicate, Pair } from '@steelbreeze/types';
 /** The type of keys supported. */
 export declare type Key = string | number;
 /** A criterion used in the criteria of a dimension. */
