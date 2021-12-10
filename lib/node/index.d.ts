@@ -20,10 +20,6 @@ export interface Axes<TRow> {
 /** A cube of data. */
 export declare type Cube<TValue> = Array<Array<Array<TValue>>>;
 /**
- * Function to pass into Array.prototype.filter to return only unique values.
- */
-export declare const unique: <TValue>(value: TValue, index: number, array: TValue[]) => boolean;
-/**
  * Returns a distinct list of values for a column of a table.
  * @param table The source data, a table of rows.
  * @param key The column name to find the distinct values for.
