@@ -61,8 +61,8 @@ export const cube = <TRow>(table: Array<TRow>, axes: Axes<TRow>): Cube<TRow> =>
  * @param dimension The dimension to generate the slicer for.
  * @returns Returns a function that will take a table and slice it into an array of tables each conforming to the criteria of a point on a dimension.
 */
-export const slice = <TValue>(dimension: Dimension<TValue>): Function<Array<TValue>, Array<Array<TValue>>> =>
-	values => dimension.map(criteria => values.filter(value => criteria.every(criterion => criterion.predicate(value))));
+export const slice = <TRow>(dimension: Dimension<TRow>): Function<Array<TRow>, Array<Array<TRow>>> =>
+	table => dimension.map(criteria => table.filter(row => criteria.every(criterion => criterion.predicate(row))));
 
 /**
  * Queries data from a cube, or any matrix structure.
