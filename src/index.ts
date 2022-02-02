@@ -66,11 +66,11 @@ export const slice = <TRow>(dimension: Dimension<TRow>): Function<Array<TRow>, A
 
 /**
  * Queries data from a cube, or any matrix structure.
- * @param source The source data.
+ * @param cube The source data.
  * @param selector A callback function to create a result from each cell of the cube.
  */
-export const map = <TRow, TResult>(source: Cube<TRow>, selector: Function<Array<TRow>, TResult>): Array<Array<TResult>> =>
-	source.map(row => row.map(selector));
+export const map = <TRow, TResult>(cube: Cube<TRow>, selector: Function<Array<TRow>, TResult>): Array<Array<TResult>> =>
+	cube.map(row => row.map(selector));
 
 /**
  * A generator, used to filter data within a cube.

@@ -50,10 +50,10 @@ export declare const cube: <TRow>(table: TRow[], axes: Axes<TRow>) => Cube<TRow>
 export declare const slice: <TRow>(dimension: Dimension<TRow>) => Function<TRow[], TRow[][]>;
 /**
  * Queries data from a cube, or any matrix structure.
- * @param source The source data.
+ * @param cube The source data.
  * @param selector A callback function to create a result from each cell of the cube.
  */
-export declare const map: <TRow, TResult>(source: Cube<TRow>, selector: Function<TRow[], TResult>) => TResult[][];
+export declare const map: <TRow, TResult>(cube: Cube<TRow>, selector: Function<TRow[], TResult>) => TResult[][];
 /**
  * A generator, used to filter data within a cube.
  * @param predicate A predicate to test a row of data to see if it should be included in the filter results.
