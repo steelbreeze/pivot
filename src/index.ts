@@ -3,20 +3,23 @@ import { Function, Predicate, Pair } from '@steelbreeze/types';
 /** The type of keys supported. */
 export type Key = string | number;
 
+/** The type of rows supported. */
+type Row = { [key in Key]: any };
+
 /** A criterion used in the criteria of a dimension. */
-export interface Criterion<TRow> extends Pair {
+export interface Criterion<TRow extends Row> extends Pair {
 	/** The predicate used to perform the test. */
 	predicate: Predicate<TRow>;
 }
 
 /** The set of criterion used to select items for a row or column within a cube. */
-export type Criteria<TRow> = Array<Criterion<TRow>>;
+export type Criteria<TRow extends Row> = Array<Criterion<TRow>>;
 
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
-export type Dimension<TRow> = Array<Criteria<TRow>>;
+export type Dimension<TRow extends Row> = Array<Criteria<TRow>>;
 
 /** A pair of axes to be used in a pivot operation. */
-export interface Axes<TRow> {
+export interface Axes<TRow extends Row> {
 	/** The x axis; columns in the resultant pivot table. */
 	x: Dimension<TRow>;
 
@@ -34,7 +37,7 @@ export type Cube<TValue> = Array<Array<Array<TValue>>>;
  * @param getValue An optional callback to derive values from the source data.
  * @returns Returns the distinct set of values for the key
  */
-export const distinct = <TRow extends Record<Key, any>>(table: Array<TRow>, key: Key, getValue: Function<TRow, any> = row => row[key]): Array<any> =>
+export const distinct = <TRow extends Row>(table: Array<TRow>, key: Key, getValue: Function<TRow, any> = row => row[key]): Array<any> =>
 	table.map(getValue).filter((value, index, source) => source.indexOf(value) === index);
 
 /**
@@ -44,7 +47,7 @@ export const distinct = <TRow extends Record<Key, any>>(table: Array<TRow>, key:
  * @param getCriteria An optional callback to build the dimensions criteria.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export const dimension = <TRow extends Record<Key, any>>(values: Array<any>, key: Key, getCriteria: Function<any, Criteria<TRow>> = value => [{ key, value, predicate: row => row[key] === value }]): Dimension<TRow> =>
+export const dimension = <TRow extends Row>(values: Array<any>, key: Key, getCriteria: Function<any, Criteria<TRow>> = value => [{ key, value, predicate: row => row[key] === value }]): Dimension<TRow> =>
 	values.map(getCriteria);
 
 /**
@@ -53,7 +56,7 @@ export const dimension = <TRow extends Record<Key, any>>(values: Array<any>, key
  * @param axes The dimensions to use for the x and y axes.
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
-export const cube = <TRow>(table: Array<TRow>, axes: Axes<TRow>): Cube<TRow> =>
+export const cube = <TRow extends Row>(table: Array<TRow>, axes: Axes<TRow>): Cube<TRow> =>
 	slice(axes.y)(table).map(slice(axes.x));
 
 /**
@@ -61,7 +64,7 @@ export const cube = <TRow>(table: Array<TRow>, axes: Axes<TRow>): Cube<TRow> =>
  * @param dimension The dimension to generate the slicer for.
  * @returns Returns a function that will take a table and slice it into an array of tables each conforming to the criteria of a point on a dimension.
  */
-export const slice = <TRow>(dimension: Dimension<TRow>): Function<Array<TRow>, Array<Array<TRow>>> =>
+export const slice = <TRow extends Row>(dimension: Dimension<TRow>): Function<Array<TRow>, Array<Array<TRow>>> =>
 	table => dimension.map(criteria => table.filter(row => criteria.every(criterion => criterion.predicate(row))));
 
 /**
@@ -76,7 +79,7 @@ export const map = <TRow, TResult>(cube: Cube<TRow>, selector: Function<Array<TR
  * A generator, used to filter data within a cube.
  * @param predicate A predicate to test a row of data to see if it should be included in the filter results.
  */
-export const filter = <TRow>(predicate: Predicate<TRow>): Function<Array<TRow>, Array<TRow>> =>
+export const filter = <TRow extends Row>(predicate: Predicate<TRow>): Function<Array<TRow>, Array<TRow>> =>
 	table => table.filter(predicate);
 
 /**
@@ -90,19 +93,19 @@ export const select = <TRow, TResult>(selector: Function<TRow, TResult>): Functi
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row.
  */
-export const sum = <TRow>(selector: Function<TRow, number>): Function<Array<TRow>, number | null> =>
+export const sum = <TRow extends Row>(selector: Function<TRow, number>): Function<Array<TRow>, number | null> =>
 	table => table ? table.reduce((total, row) => total + selector(row), 0) : null;
 
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube .
  * @param selector A callback function to derive a numerical value for each row.
  */
-export const average = <TRow>(selector: Function<TRow, number>): Function<Array<TRow>, number | null> =>
+export const average = <TRow extends Row>(selector: Function<TRow, number>): Function<Array<TRow>, number | null> =>
 	table => table ? sum(selector)(table)! / count(table)! : null;
 
 /**
  * Counts the number of items in a table.
  * @param table The source table.
  */
-export const count = <TRow>(table: Array<TRow>): number | null =>
+export const count = <TRow extends Row>(table: Array<TRow>): number | null =>
 	table.length || null;
