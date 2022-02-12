@@ -2,7 +2,7 @@ import { Function, Predicate, Pair } from '@steelbreeze/types';
 /** The type of keys supported. */
 export declare type Key = string | number;
 /** The type of rows supported. */
-declare type Row = {
+export declare type Row = {
     [key in Key]: any;
 };
 /** A criterion used in the criteria of a dimension. */
@@ -83,4 +83,3 @@ export declare const average: <TRow extends Row>(selector: Function<TRow, number
  * @param table The source table.
  */
 export declare const count: <TRow extends Row>(table: TRow[]) => number | null;
-export {};
