@@ -65,7 +65,24 @@ export const cube = <TRow extends Row>(table: Array<TRow>, axes: Axes<TRow>): Cu
  * @returns Returns a function that will take a table and slice it into an array of tables each conforming to the criteria of a point on a dimension.
  */
 export const slice = <TRow extends Row>(dimension: Dimension<TRow>): Function<Array<TRow>, Array<Array<TRow>>> =>
-	table => dimension.map(criteria => split(table, row => criteria.every(criterion => criterion.predicate(row))));
+	table => dimension.map(criteria => {
+		const result: Array<TRow> = [], l = table.length;
+		let i = 0, j = 0;
+
+		for (; i < l; ++i) {
+			const row = table[i];
+
+			if (criteria.every(criterion => criterion.predicate(row))) {
+				result.push(row);
+			} else {
+				table[j++] = row;
+			}
+		}
+
+		table.length = j;
+
+		return result;
+	});
 
 /**
  * Queries data from a cube, or any matrix structure.
@@ -109,29 +126,3 @@ export const average = <TRow extends Row>(selector: Function<TRow, number>): Fun
  */
 export const count = <TRow extends Row>(table: Array<TRow>): number | null =>
 	table.length || null;
-
-/**
- * Removes records from an array where a predicate evaluates true and returns them.
- * @param table The source table to extract records from
- * @param predicate A predicate function to determine which records to remove.
- * @returns An array of the removed items.
- * @hidden
- */
-function split<TRow>(table: Array<TRow>, predicate: Predicate<TRow>): Array<TRow> {
-	const result: Array<TRow> = [], l = table.length;
-	let i = 0, j = 0;
-
-	for (; i < l; ++i) {
-		const row = table[i];
-
-		if (predicate(row)) {
-			result.push(row);
-		} else {
-			table[j++] = row;
-		}
-	}
-
-	table.length = j;
-
-	return result;
-}
