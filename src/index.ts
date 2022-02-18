@@ -38,7 +38,7 @@ export type Cube<TValue> = Array<Array<Array<TValue>>>;
  * @returns Returns the distinct set of values for the key
  */
 export const distinct = <TRow extends Row>(table: Array<TRow>, key: Key, getValue: Function<TRow, any> = row => row[key]): Array<any> =>
-	table.map(getValue).filter((value, index, source) => source.indexOf(value) === index);
+	[...table.reduce((set, row) => set.add(getValue(row)), new Set())];
 
 /**
  * Creates a dimension from an array of values.
