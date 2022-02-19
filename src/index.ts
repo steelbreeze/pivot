@@ -66,15 +66,13 @@ export const cube = <TRow extends Row>(table: Array<TRow>, axes: Axes<TRow>): Cu
  */
 export const slice = <TRow extends Row>(dimension: Dimension<TRow>): Function<Array<TRow>, Array<Array<TRow>>> =>
 	table => dimension.map(criteria => {
-		let result: Array<TRow> = [], i = 0, j = 0, l = table.length;
+		let result: Array<TRow> = [], i = 0, j = 0;
 
-		for (; i < l; ++i) {
-			const row = table[i];
-
-			if (criteria.every(criterion => criterion.predicate(row))) {
-				result.push(row);
+		for (; i < table.length; ++i) {
+			if (criteria.every(criterion => criterion.predicate(table[i]))) {
+				result.push(table[i]);
 			} else {
-				table[j++] = row;
+				table[j++] = table[i];
 			}
 		}
 
