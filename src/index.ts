@@ -68,11 +68,11 @@ export const slice = <TRow extends Row>(dimension: Dimension<TRow>): Function<Ar
 	table => dimension.map(criteria => {
 		let result: Array<TRow> = [], i = 0, j = 0;
 
-		for (; i < table.length; ++i) {
+		while (i < table.length) {
 			if (criteria.every(criterion => criterion.predicate(table[i]))) {
-				result.push(table[i]);
+				result.push(table[i++]);
 			} else {
-				table[j++] = table[i];
+				table[j++] = table[i++];
 			}
 		}
 
