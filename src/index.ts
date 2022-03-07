@@ -1,4 +1,4 @@
-import { Function, Predicate, Pair } from '@steelbreeze/types';
+import { CallbackFunction, Function, Pair } from '@steelbreeze/types';
 
 /** The type of keys supported. */
 export type Key = string | number;
@@ -8,8 +8,8 @@ export type Row = { [key in Key]: any };
 
 /** A criterion used in the criteria of a dimension. */
 export interface Criterion<TRow extends Row> extends Pair {
-	/** The predicate used to perform the test. */
-	predicate: Predicate<TRow>;
+	/** The predicate callback function used to perform the test. */
+	predicate: CallbackFunction<TRow, boolean>;
 }
 
 /** The set of criterion used to select items for a row or column within a cube. */
@@ -37,11 +37,11 @@ export type Cube<TValue> = Array<Array<Array<TValue>>>;
  * @param getValue An optional callback to derive values from the source data.
  * @returns Returns the distinct set of values for the key
  */
-export const distinct = <TRow extends Row>(table: Array<TRow>, key: Key, getValue: Function<TRow, any> = row => row[key]): Array<any> => {
+export const distinct = <TRow extends Row>(table: Array<TRow>, key: Key, getValue: CallbackFunction<TRow, any> = row => row[key]): Array<any> => {
 	const result = new Set<any>();
 
-	for(const row of table) {
-		result.add(getValue(row));
+	for(let i = 0; i < table.length; ++i) {
+		result.add(getValue(table[i], i, table));
 	}
 
 	return [...result];
@@ -54,8 +54,15 @@ export const distinct = <TRow extends Row>(table: Array<TRow>, key: Key, getValu
  * @param getCriteria An optional callback to build the dimensions criteria.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export const dimension = <TRow extends Row>(values: Array<any>, key: Key, getCriteria: Function<any, Criteria<TRow>> = value => [{ key, value, predicate: row => row[key] === value }]): Dimension<TRow> =>
-	values.map(getCriteria);
+export const dimension = <TRow extends Row>(values: Array<any>, key: Key, getCriteria: CallbackFunction<any, Criteria<TRow>> = value => [{ key, value, predicate: row => row[key] === value }]): Dimension<TRow> => {
+	const result: Dimension<TRow> = [];
+
+	for(let i = 0; i < values.length; ++i) {
+		result.push(getCriteria(values[i], i, values));
+	}
+
+	return result;
+}
 
 /**
  * Pivots a table by two axes
@@ -63,7 +70,7 @@ export const dimension = <TRow extends Row>(values: Array<any>, key: Key, getCri
  * @param axes The dimensions to use for the x and y axes.
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
-export const cube = <TRow extends Row>(table: Array<TRow>, axes: Axes<TRow>): Cube<TRow> =>
+export const cube = <TRow extends Row>(table: Iterable<TRow>, axes: Axes<TRow>): Cube<TRow> =>
 	slice(axes.y)([...table]).map(slice(axes.x));
 
 /**
@@ -76,7 +83,7 @@ export const slice = <TRow extends Row>(dimension: Dimension<TRow>): Function<Ar
 		let result: Array<TRow> = [], i = 0, j = 0;
 
 		while (i < table.length) {
-			if (criteria.every(criterion => criterion.predicate(table[i]))) {
+			if (criteria.every(criterion => criterion.predicate(table[i], i, table))) {
 				result.push(table[i++]);
 			} else {
 				table[j++] = table[i++];
@@ -93,21 +100,21 @@ export const slice = <TRow extends Row>(dimension: Dimension<TRow>): Function<Ar
  * @param cube The source data.
  * @param selector A callback function to create a result from each cell of the cube.
  */
-export const map = <TRow, TResult>(cube: Cube<TRow>, selector: Function<Array<TRow>, TResult>): Array<Array<TResult>> =>
+export const map = <TRow, TResult>(cube: Cube<TRow>, selector: CallbackFunction<Array<TRow>, TResult>): Array<Array<TResult>> =>
 	cube.map(row => row.map(selector));
 
 /**
  * A generator, used to filter data within a cube.
  * @param predicate A predicate to test a row of data to see if it should be included in the filter results.
  */
-export const filter = <TRow extends Row>(predicate: Predicate<TRow>): Function<Array<TRow>, Array<TRow>> =>
+export const filter = <TRow extends Row>(predicate: CallbackFunction<TRow, boolean>): CallbackFunction<Array<TRow>, Array<TRow>> =>
 	table => table.filter(predicate);
 
 /**
  * A generator, used to transform the source data in a cube to another representation.
  * @param selector A function to transform a source record into the desired result.
  */
-export const select = <TRow, TResult>(selector: Function<TRow, TResult>): Function<Array<TRow>, Array<TResult>> =>
+export const select = <TRow, TResult>(selector: CallbackFunction<TRow, TResult>): Function<Array<TRow>, Array<TResult>> =>
 	table => table.map(selector);
 
 /**

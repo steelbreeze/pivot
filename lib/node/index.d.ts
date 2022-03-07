@@ -1,4 +1,4 @@
-import { Function, Predicate, Pair } from '@steelbreeze/types';
+import { CallbackFunction, Function, Pair } from '@steelbreeze/types';
 /** The type of keys supported. */
 export declare type Key = string | number;
 /** The type of rows supported. */
@@ -7,8 +7,8 @@ export declare type Row = {
 };
 /** A criterion used in the criteria of a dimension. */
 export interface Criterion<TRow extends Row> extends Pair {
-    /** The predicate used to perform the test. */
-    predicate: Predicate<TRow>;
+    /** The predicate callback function used to perform the test. */
+    predicate: CallbackFunction<TRow, boolean>;
 }
 /** The set of criterion used to select items for a row or column within a cube. */
 export declare type Criteria<TRow extends Row> = Array<Criterion<TRow>>;
@@ -30,7 +30,7 @@ export declare type Cube<TValue> = Array<Array<Array<TValue>>>;
  * @param getValue An optional callback to derive values from the source data.
  * @returns Returns the distinct set of values for the key
  */
-export declare const distinct: <TRow extends Row>(table: TRow[], key: Key, getValue?: Function<TRow, any>) => Array<any>;
+export declare const distinct: <TRow extends Row>(table: TRow[], key: Key, getValue?: CallbackFunction<TRow, any>) => Array<any>;
 /**
  * Creates a dimension from an array of values.
  * @param values A distinct list of values for the dimension.
@@ -38,14 +38,14 @@ export declare const distinct: <TRow extends Row>(table: TRow[], key: Key, getVa
  * @param getCriteria An optional callback to build the dimensions criteria.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export declare const dimension: <TRow extends Row>(values: Array<any>, key: Key, getCriteria?: Function<any, Criteria<TRow>>) => Dimension<TRow>;
+export declare const dimension: <TRow extends Row>(values: Array<any>, key: Key, getCriteria?: CallbackFunction<any, Criteria<TRow>>) => Dimension<TRow>;
 /**
  * Pivots a table by two axes
  * @param table The source data, an array of rows.
  * @param axes The dimensions to use for the x and y axes.
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
-export declare const cube: <TRow extends Row>(table: TRow[], axes: Axes<TRow>) => Cube<TRow>;
+export declare const cube: <TRow extends Row>(table: Iterable<TRow>, axes: Axes<TRow>) => Cube<TRow>;
 /**
  * Generates a function to slice data by the criteria specified in a dimension.
  * @param dimension The dimension to generate the slicer for.
@@ -57,17 +57,17 @@ export declare const slice: <TRow extends Row>(dimension: Dimension<TRow>) => Fu
  * @param cube The source data.
  * @param selector A callback function to create a result from each cell of the cube.
  */
-export declare const map: <TRow, TResult>(cube: Cube<TRow>, selector: Function<TRow[], TResult>) => TResult[][];
+export declare const map: <TRow, TResult>(cube: Cube<TRow>, selector: CallbackFunction<TRow[], TResult>) => TResult[][];
 /**
  * A generator, used to filter data within a cube.
  * @param predicate A predicate to test a row of data to see if it should be included in the filter results.
  */
-export declare const filter: <TRow extends Row>(predicate: Predicate<TRow>) => Function<TRow[], TRow[]>;
+export declare const filter: <TRow extends Row>(predicate: CallbackFunction<TRow, boolean>) => CallbackFunction<TRow[], TRow[]>;
 /**
  * A generator, used to transform the source data in a cube to another representation.
  * @param selector A function to transform a source record into the desired result.
  */
-export declare const select: <TRow, TResult>(selector: Function<TRow, TResult>) => Function<TRow[], TResult[]>;
+export declare const select: <TRow, TResult>(selector: CallbackFunction<TRow, TResult>) => Function<TRow[], TResult[]>;
 /**
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row.
