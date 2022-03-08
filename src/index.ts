@@ -38,10 +38,10 @@ export type Cube<TValue> = Array<Array<Array<TValue>>>;
  * @returns Returns the distinct set of values for the key
  */
 export const distinct = <TRow extends Row>(table: Array<TRow>, key: Key, getValue: CallbackFunction<TRow, any> = row => row[key]): Array<any> => {
-	const result = new Set<any>();
+	let result = new Set<any>(), i = 0;
 
-	for(let i = 0; i < table.length; ++i) {
-		result.add(getValue(table[i], i, table));
+	while (i < table.length) {
+		result.add(getValue(table[i], i++, table));
 	}
 
 	return [...result];
@@ -55,10 +55,10 @@ export const distinct = <TRow extends Row>(table: Array<TRow>, key: Key, getValu
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
 export const dimension = <TRow extends Row>(values: Array<any>, key: Key, getCriteria: CallbackFunction<any, Criteria<TRow>> = value => [{ key, value, predicate: row => row[key] === value }]): Dimension<TRow> => {
-	const result: Dimension<TRow> = [];
+	let result: Dimension<TRow> = new Array<Criteria<TRow>>(values.length), i = values.length;
 
-	for(let i = 0; i < values.length; ++i) {
-		result.push(getCriteria(values[i], i, values));
+	while (i--) {
+		result[i] = getCriteria(values[i], i, values);
 	}
 
 	return result;
