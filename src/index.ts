@@ -37,15 +37,8 @@ export type Cube<TValue> = Array<Array<Array<TValue>>>;
  * @param getValue An optional callback to derive values from the source data.
  * @returns Returns the distinct set of values for the key
  */
-export const distinct = <TRow extends Row>(table: Array<TRow>, key: Key, getValue: CallbackFunction<TRow, any> = row => row[key]): Array<any> => {
-	let result = new Set<any>(), i = 0;
-
-	while (i < table.length) {
-		result.add(getValue(table[i], i++, table));
-	}
-
-	return [...result];
-}
+export const distinct = <TRow extends Row>(table: Array<TRow>, key: Key, getValue: CallbackFunction<TRow, any> = row => row[key]): Array<any> =>
+	[...table.reduce((result, row, index) => result.add(getValue(row, index, table)), new Set<any>())];
 
 /**
  * Creates a dimension from an array of values.
@@ -54,15 +47,8 @@ export const distinct = <TRow extends Row>(table: Array<TRow>, key: Key, getValu
  * @param getCriteria An optional callback to build the dimensions criteria.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export const dimension = <TRow extends Row>(values: Array<any>, key: Key, getCriteria: CallbackFunction<any, Criteria<TRow>> = value => [{ key, value, predicate: row => row[key] === value }]): Dimension<TRow> => {
-	let result: Dimension<TRow> = new Array<Criteria<TRow>>(values.length), i = values.length;
-
-	while (i--) {
-		result[i] = getCriteria(values[i], i, values);
-	}
-
-	return result;
-}
+export const dimension = <TRow extends Row>(values: Array<any>, key: Key, getCriteria: CallbackFunction<any, Criteria<TRow>> = value => [{ key, value, predicate: row => row[key] === value }]): Dimension<TRow> =>
+	values.map(getCriteria);
 
 /**
  * Pivots a table by two axes
