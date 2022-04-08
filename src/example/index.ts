@@ -19,7 +19,7 @@ result.forEach((row, i) => console.log(`${print(axes.y[i][0].value)}\t${row.map(
 
 // Calculate a person's age from their date of birth
 function age(person: Player): number {
-	return new Date(Date.now() - person.dateOfBirth.getTime()).getUTCFullYear() - 1970;
+	return new Date(new Date('2021-05-23').getTime() - person.dateOfBirth.getTime()).getUTCFullYear() - 1970;
 }
 
 // Print a value in 7 characters and truncate with ellipsis

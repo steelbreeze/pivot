@@ -1,4 +1,4 @@
-import { CallbackFunction, Function, Pair } from '@steelbreeze/types';
+import { CallbackFunction, Function, Pair, Predicate } from '@steelbreeze/types';
 
 /** The type of keys supported. */
 export type Key = string | number;
@@ -65,21 +65,7 @@ export const cube = <TRow extends Row>(table: Iterable<TRow>, axes: Axes<TRow>):
  * @returns Returns a function that will take a table and slice it into an array of tables each conforming to the criteria of a point on a dimension.
  */
 export const slice = <TRow extends Row>(dimension: Dimension<TRow>): Function<Array<TRow>, Array<Array<TRow>>> =>
-	table => dimension.map(criteria => {
-		let result: Array<TRow> = [], i = 0, j = 0;
-
-		while (i < table.length) {
-			if (criteria.every(criterion => criterion.predicate(table[i], i, table))) {
-				result.push(table[i++]);
-			} else {
-				table[j++] = table[i++];
-			}
-		}
-
-		table.length = j;
-
-		return result;
-	});
+	table => dimension.map(criteria => table.split(row => criteria.every(criterion => criterion.predicate(row))));
 
 /**
  * Queries data from a cube, or any matrix structure.
@@ -123,3 +109,33 @@ export const average = <TRow extends Row>(selector: Function<TRow, number>): Fun
  */
 export const count = <TRow extends Row>(table: Array<TRow>): number | null =>
 	table.length || null;
+
+// extension to Array
+declare global {
+	interface Array<T> {
+		/**
+		 * Returns the elements of an array that meet the condition specified in a callback function and removes them from the source.
+		 * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
+		 */
+		split(predicate: Predicate<T>): Array<T>;
+	}
+}
+
+// implemetation of Array.prototype.split
+if (!Array.prototype.split) {
+	Array.prototype.split = function <T>(predicate: Predicate<T>): Array<T> {
+		let result: Array<T> = [], i = 0, j = 0;
+
+		while (i < this.length) {
+			if (predicate(this[i])) {
+				result.push(this[i++]);
+			} else {
+				this[j++] = this[i++];
+			}
+		}
+
+		this.length = j;
+
+		return result;
+	}
+}

@@ -1,4 +1,4 @@
-import { CallbackFunction, Function, Pair } from '@steelbreeze/types';
+import { CallbackFunction, Function, Pair, Predicate } from '@steelbreeze/types';
 /** The type of keys supported. */
 export declare type Key = string | number;
 /** The type of rows supported. */
@@ -83,3 +83,12 @@ export declare const average: <TRow extends Row>(selector: Function<TRow, number
  * @param table The source table.
  */
 export declare const count: <TRow extends Row>(table: TRow[]) => number | null;
+declare global {
+    interface Array<T> {
+        /**
+         * Returns the elements of an array that meet the condition specified in a callback function and removes them from the source.
+         * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
+         */
+        split(predicate: Predicate<T>): Array<T>;
+    }
+}
