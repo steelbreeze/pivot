@@ -1,4 +1,4 @@
-import { CallbackFunction, Function, Pair, Predicate } from '@steelbreeze/types';
+import { Callback, Function, Pair, Predicate } from '@steelbreeze/types';
 
 /** The type of keys supported. */
 export type Key = string | number;
@@ -9,7 +9,7 @@ export type Row = { [key in Key]: any };
 /** A criterion used in the criteria of a dimension. */
 export interface Criterion<TRow extends Row> extends Pair {
 	/** The predicate callback function used to perform the test. */
-	predicate: CallbackFunction<TRow, boolean>;
+	predicate: Callback<TRow, boolean>;
 }
 
 /** The set of criterion used to select items for a row or column within a cube. */
@@ -37,18 +37,18 @@ export type Cube<TValue> = Array<Array<Array<TValue>>>;
  * @param getValue An optional callback to derive values from the source data.
  * @returns Returns the distinct set of values for the key
  */
-export const distinct = <TRow extends Row>(table: Array<TRow>, key: Key, getValue: CallbackFunction<TRow, any> = row => row[key]): Array<any> =>
+export const distinct = <TRow extends Row>(table: Array<TRow>, key: Key, getValue: Callback<TRow, any> = row => row[key]): Array<any> =>
 	[...table.reduce((result, row, index) => result.add(getValue(row, index, table)), new Set<any>())];
 
 /**
  * Creates a dimension from an array of values.
  * @param values A distinct list of values for the dimension.
  * @param key The name to give this dimension.
- * @param getCriteria An optional callback to build the dimensions criteria.
+ * @param criteria An optional callback to build the dimensions criteria.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export const dimension = <TRow extends Row>(values: Array<any>, key: Key, getCriteria: CallbackFunction<any, Criteria<TRow>> = value => [{ key, value, predicate: row => row[key] === value }]): Dimension<TRow> =>
-	values.map(getCriteria);
+export const dimension = <TRow extends Row>(values: Array<any>, key: Key, criteria: Callback<any, Criteria<TRow>> = value => [{ key, value, predicate: row => row[key] === value }]): Dimension<TRow> =>
+	values.map(criteria);
 
 /**
  * Pivots a table by two axes
@@ -65,28 +65,28 @@ export const cube = <TRow extends Row>(table: Iterable<TRow>, axes: Axes<TRow>):
  * @returns Returns a function that will take a table and slice it into an array of tables each conforming to the criteria of a point on a dimension.
  */
 export const slice = <TRow extends Row>(dimension: Dimension<TRow>): Function<Array<TRow>, Array<Array<TRow>>> =>
-	table => dimension.map(criteria => table.split(row => criteria.every(criterion => criterion.predicate(row))));
+	table => dimension.map(criteria => split(table, row => criteria.every(criterion => criterion.predicate(row))));
 
 /**
  * Queries data from a cube, or any matrix structure.
  * @param cube The source data.
  * @param selector A callback function to create a result from each cell of the cube.
  */
-export const map = <TRow, TResult>(cube: Cube<TRow>, selector: CallbackFunction<Array<TRow>, TResult>): Array<Array<TResult>> =>
+export const map = <TRow, TResult>(cube: Cube<TRow>, selector: Callback<Array<TRow>, TResult>): Array<Array<TResult>> =>
 	cube.map(row => row.map(selector));
 
 /**
  * A generator, used to filter data within a cube.
  * @param predicate A predicate to test a row of data to see if it should be included in the filter results.
  */
-export const filter = <TRow extends Row>(predicate: CallbackFunction<TRow, boolean>): CallbackFunction<Array<TRow>, Array<TRow>> =>
+export const filter = <TRow extends Row>(predicate: Callback<TRow, boolean>): Callback<Array<TRow>, Array<TRow>> =>
 	table => table.filter(predicate);
 
 /**
  * A generator, used to transform the source data in a cube to another representation.
  * @param selector A function to transform a source record into the desired result.
  */
-export const select = <TRow, TResult>(selector: CallbackFunction<TRow, TResult>): Function<Array<TRow>, Array<TResult>> =>
+export const select = <TRow, TResult>(selector: Callback<TRow, TResult>): Function<Array<TRow>, Array<TResult>> =>
 	table => table.map(selector);
 
 /**
@@ -110,32 +110,22 @@ export const average = <TRow extends Row>(selector: Function<TRow, number>): Fun
 export const count = <TRow extends Row>(table: Array<TRow>): number | null =>
 	table.length || null;
 
-// extension to Array
-declare global {
-	interface Array<T> {
-		/**
-		 * Returns the elements of an array that meet the condition specified in a callback function and removes them from the source.
-		 * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
-		 */
-		split(predicate: Predicate<T>): Array<T>;
-	}
-}
+/**
+ * Returns the elements of an array that meet the condition specified in a callback function and removes them from the source.
+ * @private
+ */
+function split<T>(source: Array<T>, predicate: Predicate<T>): Array<T> {
+	let result: Array<T> = [], i = 0, j = 0;
 
-// implemetation of Array.prototype.split
-if (!Array.prototype.split) {
-	Array.prototype.split = function <T>(predicate: Predicate<T>): Array<T> {
-		let result: Array<T> = [], i = 0, j = 0;
-
-		while (i < this.length) {
-			if (predicate(this[i])) {
-				result.push(this[i++]);
-			} else {
-				this[j++] = this[i++];
-			}
+	while (i < source.length) {
+		if (predicate(source[i])) {
+			result.push(source[i++]);
+		} else {
+			source[j++] = source[i++];
 		}
-
-		this.length = j;
-
-		return result;
 	}
+
+	source.length = j;
+
+	return result;
 }
