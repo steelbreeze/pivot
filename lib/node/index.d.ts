@@ -45,7 +45,7 @@ export declare const dimension: <TRow extends Row>(values: Array<any>, key: Key,
  * @param axes The dimensions to use for the x and y axes.
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
-export declare const cube: <TRow extends Row>(table: Iterable<TRow>, axes: Axes<TRow>) => Cube<TRow>;
+export declare const cube: <TRow extends Row>(table: TRow[], axes: Axes<TRow>) => Cube<TRow>;
 /**
  * Generates a function to slice data by the criteria specified in a dimension.
  * @param dimension The dimension to generate the slicer for.
