@@ -26,5 +26,5 @@ function age(person: Player): number {
 function print(value: any) {
 	const str = String(value || '');
 
-	return str.length < 8 ? str : (str.substr(0, 6) + '\u2026');
+	return str.length < 8 ? str : (str.substring(0, 6) + '\u2026');
 }
