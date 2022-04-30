@@ -1,6 +1,6 @@
 {
   "name": "@steelbreeze/pivot",
-  "version": "2.8.5",
+  "version": "2.8.6",
   "description": "Minimal TypeScript / JavaScript pivot table library",
   "main": "lib/node/index.js",
   "module": "lib/node/index.js",

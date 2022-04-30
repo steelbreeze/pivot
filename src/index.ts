@@ -114,18 +114,18 @@ export const count = <TRow extends Row>(table: Array<TRow>): number | null =>
  * Returns the elements of an array that meet the condition specified in a callback function and removes them from the source.
  * @private
  */
-function split<T>(source: Array<T>, predicate: Predicate<T>): Array<T> {
-	let result: Array<T> = [], i = 0, j = 0;
+function split<T>(values: Array<T>, predicate: Predicate<T>): Array<T> {
+	let result: Array<T> = [], length = 0;
 
-	while (i < source.length) {
-		if (predicate(source[i])) {
-			result.push(source[i++]);
+	for (const value of values) {
+		if (predicate(value)) {
+			result.push(value);
 		} else {
-			source[j++] = source[i++];
+			values[length++] = value;
 		}
 	}
 
-	source.length = j;
+	values.length = length;
 
 	return result;
 }
