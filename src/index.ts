@@ -38,8 +38,7 @@ export type Cube<TValue> = Array<Array<Array<TValue>>>;
  * @returns Returns the distinct set of values for the key
  */
 export const distinct = <TRow extends Row>(table: Array<TRow>, key: Key, getValue: Callback<TRow, any> = row => row[key]): Array<any> =>
-	[...table.reduce((result, row, index) => result.add(getValue(row, index, table)), new Set<any>())];
-
+	[...new Set(table.map(getValue))];
 /**
  * Creates a dimension from an array of values.
  * @param values A distinct list of values for the dimension.
