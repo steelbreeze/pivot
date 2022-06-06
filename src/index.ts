@@ -57,7 +57,7 @@ export const dimension = <TRow extends Row>(values: Array<any>, key: Key, criter
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
 export const cube = <TRow extends Row>(table: Array<TRow>, axes: Axes<TRow>): Cube<TRow> =>
-	slice(axes.y)(table.slice()).map(slice(axes.x));
+	slice(axes.y)([...table]).map(slice(axes.x));
 
 /**
  * Generates a function to slice data by the criteria specified in a dimension.
