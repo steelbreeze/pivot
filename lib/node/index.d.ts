@@ -1,4 +1,4 @@
-import { Callback, Pair } from '@steelbreeze/types';
+import { Callback, Function, Pair } from '@steelbreeze/types';
 /** The type of keys supported. */
 export declare type Key = string | number;
 /** The type of rows supported. */
@@ -51,7 +51,7 @@ export declare const cube: <TRow extends Row>(table: TRow[], axes: Axes<TRow>) =
  * @param dimension The dimension to generate the slicer for.
  * @returns Returns a function that will take a table and slice it into an array of tables each conforming to the criteria of a point on a dimension.
  */
-export declare const slice: <TRow extends Row>(dimension: Dimension<TRow>) => Callback<TRow[], TRow[][]>;
+export declare const slice: <TRow extends Row>(dimension: Dimension<TRow>) => Function<TRow[], TRow[][]>;
 /**
  * Queries data from a cube, or any matrix structure.
  * @param cube The source data.
