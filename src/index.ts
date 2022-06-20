@@ -86,21 +86,21 @@ export const filter = <TRow extends Row>(predicate: Callback<TRow, boolean>): Ca
  * A generator, used to transform the source data in a cube to another representation.
  * @param selector A function to transform a source record into the desired result.
  */
-export const select = <TRow, TResult>(selector: Callback<TRow, TResult>): Function<Array<TRow>, Array<TResult>> =>
+export const select = <TRow, TResult>(selector: Callback<TRow, TResult>): Callback<Array<TRow>, Array<TResult>> =>
 	table => table.map(selector);
 
 /**
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row.
  */
-export const sum = <TRow extends Row>(selector: Function<TRow, number>): Function<Array<TRow>, number> =>
-	table => table.reduce((total, row) => total + selector(row), 0);
+export const sum = <TRow extends Row>(selector: Callback<TRow, number>): Callback<Array<TRow>, number> =>
+	table => table ? table.reduce((total, row) => total + selector(row), 0) : 0;
 
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube .
  * @param selector A callback function to derive a numerical value for each row.
  */
-export const average = <TRow extends Row>(selector: Function<TRow, number>): Function<Array<TRow>, number | null> =>
+export const average = <TRow extends Row>(selector: Callback<TRow, number>): Callback<Array<TRow>, number | null> =>
 	table => table ? sum(selector)(table) / table.length : null;
 
 /**

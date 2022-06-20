@@ -1,4 +1,4 @@
-import { Callback, Function, Pair } from '@steelbreeze/types';
+import { Callback, Pair } from '@steelbreeze/types';
 /** The type of keys supported. */
 export declare type Key = string | number;
 /** The type of rows supported. */
@@ -51,7 +51,7 @@ export declare const cube: <TRow extends Row>(table: TRow[], axes: Axes<TRow>) =
  * @param dimension The dimension to generate the slicer for.
  * @returns Returns a function that will take a table and slice it into an array of tables each conforming to the criteria of a point on a dimension.
  */
-export declare const slice: <TRow extends Row>(dimension: Dimension<TRow>) => Function<TRow[], TRow[][]>;
+export declare const slice: <TRow extends Row>(dimension: Dimension<TRow>) => Callback<TRow[], TRow[][]>;
 /**
  * Queries data from a cube, or any matrix structure.
  * @param cube The source data.
@@ -67,14 +67,14 @@ export declare const filter: <TRow extends Row>(predicate: Callback<TRow, boolea
  * A generator, used to transform the source data in a cube to another representation.
  * @param selector A function to transform a source record into the desired result.
  */
-export declare const select: <TRow, TResult>(selector: Callback<TRow, TResult>) => Function<TRow[], TResult[]>;
+export declare const select: <TRow, TResult>(selector: Callback<TRow, TResult>) => Callback<TRow[], TResult[]>;
 /**
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row.
  */
-export declare const sum: <TRow extends Row>(selector: Function<TRow, number>) => Function<TRow[], number>;
+export declare const sum: <TRow extends Row>(selector: Callback<TRow, number>) => Callback<TRow[], number>;
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube .
  * @param selector A callback function to derive a numerical value for each row.
  */
-export declare const average: <TRow extends Row>(selector: Function<TRow, number>) => Function<TRow[], number | null>;
+export declare const average: <TRow extends Row>(selector: Callback<TRow, number>) => Callback<TRow[], number | null>;
