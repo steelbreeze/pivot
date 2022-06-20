@@ -93,22 +93,15 @@ export const select = <TRow, TResult>(selector: Callback<TRow, TResult>): Functi
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row.
  */
-export const sum = <TRow extends Row>(selector: Function<TRow, number>): Function<Array<TRow>, number | null> =>
-	table => table ? table.reduce((total, row) => total + selector(row), 0) : null;
+export const sum = <TRow extends Row>(selector: Function<TRow, number>): Function<Array<TRow>, number> =>
+	table => table.reduce((total, row) => total + selector(row), 0);
 
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube .
  * @param selector A callback function to derive a numerical value for each row.
  */
 export const average = <TRow extends Row>(selector: Function<TRow, number>): Function<Array<TRow>, number | null> =>
-	table => table ? sum(selector)(table)! / count(table)! : null;
-
-/**
- * Counts the number of items in a table.
- * @param table The source table.
- */
-export const count = <TRow extends Row>(table: Array<TRow>): number | null =>
-	table.length || null;
+	table => table ? sum(selector)(table) / table.length : null;
 
 /**
  * Returns the elements of an array that meet the condition specified in a callback function and removes them from the source.

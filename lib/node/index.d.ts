@@ -72,14 +72,9 @@ export declare const select: <TRow, TResult>(selector: Callback<TRow, TResult>) 
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row.
  */
-export declare const sum: <TRow extends Row>(selector: Function<TRow, number>) => Function<TRow[], number | null>;
+export declare const sum: <TRow extends Row>(selector: Function<TRow, number>) => Function<TRow[], number>;
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube .
  * @param selector A callback function to derive a numerical value for each row.
  */
 export declare const average: <TRow extends Row>(selector: Function<TRow, number>) => Function<TRow[], number | null>;
-/**
- * Counts the number of items in a table.
- * @param table The source table.
- */
-export declare const count: <TRow extends Row>(table: TRow[]) => number | null;
