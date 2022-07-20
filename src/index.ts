@@ -6,7 +6,7 @@ export type Key = string | number;
 /** The type of rows supported. */
 export type Row = { [key in Key]: any };
 
-/** A criterion used in the criteria of a dimension. */
+/** A cirerion is one predicate that must resolve true for a row of data to be associated with one point on an axis. */
 export interface Criterion<TRow extends Row> extends Pair {
 	/** The predicate callback function used to perform the test. */
 	predicate: Callback<TRow, boolean>;
@@ -39,6 +39,7 @@ export type Cube<TValue> = Array<Array<Array<TValue>>>;
  */
 export const distinct = <TRow extends Row>(table: Array<TRow>, key: Key, getValue: Callback<TRow, any> = row => row[key]): Array<any> =>
 	[...table.reduce((set, row) => set.add(getValue(row)), new Set())];
+
 /**
  * Creates a dimension from an array of values.
  * @param values A distinct list of values for the dimension.
