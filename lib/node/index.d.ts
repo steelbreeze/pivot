@@ -5,7 +5,7 @@ export declare type Key = string | number;
 export declare type Row = {
     [key in Key]: any;
 };
-/** A criterion used in the criteria of a dimension. */
+/** A cirerion is one predicate that must resolve true for a row of data to be associated with one point on an axis. */
 export interface Criterion<TRow extends Row> extends Pair {
     /** The predicate callback function used to perform the test. */
     predicate: Callback<TRow, boolean>;
