@@ -94,14 +94,15 @@ export const select = <TRow, TResult>(selector: Callback<TRow, TResult>): Callba
  * @param selector A callback function to derive a numerical value for each row.
  */
 export const sum = <TRow extends Row>(selector: Callback<TRow, number>): Callback<Array<TRow>, number> =>
-	table => table ? table.reduce((total, row) => total + selector(row), 0) : 0;
+	table => table.reduce((total, row) => total + selector(row), 0);
 
 /**
- * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube .
+ * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row.
+ * @returns Returns a callback function that can be passed into the map function returning the average of the values for a cell or NaN if there are no values in that cell.
  */
-export const average = <TRow extends Row>(selector: Callback<TRow, number>): Callback<Array<TRow>, number | null> =>
-	table => table ? sum(selector)(table) / table.length : null;
+export const average = <TRow extends Row>(selector: Callback<TRow, number>): Callback<Array<TRow>, number> =>
+	table => sum(selector)(table) / table.length;
 
 /**
  * Returns the elements of an array that meet the condition specified in a callback function and removes them from the source.

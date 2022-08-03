@@ -13,6 +13,8 @@ let cube = pivot.cube(squad, axes);
 // find the average age of players by position by country
 const result = pivot.map(cube, pivot.average(age));
 
+console.log(result)
+
 // ugly code to pretty print the result with axes
 console.log(`\t${axes.x.map(c => print(c[0].value)).join('\t')}`)
 result.forEach((row, i) => console.log(`${print(axes.y[i][0].value)}\t${row.map(print).join('\t')}`));
