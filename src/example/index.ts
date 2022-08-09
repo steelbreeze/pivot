@@ -2,22 +2,18 @@ import { Player, squad } from './fulham';
 import * as pivot from '..';
 
 // create dimensions derived from the squad data
-const axes = {
-	x: pivot.dimension(pivot.distinct(squad, 'position').sort(), 'position'),
-	y: pivot.dimension(pivot.distinct(squad, 'country').sort(), 'country')
-};
+const x = pivot.dimension(pivot.distinct(squad, 'position').sort(), 'position');
+const	y= pivot.dimension(pivot.distinct(squad, 'country').sort(), 'country');
 
 // create the pivot cube from the squad data using position and country for x and y axes
-let cube = pivot.cube(squad, axes);
+let cube = pivot.cube(squad, y, x);
 
 // find the average age of players by position by country
 const result = pivot.map(cube, pivot.average(age));
 
-console.log(result)
-
 // ugly code to pretty print the result with axes
-console.log(`\t${axes.x.map(c => print(c[0].value)).join('\t')}`)
-result.forEach((row, i) => console.log(`${print(axes.y[i][0].value)}\t${row.map(print).join('\t')}`));
+console.log(`\t${x.map(c => print(c[0].value)).join('\t')}`)
+result.forEach((row, i) => console.log(`${print(y[i][0].value)}\t${row.map(print).join('\t')}`));
 
 // Calculate a person's age from their date of birth
 function age(person: Player): number {

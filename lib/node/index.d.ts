@@ -14,13 +14,6 @@ export interface Criterion<TRow extends Row> extends Pair {
 export declare type Criteria<TRow extends Row> = Array<Criterion<TRow>>;
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
 export declare type Dimension<TRow extends Row> = Array<Criteria<TRow>>;
-/** A pair of axes to be used in a pivot operation. */
-export interface Axes<TRow extends Row> {
-    /** The x axis; columns in the resultant pivot table. */
-    x: Dimension<TRow>;
-    /** The y axis; rows in the resultant pivot table. */
-    y: Dimension<TRow>;
-}
 /** A cube of data. */
 export declare type Cube<TValue> = Array<Array<Array<TValue>>>;
 /**
@@ -42,10 +35,11 @@ export declare const dimension: <TRow extends Row>(values: Array<any>, key: Key,
 /**
  * Pivots a table by two axes
  * @param table The source data, an array of rows.
- * @param axes The dimensions to use for the x and y axes.
+ * @param y The dimension to use for the y axis.
+ * @param x The dimension to use for the x axis.
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
-export declare const cube: <TRow extends Row>(table: TRow[], axes: Axes<TRow>) => Cube<TRow>;
+export declare const cube: <TRow extends Row>(table: TRow[], y: Dimension<TRow>, x: Dimension<TRow>) => Cube<TRow>;
 /**
  * Generates a function to slice data by the criteria specified in a dimension.
  * @param dimension The dimension to generate the slicer for.

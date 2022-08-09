@@ -16,7 +16,7 @@ const x = pivot.dimension([1, 2, 3], 0);
 const y = pivot.dimension(pivot.distinct(data, 1), 1);
 
 // create a cube from the data using the x and y dimensions
-const cube = pivot.cube(data, { x, y });
+const cube = pivot.cube(data, x, y);
 
 // Display the values of the third element seen in the data
 console.log(pivot.map(cube, pivot.select(t => t[2])));
