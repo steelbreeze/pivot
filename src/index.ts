@@ -51,7 +51,21 @@ export const cube = <TRow extends Row>(table: Array<TRow>, y: Dimension<TRow>, x
  * @returns Returns a function that will take a table and slice it into an array of tables each conforming to the criteria of a point on a dimension.
  */
 export const slice = <TRow extends Row>(dimension: Dimension<TRow>): Function<Array<TRow>, Array<Array<TRow>>> =>
-	table => dimension.map(criteria => split(table, criteria));
+	table => dimension.map(criteria => {
+		let result: Array<TRow> = [], length = 0;
+
+		for (const row of table) {
+			if (criteria.every(criterion => criterion(row))) {
+				result.push(row);
+			} else {
+				table[length++] = row;
+			}
+		}
+
+		table.length = length;
+
+		return result;
+	});
 
 /**
  * Queries data from a cube, or any matrix structure.
@@ -89,23 +103,3 @@ export const sum = <TRow extends Row>(selector: Callback<TRow, number>): Callbac
  */
 export const average = <TRow extends Row>(selector: Callback<TRow, number>): Callback<Array<TRow>, number> =>
 	table => sum(selector)(table) / table.length;
-
-/**
- * Returns the elements of an array that meet the condition specified in a callback function and removes them from the source.
- * @private
- */
-function split<T>(table: Array<T>, criteria: Criteria<T>): Array<T> {
-	let result: Array<T> = [], length = 0;
-
-	for (const row of table) {
-		if (criteria.every(criterion => criterion(row))) {
-			result.push(row);
-		} else {
-			table[length++] = row;
-		}
-	}
-
-	table.length = length;
-
-	return result;
-}
