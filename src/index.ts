@@ -1,4 +1,4 @@
-import { Callback, Function, Pair, Predicate } from '@steelbreeze/types';
+import { Callback, Function, Pair } from '@steelbreeze/types';
 
 /** The type of keys supported. */
 export type Key = string | number;
@@ -51,7 +51,7 @@ export const cube = <TRow extends Row>(table: Array<TRow>, y: Dimension<TRow>, x
  * @returns Returns a function that will take a table and slice it into an array of tables each conforming to the criteria of a point on a dimension.
  */
 export const slice = <TRow extends Row>(dimension: Dimension<TRow>): Function<Array<TRow>, Array<Array<TRow>>> =>
-	table => dimension.map(criteria => split(table, row => criteria.every(criterion => criterion(row))));
+	table => dimension.map(criteria => split(table, criteria));
 
 /**
  * Queries data from a cube, or any matrix structure.
@@ -94,18 +94,18 @@ export const average = <TRow extends Row>(selector: Callback<TRow, number>): Cal
  * Returns the elements of an array that meet the condition specified in a callback function and removes them from the source.
  * @private
  */
-function split<T>(values: Array<T>, predicate: Predicate<T>): Array<T> {
+function split<T>(table: Array<T>, criteria: Criteria<T>): Array<T> {
 	let result: Array<T> = [], length = 0;
 
-	for (const value of values) {
-		if (predicate(value)) {
-			result.push(value);
+	for (const row of table) {
+		if (criteria.every(criterion => criterion(row))) {
+			result.push(row);
 		} else {
-			values[length++] = value;
+			table[length++] = row;
 		}
 	}
 
-	values.length = length;
+	table.length = length;
 
 	return result;
 }
