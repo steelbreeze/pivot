@@ -6,11 +6,8 @@ export type Key = string | number;
 /** The type of rows supported. */
 export type Row = { [key in Key]: any };
 
-/** A criterion is one predicate that must resolve true for a row of data to be associated with one point on an axis. */
-export type Criterion<TRow extends Row> = { predicate: Callback<TRow, boolean> } & Pair;
-
-/** The set of criterion used to select items for a row or column within a cube. */
-export type Criteria<TRow extends Row> = Array<Criterion<TRow>>;
+/** The definition of a dimension, the predicate(s) used as criteria used to determine if a row of data belongs to a point on a dimension. */
+export type Criteria<TRow extends Row> = Array<Callback<TRow, boolean> & Pair>;
 
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
 export type Dimension<TRow extends Row> = Array<Criteria<TRow>>;
@@ -35,7 +32,7 @@ export const distinct = <TRow extends Row>(table: Array<TRow>, key: Key, getValu
  * @param criteria An optional callback to build the dimensions criteria.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export const dimension = <TRow extends Row>(values: Array<any>, key: Key, criteria: Callback<any, Criteria<TRow>> = value => [{ predicate: row => row[key] === value, key, value }]): Dimension<TRow> =>
+export const dimension = <TRow extends Row>(values: Array<any>, key: Key, criteria: Callback<any, Criteria<TRow>> = value => [Object.assign((row: TRow) => row[key] === value, { key, value })]): Dimension<TRow> =>
 	values.map(criteria);
 
 /**
@@ -54,7 +51,7 @@ export const cube = <TRow extends Row>(table: Array<TRow>, y: Dimension<TRow>, x
  * @returns Returns a function that will take a table and slice it into an array of tables each conforming to the criteria of a point on a dimension.
  */
 export const slice = <TRow extends Row>(dimension: Dimension<TRow>): Function<Array<TRow>, Array<Array<TRow>>> =>
-	table => dimension.map(criteria => split(table, row => criteria.every(criterion => criterion.predicate(row))));
+	table => dimension.map(criteria => split(table, row => criteria.every(criterion => criterion(row))));
 
 /**
  * Queries data from a cube, or any matrix structure.

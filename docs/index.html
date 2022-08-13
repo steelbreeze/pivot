@@ -4,7 +4,7 @@
 <head>
 	<title>steelbreeze/pivot</title>
 	<style>
-/*		@import url("https://cdn.skypack.dev/-/holiday.css@v0.9.5-Jl4gV7y2zMps6H5ZtJC8/dist=es2020,mode=raw/dist/holiday.css");
+		/*		@import url("https://cdn.skypack.dev/-/holiday.css@v0.9.5-Jl4gV7y2zMps6H5ZtJC8/dist=es2020,mode=raw/dist/holiday.css");
 */
 		@import url("https://cdn.jsdelivr.net/npm/holiday.css@0.9.8");
 
@@ -116,8 +116,8 @@
 
 		function labelled(key, label) {
 			return value => [
-				{ key: label, value: key, predicate: row => row['position'] === value },
-				{ key, value, predicate: () => true }
+				Object.assign(() => true, { key: label, value: key }),	 
+				Object.assign(row => row[key] === value, { key, value })
 			];
 		}
 	</script>

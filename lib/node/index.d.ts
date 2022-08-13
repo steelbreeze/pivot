@@ -5,12 +5,8 @@ export declare type Key = string | number;
 export declare type Row = {
     [key in Key]: any;
 };
-/** A criterion is one predicate that must resolve true for a row of data to be associated with one point on an axis. */
-export declare type Criterion<TRow extends Row> = {
-    predicate: Callback<TRow, boolean>;
-} & Pair;
-/** The set of criterion used to select items for a row or column within a cube. */
-export declare type Criteria<TRow extends Row> = Array<Criterion<TRow>>;
+/** The definition of a dimension, the predicate(s) used as criteria used to determine if a row of data belongs to a point on a dimension. */
+export declare type Criteria<TRow extends Row> = Array<Callback<TRow, boolean> & Pair>;
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
 export declare type Dimension<TRow extends Row> = Array<Criteria<TRow>>;
 /** A cube of data. */
