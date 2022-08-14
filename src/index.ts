@@ -54,7 +54,7 @@ export const slice = <TRow extends Row>(dimension: Dimension<TRow>): Function<Ar
 	table => dimension.map(criteria => {
 		let result: Array<TRow> = [], length = 0;
 
-		for (const row of table) {
+		for (var row of table) {
 			if (criteria.every(criterion => criterion(row))) {
 				result.push(row);
 			} else {
