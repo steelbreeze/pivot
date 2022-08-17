@@ -1,4 +1,4 @@
-import { Callback, Function, Pair } from '@steelbreeze/types';
+import { Callback, Function, Pair, Predicate } from '@steelbreeze/types';
 
 /** The type of keys supported. */
 export type Key = string | number;
@@ -7,7 +7,7 @@ export type Key = string | number;
 export type Row = { [key in Key]: any };
 
 /** The definition of a dimension, the predicate(s) used as criteria used to determine if a row of data belongs to a point on a dimension. */
-export type Criteria<TRow extends Row> = Array<Callback<TRow, boolean> & Pair>;
+export type Criteria<TRow extends Row> = Array<Predicate<TRow> & Pair>;
 
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
 export type Dimension<TRow extends Row> = Array<Criteria<TRow>>;
@@ -29,11 +29,11 @@ export const distinct = <TRow extends Row>(table: Array<TRow>, key: Key, getValu
  * Creates a dimension from an array of values.
  * @param values A distinct list of values for the dimension.
  * @param key The name to give this dimension.
- * @param criteria An optional callback to build the dimensions criteria.
+ * @param createCriteria An optional callback to build the dimensions criteria.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export const dimension = <TRow extends Row>(values: Array<any>, key: Key, criteria: Callback<any, Criteria<TRow>> = value => [Object.assign((row: TRow) => row[key] === value, { key, value })]): Dimension<TRow> =>
-	values.map(criteria);
+export const dimension = <TRow extends Row>(values: Array<any>, key: Key, createCriteria: Callback<any, Criteria<TRow>> = value => [Object.assign((row: TRow) => row[key] === value, { key, value })]): Dimension<TRow> =>
+	values.map(createCriteria);
 
 /**
  * Pivots a table by two axes
@@ -52,15 +52,7 @@ export const cube = <TRow extends Row>(table: Array<TRow>, y: Dimension<TRow>, x
  */
 export const slice = <TRow extends Row>(dimension: Dimension<TRow>): Function<Array<TRow>, Array<Array<TRow>>> =>
 	table => dimension.map(criteria => {
-		let result: Array<TRow> = [], length = 0;
-
-		for (var row of table) {
-			if (criteria.every(criterion => criterion(row))) {
-				result.push(row);
-			} else {
-				table[length++] = row;
-			}
-		}
+		let length = 0, result = table.filter(row => criteria.every(criterion => criterion(row)) || !(table[length++] = row));
 
 		table.length = length;
 

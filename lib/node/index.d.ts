@@ -1,4 +1,4 @@
-import { Callback, Function, Pair } from '@steelbreeze/types';
+import { Callback, Function, Pair, Predicate } from '@steelbreeze/types';
 /** The type of keys supported. */
 export declare type Key = string | number;
 /** The type of rows supported. */
@@ -6,7 +6,7 @@ export declare type Row = {
     [key in Key]: any;
 };
 /** The definition of a dimension, the predicate(s) used as criteria used to determine if a row of data belongs to a point on a dimension. */
-export declare type Criteria<TRow extends Row> = Array<Callback<TRow, boolean> & Pair>;
+export declare type Criteria<TRow extends Row> = Array<Predicate<TRow> & Pair>;
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
 export declare type Dimension<TRow extends Row> = Array<Criteria<TRow>>;
 /** A cube of data. */
@@ -23,10 +23,10 @@ export declare const distinct: <TRow extends Row>(table: TRow[], key: Key, getVa
  * Creates a dimension from an array of values.
  * @param values A distinct list of values for the dimension.
  * @param key The name to give this dimension.
- * @param criteria An optional callback to build the dimensions criteria.
+ * @param createCriteria An optional callback to build the dimensions criteria.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export declare const dimension: <TRow extends Row>(values: Array<any>, key: Key, criteria?: Callback<any, Criteria<TRow>>) => Dimension<TRow>;
+export declare const dimension: <TRow extends Row>(values: Array<any>, key: Key, createCriteria?: Callback<any, Criteria<TRow>>) => Dimension<TRow>;
 /**
  * Pivots a table by two axes
  * @param table The source data, an array of rows.
