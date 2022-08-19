@@ -1,12 +1,16 @@
 import { Callback, Function, Pair, Predicate } from '@steelbreeze/types';
+/** The type of values that can be in a row. */
+export declare type Value = any;
 /** The type of keys supported. */
-export declare type Key = string | number;
+export declare type Key = Exclude<keyof Value, Symbol>;
 /** The type of rows supported. */
 export declare type Row = {
-    [key in Key]: any;
+    [key in Key]: Value;
 };
-/** The definition of a dimension, the predicate(s) used as criteria used to determine if a row of data belongs to a point on a dimension. */
-export declare type Criteria<TRow extends Row> = Array<Predicate<TRow> & Pair>;
+/** A single predicate and associated metadata used to help determine if a row of data is associated with a point of a dimension. */
+export declare type Criterion<TRow extends Row> = Predicate<TRow> & Pair;
+/** A set of predicates and associated metadata used to determine if a row of data is associated with a point of a dimension. */
+export declare type Criteria<TRow extends Row> = Array<Criterion<TRow>>;
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
 export declare type Dimension<TRow extends Row> = Array<Criteria<TRow>>;
 /** A cube of data. */
@@ -18,7 +22,7 @@ export declare type Cube<TValue> = Array<Array<Array<TValue>>>;
  * @param getValue An optional callback to derive values from the source data.
  * @returns Returns the distinct set of values for the key
  */
-export declare const distinct: <TRow extends Row>(table: TRow[], key: Key, getValue?: Callback<TRow, any>) => Array<any>;
+export declare const distinct: <TRow extends Row>(table: TRow[], key: Key, getValue?: Callback<TRow, any>) => Array<Value>;
 /**
  * Creates a dimension from an array of values.
  * @param values A distinct list of values for the dimension.
@@ -26,7 +30,7 @@ export declare const distinct: <TRow extends Row>(table: TRow[], key: Key, getVa
  * @param createCriteria An optional callback to build the dimensions criteria.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export declare const dimension: <TRow extends Row>(values: Array<any>, key: Key, createCriteria?: Callback<any, Criteria<TRow>>) => Dimension<TRow>;
+export declare const dimension: <TRow extends Row>(values: Array<Value>, key: Key, createCriteria?: Callback<any, Criteria<TRow>>) => Dimension<TRow>;
 /**
  * Pivots a table by two axes
  * @param table The source data, an array of rows.
