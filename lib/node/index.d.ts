@@ -38,7 +38,7 @@ export declare const dimension: <TRow extends Row>(values: Array<Value>, key: Ke
  * @param x The dimension to use for the x axis.
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
-export declare const cube: <TRow extends Row>(table: TRow[], y: Dimension<TRow>, x: Dimension<TRow>) => Cube<TRow>;
+export declare const cube: <TRow>(table: TRow[], y: Dimension<TRow>, x: Dimension<TRow>) => Cube<TRow>;
 /**
  * Generates a function to slice data by the criteria specified in a dimension.
  * @param dimension The dimension to generate the slicer for.
@@ -55,7 +55,7 @@ export declare const map: <TRow, TResult>(cube: Cube<TRow>, selector: Callback<T
  * A generator, used to filter data within a cube.
  * @param predicate A predicate to test a row of data to see if it should be included in the filter results.
  */
-export declare const filter: <TRow extends Row>(predicate: Callback<TRow, boolean>) => Callback<TRow[], TRow[]>;
+export declare const filter: <TRow>(predicate: Callback<TRow, boolean>) => Callback<TRow[], TRow[]>;
 /**
  * A generator, used to transform the source data in a cube to another representation.
  * @param selector A function to transform a source record into the desired result.
@@ -65,10 +65,10 @@ export declare const select: <TRow, TResult>(selector: Callback<TRow, TResult>) 
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row.
  */
-export declare const sum: <TRow extends Row>(selector: Callback<TRow, number>) => Callback<TRow[], number>;
+export declare const sum: <TRow>(selector: Callback<TRow, number>) => Callback<TRow[], number>;
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row.
  * @returns Returns a callback function that can be passed into the map function returning the average of the values for a cell or NaN if there are no values in that cell.
  */
-export declare const average: <TRow extends Row>(selector: Callback<TRow, number>) => Callback<TRow[], number>;
+export declare const average: <TRow>(selector: Callback<TRow, number>) => Callback<TRow[], number>;

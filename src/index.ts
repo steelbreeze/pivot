@@ -48,7 +48,7 @@ export const dimension = <TRow extends Row>(values: Array<Value>, key: Key, crea
  * @param x The dimension to use for the x axis.
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
-export const cube = <TRow extends Row>(table: Array<TRow>, y: Dimension<TRow>, x: Dimension<TRow>): Cube<TRow> =>
+export const cube = <TRow>(table: Array<TRow>, y: Dimension<TRow>, x: Dimension<TRow>): Cube<TRow> =>
 	slice(y)([...table]).map(slice(x));
 
 /**
@@ -79,7 +79,7 @@ export const map = <TRow, TResult>(cube: Cube<TRow>, selector: Callback<Array<TR
  * A generator, used to filter data within a cube.
  * @param predicate A predicate to test a row of data to see if it should be included in the filter results.
  */
-export const filter = <TRow extends Row>(predicate: Callback<TRow, boolean>): Callback<Array<TRow>, Array<TRow>> =>
+export const filter = <TRow >(predicate: Callback<TRow, boolean>): Callback<Array<TRow>, Array<TRow>> =>
 	(table: Array<TRow>) => table.filter(predicate);
 
 /**
@@ -93,7 +93,7 @@ export const select = <TRow, TResult>(selector: Callback<TRow, TResult>): Callba
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row.
  */
-export const sum = <TRow extends Row>(selector: Callback<TRow, number>): Callback<Array<TRow>, number> =>
+export const sum = <TRow>(selector: Callback<TRow, number>): Callback<Array<TRow>, number> =>
 	(table: Array<TRow>) => table.reduce((total: number, row: TRow) => total + selector(row), 0);
 
 /**
@@ -101,5 +101,5 @@ export const sum = <TRow extends Row>(selector: Callback<TRow, number>): Callbac
  * @param selector A callback function to derive a numerical value for each row.
  * @returns Returns a callback function that can be passed into the map function returning the average of the values for a cell or NaN if there are no values in that cell.
  */
-export const average = <TRow extends Row>(selector: Callback<TRow, number>): Callback<Array<TRow>, number> =>
+export const average = <TRow>(selector: Callback<TRow, number>): Callback<Array<TRow>, number> =>
 	(table: Array<TRow>) => sum(selector)(table) / table.length;
