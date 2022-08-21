@@ -44,7 +44,7 @@ export declare const cube: <TRow extends Row>(table: TRow[], y: Dimension<TRow>,
  * @param dimension The dimension to generate the slicer for.
  * @returns Returns a function that will take a table and slice it into an array of tables each conforming to the criteria of a point on a dimension.
  */
-export declare const slice: <TRow extends Row>(dimension: Dimension<TRow>) => Function<TRow[], TRow[][]>;
+export declare const slice: <TSource>(dimension: Dimension<TSource>) => Function<TSource[], TSource[][]>;
 /**
  * Queries data from a cube, or any matrix structure.
  * @param cube The source data.

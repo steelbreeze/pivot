@@ -56,11 +56,13 @@ export const cube = <TRow extends Row>(table: Array<TRow>, y: Dimension<TRow>, x
  * @param dimension The dimension to generate the slicer for.
  * @returns Returns a function that will take a table and slice it into an array of tables each conforming to the criteria of a point on a dimension.
  */
-export const slice = <TRow extends Row>(dimension: Dimension<TRow>): Function<Array<TRow>, Array<Array<TRow>>> =>
-	(table: Array<TRow>) => dimension.map((criteria: Criteria<TRow>) => {
-		let length = 0, result = table.filter((row: TRow) => criteria.every((criterion: Criterion<TRow>) => criterion(row)) || !(table[length++] = row));
+export const slice = <TSource>(dimension: Dimension<TSource>): Function<Array<TSource>, Array<Array<TSource>>> =>
+	(source: Array<TSource>) => dimension.map((criteria: Criteria<TSource>) => {
+		// perform the filter and for items that don't pass the criteria, pack them at the start of the source
+		let length = 0, result = source.filter((row: TSource) => criteria.every((criterion: Criterion<TSource>) => criterion(row)) || !(source[length++] = row));
 
-		table.length = length;
+		// trim the source to just remaining items 
+		source.length = length;
 
 		return result;
 	});
