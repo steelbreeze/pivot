@@ -18,8 +18,11 @@ export type Criteria<TRow extends Row> = Array<Criterion<TRow>>;
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
 export type Dimension<TRow extends Row> = Array<Criteria<TRow>>;
 
+/** A matrix is a two-dimensional data structure. */
+export type Matrix<TSource> = Array<Array<TSource>>;
+
 /** A cube of data. */
-export type Cube<TValue> = Array<Array<Array<TValue>>>;
+export type Cube<TSource> = Matrix<Array<TSource>>;
 
 /**
  * Returns a distinct list of values for a column of a table.
@@ -56,7 +59,7 @@ export const cube = <TRow>(table: Array<TRow>, y: Dimension<TRow>, x: Dimension<
  * @param dimension The dimension to generate the slicer for.
  * @returns Returns a function that will take a table and slice it into an array of tables each conforming to the criteria of a point on a dimension.
  */
-export const slice = <TSource>(dimension: Dimension<TSource>): Function<Array<TSource>, Array<Array<TSource>>> =>
+export const slice = <TSource>(dimension: Dimension<TSource>): Function<Array<TSource>, Matrix<TSource>> =>
 	(source: Array<TSource>) => dimension.map((criteria: Criteria<TSource>) => {
 		// perform the filter; for items that don't pass the criteria, pack them at the start of the source
 		let length = 0, result = source.filter((row: TSource) => criteria.every((criterion: Criterion<TSource>) => criterion(row)) || !(source[length++] = row));
@@ -69,11 +72,11 @@ export const slice = <TSource>(dimension: Dimension<TSource>): Function<Array<TS
 
 /**
  * Queries data from a cube, or any matrix structure.
- * @param cube The source data.
+ * @param source The source data.
  * @param selector A callback function to create a result from each cell of the cube.
  */
-export const map = <TRow, TResult>(cube: Cube<TRow>, selector: Callback<Array<TRow>, TResult>): Array<Array<TResult>> =>
-	cube.map((slice: Array<Array<TRow>>) => slice.map(selector));
+export const map = <TSource, TResult>(source: Matrix<TSource>, selector: Callback<TSource, TResult>): Matrix<TResult> =>
+	source.map((slice: Array<TSource>) => slice.map(selector));
 
 /**
  * A generator, used to filter data within a cube.

@@ -13,8 +13,10 @@ export declare type Criterion<TRow extends Row> = Predicate<TRow> & Pair;
 export declare type Criteria<TRow extends Row> = Array<Criterion<TRow>>;
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
 export declare type Dimension<TRow extends Row> = Array<Criteria<TRow>>;
+/** A matrix is a two-dimensional data structure. */
+export declare type Matrix<TSource> = Array<Array<TSource>>;
 /** A cube of data. */
-export declare type Cube<TValue> = Array<Array<Array<TValue>>>;
+export declare type Cube<TSource> = Matrix<Array<TSource>>;
 /**
  * Returns a distinct list of values for a column of a table.
  * @param table The source data, a table of rows.
@@ -44,13 +46,13 @@ export declare const cube: <TRow>(table: TRow[], y: Dimension<TRow>, x: Dimensio
  * @param dimension The dimension to generate the slicer for.
  * @returns Returns a function that will take a table and slice it into an array of tables each conforming to the criteria of a point on a dimension.
  */
-export declare const slice: <TSource>(dimension: Dimension<TSource>) => Function<TSource[], TSource[][]>;
+export declare const slice: <TSource>(dimension: Dimension<TSource>) => Function<TSource[], Matrix<TSource>>;
 /**
  * Queries data from a cube, or any matrix structure.
- * @param cube The source data.
+ * @param source The source data.
  * @param selector A callback function to create a result from each cell of the cube.
  */
-export declare const map: <TRow, TResult>(cube: Cube<TRow>, selector: Callback<TRow[], TResult>) => TResult[][];
+export declare const map: <TSource, TResult>(source: Matrix<TSource>, selector: Callback<TSource, TResult>) => Matrix<TResult>;
 /**
  * A generator, used to filter data within a cube.
  * @param predicate A predicate to test a row of data to see if it should be included in the filter results.
