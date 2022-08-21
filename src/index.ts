@@ -58,10 +58,10 @@ export const cube = <TRow>(table: Array<TRow>, y: Dimension<TRow>, x: Dimension<
  */
 export const slice = <TSource>(dimension: Dimension<TSource>): Function<Array<TSource>, Array<Array<TSource>>> =>
 	(source: Array<TSource>) => dimension.map((criteria: Criteria<TSource>) => {
-		// perform the filter and for items that don't pass the criteria, pack them at the start of the source
+		// perform the filter; for items that don't pass the criteria, pack them at the start of the source
 		let length = 0, result = source.filter((row: TSource) => criteria.every((criterion: Criterion<TSource>) => criterion(row)) || !(source[length++] = row));
 
-		// trim the source to just remaining items 
+		// trim the source to just the unfiltered items in order to test less items on next iteration 
 		source.length = length;
 
 		return result;
