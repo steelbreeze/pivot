@@ -10,13 +10,13 @@ export type Key = Exclude<keyof Value, Symbol>;
 export type Row = { [key in Key]: Value };
 
 /** A single predicate and associated metadata used to help determine if a row of data is associated with a point of a dimension. */
-export type Criterion<TRow extends Row> = Predicate<TRow> & Pair;
+export type Criterion<TRow> = Predicate<TRow> & Pair;
 
 /** A set of predicates and associated metadata used to determine if a row of data is associated with a point of a dimension. */
-export type Criteria<TRow extends Row> = Array<Criterion<TRow>>;
+export type Criteria<TRow> = Array<Criterion<TRow>>;
 
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
-export type Dimension<TRow extends Row> = Array<Criteria<TRow>>;
+export type Dimension<TRow> = Array<Criteria<TRow>>;
 
 /** A matrix is a two-dimensional data structure. */
 export type Matrix<TSource> = Array<Array<TSource>>;
@@ -82,7 +82,7 @@ export const map = <TSource, TResult>(source: Matrix<TSource>, selector: Callbac
  * A generator, used to filter data within a cube.
  * @param predicate A predicate to test a row of data to see if it should be included in the filter results.
  */
-export const filter = <TRow >(predicate: Callback<TRow, boolean>): Callback<Array<TRow>, Array<TRow>> =>
+export const filter = <TRow>(predicate: Callback<TRow, boolean>): Callback<Array<TRow>, Array<TRow>> =>
 	(table: Array<TRow>) => table.filter(predicate);
 
 /**

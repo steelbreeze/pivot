@@ -8,11 +8,11 @@ export declare type Row = {
     [key in Key]: Value;
 };
 /** A single predicate and associated metadata used to help determine if a row of data is associated with a point of a dimension. */
-export declare type Criterion<TRow extends Row> = Predicate<TRow> & Pair;
+export declare type Criterion<TRow> = Predicate<TRow> & Pair;
 /** A set of predicates and associated metadata used to determine if a row of data is associated with a point of a dimension. */
-export declare type Criteria<TRow extends Row> = Array<Criterion<TRow>>;
+export declare type Criteria<TRow> = Array<Criterion<TRow>>;
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
-export declare type Dimension<TRow extends Row> = Array<Criteria<TRow>>;
+export declare type Dimension<TRow> = Array<Criteria<TRow>>;
 /** A matrix is a two-dimensional data structure. */
 export declare type Matrix<TSource> = Array<Array<TSource>>;
 /** A cube of data. */
