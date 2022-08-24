@@ -26,13 +26,21 @@ export type Cube<TSource> = Matrix<Array<TSource>>;
 
 /**
  * Returns a distinct list of values for a column of a table.
- * @param table The source data, a table of rows.
+ * @param table The source data, an array of rows.
  * @param key The column name to find the distinct values for.
  * @param getValue An optional callback to derive values from the source data.
  * @returns Returns the distinct set of values for the key
  */
 export const distinct = <TRow extends Row>(table: Array<TRow>, key: Key, getValue: Callback<TRow, Value> = (row: TRow) => row[key]): Array<Value> =>
-	[...new Set(table.map(getValue))];
+	table.reduce((result: Array<Value>, row: TRow) => {
+		var value = getValue(row);
+
+		if (!result.includes(value)) {
+			result.push(value);
+		}
+
+		return result;
+	}, []);
 
 /**
  * Creates a dimension from an array of values.

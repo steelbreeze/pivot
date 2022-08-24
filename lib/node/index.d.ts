@@ -19,7 +19,7 @@ export declare type Matrix<TSource> = Array<Array<TSource>>;
 export declare type Cube<TSource> = Matrix<Array<TSource>>;
 /**
  * Returns a distinct list of values for a column of a table.
- * @param table The source data, a table of rows.
+ * @param table The source data, an array of rows.
  * @param key The column name to find the distinct values for.
  * @param getValue An optional callback to derive values from the source data.
  * @returns Returns the distinct set of values for the key
