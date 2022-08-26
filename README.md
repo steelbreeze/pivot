@@ -8,6 +8,8 @@ The library also provides a modest set of numerical selectors. Suggestions for a
 ## Why create another pivot table library?
 There are plenty of pivot table libraries in existence, so why create another one? Well, this is a spin-off from the [steelbreeze/landscape](https://github.com/steelbreeze/landscape) project, where instead of aggregating numerical data from the pivot cube, non-numerical data is needed.
 
+It also focuses just on dimension and cube creation, without any layout considerations keeping it small and unopinionated.
+
 ## Installation
 ### NPM
 For installation via the node package manager:
