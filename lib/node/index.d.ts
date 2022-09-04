@@ -8,8 +8,9 @@ export declare type Row = {
     [key in Key]: Value;
 };
 /** A set of predicates and associated metadata used to determine if a row of data is associated with a point of a dimension. */
-export declare type Criteria<TRow> = Predicate<TRow> & {
-    metadata: Array<Pair>;
+export declare type Criteria<TRow> = {
+    predicate: Predicate<TRow>;
+    metadata: Array<Pair<Value, Key>>;
 };
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
 export declare type Dimension<TRow> = Array<Criteria<TRow>>;
@@ -20,11 +21,10 @@ export declare type Cube<TSource> = Matrix<Array<TSource>>;
 /**
  * Returns a distinct list of values for a column of a table.
  * @param table The source data, an array of rows.
- * @param key The column name to find the distinct values for.
  * @param getValue An optional callback to derive values from the source data.
  * @returns Returns the distinct set of values for the key
  */
-export declare const distinct: <TRow extends Row>(table: TRow[], key: Key, getValue?: Callback<TRow, any>) => Array<Value>;
+export declare const distinct: <TRow extends Row>(table: TRow[], getValue: Callback<TRow, any>) => Array<Value>;
 /**
  * Creates a dimension from an array of values.
  * @param values A distinct list of values for the dimension.

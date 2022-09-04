@@ -3,7 +3,7 @@ import * as pivot from '..';
 
 // create dimensions derived from the squad data
 const x = pivot.dimension(['Goalkeeper', 'Defender', 'Midfielder', 'Forward'], 'position');
-const y = pivot.dimension(pivot.distinct(squad, 'country').sort(), 'country');
+const y = pivot.dimension(pivot.distinct(squad, player => player.country).sort(), 'country');
 
 // create the pivot cube from the squad data using position and country for x and y axes
 let cube = pivot.cube(squad, y, x);

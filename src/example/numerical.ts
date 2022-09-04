@@ -13,7 +13,7 @@ const data = [
 const x = pivot.dimension([1, 2, 3], 0);
 
 // create a dimension with derived values for the second element in the data.
-const y = pivot.dimension(pivot.distinct(data, 1), 1);
+const y = pivot.dimension(pivot.distinct(data, row => row[1]), 1);
 
 // create a cube from the data using the x and y dimensions
 const cube = pivot.cube(data, x, y);
