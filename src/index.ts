@@ -32,15 +32,7 @@ export type Cube<TSource> = Matrix<Array<TSource>>;
  * @returns Returns the distinct set of values for the key
  */
 export const distinct = <TRow extends Row>(table: Array<TRow>, key: Key, getValue: Callback<TRow, Value> = (row: TRow) => row[key]): Array<Value> =>
-	table.reduce((result: Array<Value>, row: TRow) => {
-		var value = getValue(row);
-
-		if (!result.includes(value)) {
-			result.push(value);
-		}
-
-		return result;
-	}, []);
+	[...new Set(table.map(getValue))];
 
 /**
  * Creates a dimension from an array of values.
