@@ -84,8 +84,8 @@
 		];
 
 		// create axes out of the dimensions derived from the squad data
-		const country = pivot.dimension(pivot.distinct(squad, 'country').sort(), 'country');
-		const position = pivot.dimension(pivot.distinct(squad, 'position').sort(), 'position', labelled('position', 'Label'));
+		const country = pivot.dimension(pivot.distinct(squad, 'country').sort(), 'country', labelled('country', 'Label'));
+		const position = pivot.dimension(['Goalkeeper', 'Defender', 'Midfielder', 'Forward'], 'position', labelled('position', 'Label'));
 
 		// create the pivot cube
 		const cube = pivot.cube(squad, country, position);
@@ -95,9 +95,9 @@
 
 		document.getElementById("squad").innerHTML =
 			`<thead>` +
-			position[0].map((_c, ii) => `<tr>${country[0].map(() => `<td></td>`).join('')}${position.map(c => th(c[ii])).join('')}</tr>`).join('') +
+			position[0].metadata.map((_, pi) => `<tr>${position[0].metadata.map(() => '<th></th>').join('')}${position.map(c => th(c.metadata[pi])).join('')}</tr>`).join('') +
 			`</thead>` +
-			result.map((row, i) => `<tr>${country[i].map(th).join('')}${row.map(cell => td(cell || '', '')).join('')}</tr>`).join('');
+			result.map((row, i) => `<tr>${country[i].metadata.map(th).join('')}${row.map(cell => td(cell || '', '')).join('')}</tr>`).join('');
 
 		// generate a header cell in a table
 		function th(data) {
@@ -115,10 +115,13 @@
 		}
 
 		function labelled(key, label) {
-			return value => [
-				Object.assign(() => true, { key: label, value: key }),	 
-				Object.assign(row => row[key] === value, { key, value })
-			];
+			return value => Object.assign(row => row[key] === value,
+				{
+					metadata: [
+						{ key: label, value: key },
+						{ key, value }
+					]
+				});
 		}
 	</script>
 </body>

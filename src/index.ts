@@ -9,11 +9,8 @@ export type Key = Exclude<keyof Value, Symbol>;
 /** The type of rows supported. */
 export type Row = { [key in Key]: Value };
 
-/** A single predicate and associated metadata used to help determine if a row of data is associated with a point of a dimension. */
-export type Criterion<TRow> = Predicate<TRow> & Pair;
-
 /** A set of predicates and associated metadata used to determine if a row of data is associated with a point of a dimension. */
-export type Criteria<TRow> = Array<Criterion<TRow>>;
+export type Criteria<TRow> = Predicate<TRow> & { metadata: Array<Pair> };
 
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
 export type Dimension<TRow> = Array<Criteria<TRow>>;
@@ -41,7 +38,7 @@ export const distinct = <TRow extends Row>(table: Array<TRow>, key: Key, getValu
  * @param createCriteria An optional callback to build the dimensions criteria.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export const dimension = <TRow extends Row>(values: Array<Value>, key: Key, createCriteria: Callback<Value, Criteria<TRow>> = (value: Value) => [Object.assign((row: TRow) => row[key] === value, { key, value })]): Dimension<TRow> =>
+export const dimension = <TRow extends Row>(values: Array<Value>, key: Key, createCriteria: Callback<Value, Criteria<TRow>> = (value: Value) => Object.assign((row: TRow) => row[key] === value, { metadata: [{ key, value }] })): Dimension<TRow> =>
 	values.map(createCriteria);
 
 /**
@@ -62,7 +59,7 @@ export const cube = <TRow>(table: Array<TRow>, y: Dimension<TRow>, x: Dimension<
 export const slice = <TSource>(dimension: Dimension<TSource>): Function<Array<TSource>, Matrix<TSource>> =>
 	(source: Array<TSource>) => dimension.map((criteria: Criteria<TSource>) => {
 		// perform the filter; for items that don't pass the criteria, pack them at the start of the source
-		let length = 0, result = source.filter((row: TSource) => criteria.every((criterion: Criterion<TSource>) => criterion(row)) || !(source[length++] = row));
+		let length = 0, result = source.filter((row: TSource) => criteria(row) || !(source[length++] = row));
 
 		// trim the source to just the unfiltered items in order to test less items on next iteration 
 		source.length = length;

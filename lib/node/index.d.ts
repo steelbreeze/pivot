@@ -7,10 +7,10 @@ export declare type Key = Exclude<keyof Value, Symbol>;
 export declare type Row = {
     [key in Key]: Value;
 };
-/** A single predicate and associated metadata used to help determine if a row of data is associated with a point of a dimension. */
-export declare type Criterion<TRow> = Predicate<TRow> & Pair;
 /** A set of predicates and associated metadata used to determine if a row of data is associated with a point of a dimension. */
-export declare type Criteria<TRow> = Array<Criterion<TRow>>;
+export declare type Criteria<TRow> = Predicate<TRow> & {
+    metadata: Array<Pair>;
+};
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
 export declare type Dimension<TRow> = Array<Criteria<TRow>>;
 /** A matrix is a two-dimensional data structure. */

@@ -2,7 +2,7 @@ import { Player, squad } from './fulham';
 import * as pivot from '..';
 
 // create dimensions derived from the squad data
-const x = pivot.dimension(pivot.distinct(squad, 'position').sort(), 'position');
+const x = pivot.dimension(['Goalkeeper', 'Defender', 'Midfielder', 'Forward'], 'position');
 const y = pivot.dimension(pivot.distinct(squad, 'country').sort(), 'country');
 
 // create the pivot cube from the squad data using position and country for x and y axes
@@ -17,8 +17,8 @@ function age(person: Player): number {
 }
 
 // ugly code to pretty print the result with axes
-console.log(`\t${x.map(c => print(c[0].value)).join('\t')}`);
-result.forEach((row, i) => console.log(`${print(y[i][0].value)}\t${row.map(print).join('\t')}`));
+console.log(`\t${x.map(c => print(c.metadata[0].value)).join('\t')}`);
+result.forEach((row, i) => console.log(`${print(y[i].metadata[0].value)}\t${row.map(print).join('\t')}`));
 
 // Print a value in 7 characters and truncate with ellipsis
 function print(value: any) {
