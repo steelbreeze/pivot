@@ -4,7 +4,7 @@
 <head>
 	<title>steelbreeze/pivot</title>
 	<style>
-		@import url("https://cdn.jsdelivr.net/npm/holiday.css@0.9.8");
+				@import url("https://cdn.jsdelivr.net/npm/holiday.css@0.9.8");
 
 		th {
 			text-align: left;
@@ -47,10 +47,10 @@
 	</footer>
 	<script src="./dist/pivot.min.js"></script>
 	<script type="module">
-		import * as footer from 'https://steelbreeze.net/footer.js';
-
-		footer.init('https://api.github.com/repos/steelbreeze/pivot');
-
+				import * as footer from 'https://steelbreeze.net/footer.js';
+		
+				footer.init('https://api.github.com/repos/steelbreeze/pivot');
+		
 		const squad = [
 			{ shirt: 1, position: 'Goalkeeper', givenName: 'Alphonse', familyName: 'Areola', country: 'France', dateOfBirth: new Date('1993-02-27') },
 			{ shirt: 12, position: 'Goalkeeper', givenName: 'Marek', familyName: 'Rodak', country: 'Slovakia', dateOfBirth: new Date('1996-12-13') },
@@ -81,8 +81,8 @@
 		];
 
 		// create axes out of the dimensions derived from the squad data
-		const country = pivot.dimension(pivot.distinct(squad, player => player.country).sort(), 'country'/*, labelled('country', 'Label')*/);
-		const position = pivot.dimension(['Goalkeeper', 'Defender', 'Midfielder', 'Forward'], 'position'/*, labelled('position', 'Label')*/);
+		const country = pivot.dimension(pivot.distinct(squad, player => player.country).sort(), 'country', labelled('country', 'Label'));
+		const position = pivot.dimension(['Goalkeeper', 'Defender', 'Midfielder', 'Forward'], 'position', labelled('position', 'Label'));
 
 		// create the pivot cube
 		const cube = pivot.cube(squad, country, position);
@@ -112,13 +112,14 @@
 		}
 
 		function labelled(key, label) {
-			return value => ({
-				predicate: row => row[key] === value,
-				metadata: [
-					{ key: label, value: key },
-					{ key, value }
-				]
-			});
+			return value => Object.assign(
+				row => row[key] === value,
+				{
+					metadata: [
+						{ key: label, value: key },
+						{ key, value }
+					]
+				});
 		}
 	</script>
 </body>

@@ -8,8 +8,7 @@ export declare type Row = {
     [key in Key]: Value;
 };
 /** A set of predicates and associated metadata used to determine if a row of data is associated with a point of a dimension. */
-export declare type Criteria<TRow> = {
-    predicate: Predicate<TRow>;
+export declare type Criteria<TRow> = Predicate<TRow> & {
     metadata: Array<Pair<Value, Key>>;
 };
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
