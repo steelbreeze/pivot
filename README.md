@@ -23,7 +23,7 @@ import * as pivot from 'https://cdn.skypack.dev/@steelbreeze/pivot';
 ```
 
 ## Documentation
-The documentation can be found [here](http://steelbreeze.net/pivot/api/v2), and more discussion in the [Wiki](https://github.com/steelbreeze/pivot/wiki).
+The documentation can be found [here](http://steelbreeze.net/pivot/api/v3), and more discussion in the [Wiki](https://github.com/steelbreeze/pivot/wiki).
 
 ## Example
 The following is the result of pivoting publicly available information about the Fulham Football Club [men's squad](https://web.archive.org/web/20210516151437/https://www.fulhamfc.com/teams) at the end of the 2020/21 season, calculating the average age of players by position and country.
