@@ -8,9 +8,12 @@ export declare type Row = {
     [key in Key]: Value;
 };
 /** A set of predicates and associated metadata used to determine if a row of data is associated with a point of a dimension. */
-export declare type Criteria<TRow> = Predicate<TRow> & {
+export interface Criteria<TRow> {
+    /** The callback function used to test if a record fulfils the criteria. */
+    predicate: Predicate<TRow>;
+    /** A set of metadata used to describe the criteria. */
     metadata: Array<Pair<Value, Key>>;
-};
+}
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
 export declare type Dimension<TRow> = Array<Criteria<TRow>>;
 /** A matrix is a two-dimensional data structure. */
