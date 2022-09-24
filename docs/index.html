@@ -112,13 +112,14 @@
 		}
 
 		function labelled(key, label) {
-			return value => ({
-				predicate: row => row[key] === value,
-				metadata: [
-					{ key: label, value: key },
-					{ key, value }
-				]
-			});
+			return value => Object.assign(
+				row => row[key] === value,
+				{
+					metadata: [
+						{ key: label, value: key },
+						{ key, value }
+					]
+				});
 		}
 	</script>
 </body>

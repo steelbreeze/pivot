@@ -13,7 +13,7 @@ const data = [
 const x = pivot.dimension([1, 2, 3], 'a');
 
 // create a dimension with derived values for the property 'b' in the data.
-const y = pivot.dimension(pivot.distinct(data, row => row.b), 'b');
+const y = pivot.dimension(data.map(row => row.b).filter((value, index, source) => source.indexOf(value) === index), 'b');
 
 // create a cube from the data using the x and y dimensions
 const cube = pivot.cube(data, x, y);
