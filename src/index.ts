@@ -4,7 +4,7 @@ import { Callback, Pair, Predicate } from '@steelbreeze/types';
 export type Value = any;
 
 /** The type of keys supported. */
-export type Key = Exclude<keyof Value, Symbol>;
+export type Key = keyof Value;
 
 /** The type of rows supported. */
 export type Row = { [key in Key]: Value };

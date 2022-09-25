@@ -2,7 +2,7 @@ import { Callback, Pair, Predicate } from '@steelbreeze/types';
 /** The type of values that can be in a row. */
 export declare type Value = any;
 /** The type of keys supported. */
-export declare type Key = Exclude<keyof Value, Symbol>;
+export declare type Key = keyof Value;
 /** The type of rows supported. */
 export declare type Row = {
     [key in Key]: Value;
