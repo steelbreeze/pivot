@@ -6,9 +6,6 @@ export type Value = any;
 /** The type of keys supported. */
 export type Key = keyof Value;
 
-/** The type of rows supported. */
-export type Row = { [key in Key]: Value };
-
 /** A predicate used to determine if a row of data is associated with a point of a dimension and its associated metadata (used for labelling purposes). */
 export type Criteria<TRow> = Predicate<TRow> & { metadata: Array<Pair<Key, Value>> };
 
@@ -28,7 +25,7 @@ export type Cube<TSource> = Matrix<Array<TSource>>;
  * @param createCriteria An optional callback to build the dimensions criteria.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export const dimension = <TRow extends Row>(values: Array<Value>, key: Key, createCriteria: Callback<Value, Criteria<TRow>> = (value: Value) => Object.assign((row: TRow) => row[key] === value, { metadata: [{ key, value }] })): Dimension<TRow> =>
+export const dimension = <TRow extends Record<Key, Value>>(values: Array<Value>, key: Key, createCriteria: Callback<Value, Criteria<TRow>> = (value: Value) => Object.assign((row: TRow) => row[key] === value, { metadata: [{ key, value }] })): Dimension<TRow> =>
 	values.map(createCriteria);
 
 /**

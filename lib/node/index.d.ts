@@ -3,10 +3,6 @@ import { Callback, Pair, Predicate } from '@steelbreeze/types';
 export declare type Value = any;
 /** The type of keys supported. */
 export declare type Key = keyof Value;
-/** The type of rows supported. */
-export declare type Row = {
-    [key in Key]: Value;
-};
 /** A predicate used to determine if a row of data is associated with a point of a dimension and its associated metadata (used for labelling purposes). */
 export declare type Criteria<TRow> = Predicate<TRow> & {
     metadata: Array<Pair<Key, Value>>;
@@ -24,7 +20,7 @@ export declare type Cube<TSource> = Matrix<Array<TSource>>;
  * @param createCriteria An optional callback to build the dimensions criteria.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export declare const dimension: <TRow extends Row>(values: Array<Value>, key: Key, createCriteria?: Callback<any, Criteria<TRow>>) => Dimension<TRow>;
+export declare const dimension: <TRow extends Record<string | number | symbol, any>>(values: Array<Value>, key: Key, createCriteria?: Callback<any, Criteria<TRow>>) => Dimension<TRow>;
 /**
  * Pivots a table by two axes
  * @param table The source data, an array of rows.
