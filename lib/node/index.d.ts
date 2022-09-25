@@ -49,10 +49,10 @@ export declare const select: <TSource, TResult>(selector: Callback<TSource, TRes
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row of source data.
  */
-export declare const sum: <TSource>(selector: Callback<TSource, number>) => Function<TSource[], number>;
+export declare const sum: <TSource>(selector: Function<TSource, number>) => Function<TSource[], number>;
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row of source data.
  * @returns Returns a callback function that can be passed into the map function returning the average of the values for a cell or NaN if there are no values in that cell.
  */
-export declare const average: <TSource>(selector: Callback<TSource, number>) => Function<TSource[], number>;
+export declare const average: <TSource>(selector: Function<TSource, number>) => Function<TSource[], number>;
