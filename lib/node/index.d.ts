@@ -7,7 +7,7 @@ export declare type Key = Exclude<keyof Value, Symbol>;
 export declare type Row = {
     [key in Key]: Value;
 };
-/** A set of predicates and associated metadata used to determine if a row of data is associated with a point of a dimension. */
+/** A predicate used to determine if a row of data is associated with a point of a dimension and its associated metadata (used for labelling purposes). */
 export declare type Criteria<TRow> = Predicate<TRow> & {
     metadata: Array<Pair<Value, Key>>;
 };
