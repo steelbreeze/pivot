@@ -1,4 +1,4 @@
-import { Callback, Pair, Predicate } from '@steelbreeze/types';
+import { Callback, Function, Pair, Predicate } from '@steelbreeze/types';
 
 /** The type of values that can be in the source data. */
 export type Value = any;
@@ -22,11 +22,11 @@ export type Cube<TSource> = Matrix<Array<TSource>>;
  * Creates a dimension from an array of values.
  * @param values A distinct list of values for the dimension.
  * @param key The name to give this dimension.
- * @param createCriteria An optional callback to build the dimensions criteria.
+ * @param callback An optional callback to build the dimensions criteria.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export const dimension = <TSource extends Record<Key, Value>>(values: Array<Value>, key: Key, createCriteria: Callback<Value, Criteria<TSource>> = value => Object.assign((source: TSource) => source[key] === value, { metadata: [{ key, value }] })): Dimension<TSource> =>
-	values.map(createCriteria);
+export const dimension = <TSource extends Record<Key, Value>>(values: Array<Value>, key: Key, callback: Callback<Value, Criteria<TSource>> = value => Object.assign((source: TSource) => source[key] === value, { metadata: [{ key, value }] })): Dimension<TSource> =>
+	values.map(callback);
 
 /**
  * Pivots a table by two axes
@@ -50,21 +50,21 @@ export const map = <TSource, TResult>(source: Matrix<TSource>, selector: Callbac
  * A generator, used to filter data within a cube.
  * @param predicate A predicate to test source data to see if it should be included in the filter results.
  */
-export const filter = <TSource>(predicate: Callback<TSource, boolean>): Callback<Array<TSource>, Array<TSource>> =>
+export const filter = <TSource>(predicate: Callback<TSource, boolean>): Function<Array<TSource>, Array<TSource>> =>
 	source => source.filter(predicate);
 
 /**
  * A generator, used to transform the source data in a cube to another representation.
  * @param selector A function to transform a source record into the desired result.
  */
-export const select = <TSource, TResult>(selector: Callback<TSource, TResult>): Callback<Array<TSource>, Array<TResult>> =>
+export const select = <TSource, TResult>(selector: Callback<TSource, TResult>): Function<Array<TSource>, Array<TResult>> =>
 	source => source.map(selector);
 
 /**
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row of source data.
  */
-export const sum = <TSource>(selector: Callback<TSource, number>): Callback<Array<TSource>, number> =>
+export const sum = <TSource>(selector: Callback<TSource, number>): Function<Array<TSource>, number> =>
 	source => source.reduce((total, source) => total + selector(source), 0);
 
 /**
@@ -72,5 +72,5 @@ export const sum = <TSource>(selector: Callback<TSource, number>): Callback<Arra
  * @param selector A callback function to derive a numerical value for each row of source data.
  * @returns Returns a callback function that can be passed into the map function returning the average of the values for a cell or NaN if there are no values in that cell.
  */
-export const average = <TSource>(selector: Callback<TSource, number>): Callback<Array<TSource>, number> =>
+export const average = <TSource>(selector: Callback<TSource, number>): Function<Array<TSource>, number> =>
 	source => sum(selector)(source) / source.length;
