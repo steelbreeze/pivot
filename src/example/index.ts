@@ -5,8 +5,12 @@ import * as pivot from '..';
 const x = pivot.dimension(['Goalkeeper', 'Defender', 'Midfielder', 'Forward'], 'position');
 const y = pivot.dimension(squad.map(player => player.country).filter((value, index, source) => source.indexOf(value) === index).sort(), 'country');
 
+console.time('Cube creation');
+
 // create the pivot cube from the squad data using position and country for x and y axes
 let cube = pivot.cube(squad, y, x);
+
+console.timeEnd('Cube creation');
 
 // find the average age of players by position by country
 const result = pivot.map(cube, pivot.average(age));

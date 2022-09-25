@@ -39,7 +39,7 @@ export const dimension = <TRow extends Row>(values: Array<Value>, key: Key, crea
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
 export const cube = <TRow>(table: Array<TRow>, y: Dimension<TRow>, x: Dimension<TRow>): Cube<TRow> =>
-	slice(y)([...table]).map(slice(x));
+	slice(y)(table).map(slice(x));
 
 /**
  * Generates a function to slice data by the criteria specified in a dimension.
@@ -47,15 +47,7 @@ export const cube = <TRow>(table: Array<TRow>, y: Dimension<TRow>, x: Dimension<
  * @returns Returns a function that will take a table and slice it into an array of tables each conforming to the criteria of a point on a dimension.
  */
 export const slice = <TSource>(dimension: Dimension<TSource>): Function<Array<TSource>, Matrix<TSource>> =>
-	(source: Array<TSource>) => dimension.map((criteria: Criteria<TSource>) => {
-		// perform the filter; for items that don't pass the criteria, pack them at the start of the source
-		let length = 0, result = source.filter((row: TSource) => criteria(row) || !(source[length++] = row));
-
-		// trim the source to just the unfiltered items in order to test less items on next iteration 
-		source.length = length;
-
-		return result;
-	});
+	(source: Array<TSource>) => dimension.map((criteria: Criteria<TSource>) => source.filter(criteria));
 
 /**
  * Queries data from a cube, or any matrix structure.
