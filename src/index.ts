@@ -39,7 +39,7 @@ export const dimension = <TRow extends Row>(values: Array<Value>, key: Key, crea
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
 export const cube = <TRow>(table: Array<TRow>, y: Dimension<TRow>, x: Dimension<TRow>): Cube<TRow> =>
-	y.map(yCriteria => table.filter(yCriteria)).map(slice => x.map(xCriteria => slice.filter(xCriteria)));
+	y.map((yCriteria: Criteria<TRow>) => table.filter(yCriteria)).map((slice: Array<TRow>) => x.map((xCriteria: Criteria<TRow>) => slice.filter(xCriteria)));
 
 /**
  * Queries data from a cube, or any matrix structure.
