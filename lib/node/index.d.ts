@@ -23,12 +23,12 @@ export declare type Cube<TSource> = Matrix<Array<TSource>>;
 export declare const dimension: <TSource extends Record<string | number | symbol, any>>(values: Array<Value>, key: Key, createCriteria?: Callback<any, Criteria<TSource>>) => Dimension<TSource>;
 /**
  * Pivots a table by two axes
- * @param table The source data, an array of rows.
+ * @param source The source data, an array of records.
  * @param y The dimension to use for the y axis.
  * @param x The dimension to use for the x axis.
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
-export declare const cube: <TSource>(table: TSource[], y: Dimension<TSource>, x: Dimension<TSource>) => Cube<TSource>;
+export declare const cube: <TSource>(source: TSource[], y: Dimension<TSource>, x: Dimension<TSource>) => Cube<TSource>;
 /**
  * Queries data from a cube, or any matrix structure.
  * @param source The source data.
