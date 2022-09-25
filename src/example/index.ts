@@ -2,8 +2,8 @@ import { Player, squad } from './fulham';
 import * as pivot from '..';
 
 // create dimensions derived from the squad data
-const x = pivot.dimension(['Goalkeeper', 'Defender', 'Midfielder', 'Forward'], 'position');
-const y = pivot.dimension(squad.map(player => player.country).filter((value, index, source) => source.indexOf(value) === index).sort(), 'country');
+const x = pivot.dimension('position', ['Goalkeeper', 'Defender', 'Midfielder', 'Forward']);
+const y = pivot.dimension('country', squad.map(player => player.country).filter((value, index, source) => source.indexOf(value) === index).sort());
 
 console.time('Cube creation');
 

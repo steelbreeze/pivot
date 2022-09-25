@@ -22,10 +22,10 @@ export type Cube<TSource> = Matrix<Array<TSource>>;
  * Creates a dimension from an array of values.
  * @param values A distinct list of values for the dimension.
  * @param key The name to give this dimension.
- * @param callback An optional callback to build the dimensions criteria.
+ * @param callback An optional callback to build the dimensions criteria for each of the values provided.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export const dimension = <TSource extends Record<Key, Value>>(values: Array<Value>, key: Key, callback: Callback<Value, Criteria<TSource>> = value => Object.assign((source: TSource) => source[key] === value, { metadata: [{ key, value }] })): Dimension<TSource> =>
+export const dimension = <TSource extends Record<Key, Value>>(key: Key, values: Array<Value>, callback: Callback<Value, Criteria<TSource>> = value => Object.assign((source: TSource) => source[key] === value, { metadata: [{ key, value }] })): Dimension<TSource> =>
 	values.map(callback);
 
 /**
@@ -41,36 +41,36 @@ export const cube = <TSource>(source: Array<TSource>, y: Dimension<TSource>, x: 
 /**
  * Queries data from a cube, or any matrix structure.
  * @param source The source data.
- * @param selector A callback function to create a result from each cell of the cube.
+ * @param callback A callback function to create a result from each cell of the cube.
  */
-export const map = <TSource, TResult>(source: Matrix<TSource>, selector: Callback<TSource, TResult>): Matrix<TResult> =>
-	source.map(slice => slice.map(selector));
+export const map = <TSource, TResult>(source: Matrix<TSource>, callback: Callback<TSource, TResult>): Matrix<TResult> =>
+	source.map(slice => slice.map(callback));
 
 /**
  * A generator, used to filter data within a cube.
- * @param predicate A predicate to test source data to see if it should be included in the filter results.
+ * @param callback A predicate to test source data to see if it should be included in the filter results.
  */
-export const filter = <TSource>(predicate: Callback<TSource, boolean>): Function<Array<TSource>, Array<TSource>> =>
-	source => source.filter(predicate);
+export const filter = <TSource>(callback: Callback<TSource, boolean>): Function<Array<TSource>, Array<TSource>> =>
+	source => source.filter(callback);
 
 /**
  * A generator, used to transform the source data in a cube to another representation.
- * @param selector A function to transform a source record into the desired result.
+ * @param callback A function to transform a source record into the desired result.
  */
-export const select = <TSource, TResult>(selector: Callback<TSource, TResult>): Function<Array<TSource>, Array<TResult>> =>
-	source => source.map(selector);
+export const select = <TSource, TResult>(callback: Callback<TSource, TResult>): Function<Array<TSource>, Array<TResult>> =>
+	source => source.map(callback);
 
 /**
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row of source data.
  */
-export const sum = <TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number> =>
-	source => source.reduce((total, source) => total + selector(source), 0);
+export const sum = <TSource>(callback: Function<TSource, number>): Function<Array<TSource>, number> =>
+	source => source.reduce((total, source) => total + callback(source), 0);
 
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row of source data.
  * @returns Returns a callback function that can be passed into the map function returning the average of the values for a cell or NaN if there are no values in that cell.
  */
-export const average = <TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number> =>
-	source => sum(selector)(source) / source.length;
+export const average = <TSource>(callback: Function<TSource, number>): Function<Array<TSource>, number> =>
+	source => sum(callback)(source) / source.length;

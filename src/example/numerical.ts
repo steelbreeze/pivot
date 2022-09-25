@@ -10,10 +10,10 @@ const data = [
 ];
 
 // create a dimension with pre-defined values for the first element in the data.
-const x = pivot.dimension([1, 2, 3], 0);
+const x = pivot.dimension(0, [1, 2, 3]);
 
 // create a dimension with derived values for the second element in the data.
-const y = pivot.dimension(data.map(row => row[1]).filter((value, index, source) => source.indexOf(value) === index), 1);
+const y = pivot.dimension(1, data.map(row => row[1]).filter((value, index, source) => source.indexOf(value) === index));
 
 // create a cube from the data using the x and y dimensions
 const cube = pivot.cube(data, x, y);
