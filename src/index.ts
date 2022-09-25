@@ -1,4 +1,4 @@
-import { Callback, Function, Pair, Predicate } from '@steelbreeze/types';
+import { Callback, Pair, Predicate } from '@steelbreeze/types';
 
 /** The type of values that can be in a row. */
 export type Value = any;
@@ -39,15 +39,7 @@ export const dimension = <TRow extends Row>(values: Array<Value>, key: Key, crea
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
 export const cube = <TRow>(table: Array<TRow>, y: Dimension<TRow>, x: Dimension<TRow>): Cube<TRow> =>
-	slice(y)(table).map(slice(x));
-
-/**
- * Generates a function to slice data by the criteria specified in a dimension.
- * @param dimension The dimension to generate the slicer for.
- * @returns Returns a function that will take a table and slice it into an array of tables each conforming to the criteria of a point on a dimension.
- */
-export const slice = <TSource>(dimension: Dimension<TSource>): Function<Array<TSource>, Matrix<TSource>> =>
-	(source: Array<TSource>) => dimension.map((criteria: Criteria<TSource>) => source.filter(criteria));
+	y.map(yCriteria => table.filter(yCriteria)).map(slice => x.map(xCriteria => slice.filter(xCriteria)));
 
 /**
  * Queries data from a cube, or any matrix structure.
