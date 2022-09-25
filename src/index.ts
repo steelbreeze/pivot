@@ -4,7 +4,7 @@ import { Callback, Function, Pair, Predicate } from '@steelbreeze/types';
 export type Value = any;
 
 /** The type of keys supported. */
-export type Key = keyof Value;
+export type Key = string | number;
 
 /** A predicate used to determine if source data is associated with a point of a dimension and its associated metadata (used for labelling purposes). */
 export type Criteria<TSource> = Predicate<TSource> & { metadata: Array<Pair<Key, Value>> };

@@ -2,7 +2,7 @@ import { Callback, Function, Pair, Predicate } from '@steelbreeze/types';
 /** The type of values that can be in the source data. */
 export declare type Value = any;
 /** The type of keys supported. */
-export declare type Key = keyof Value;
+export declare type Key = string | number;
 /** A predicate used to determine if source data is associated with a point of a dimension and its associated metadata (used for labelling purposes). */
 export declare type Criteria<TSource> = Predicate<TSource> & {
     metadata: Array<Pair<Key, Value>>;
@@ -20,7 +20,7 @@ export declare type Cube<TSource> = Matrix<Array<TSource>>;
  * @param callback An optional callback to build the dimensions criteria for each of the values provided.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export declare const dimension: <TSource extends Record<string | number | symbol, any>>(key: Key, values: Array<Value>, callback?: Callback<any, Criteria<TSource>>) => Dimension<TSource>;
+export declare const dimension: <TSource extends Record<Key, any>>(key: Key, values: Array<Value>, callback?: Callback<any, Criteria<TSource>>) => Dimension<TSource>;
 /**
  * Pivots a table by two axes
  * @param source The source data, an array of records.
