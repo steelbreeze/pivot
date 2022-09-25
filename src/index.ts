@@ -10,7 +10,7 @@ export type Key = keyof Value;
 export type Row = { [key in Key]: Value };
 
 /** A predicate used to determine if a row of data is associated with a point of a dimension and its associated metadata (used for labelling purposes). */
-export type Criteria<TRow> = Predicate<TRow> & { metadata: Array<Pair<Value, Key>> };
+export type Criteria<TRow> = Predicate<TRow> & { metadata: Array<Pair<Key, Value>> };
 
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
 export type Dimension<TRow> = Array<Criteria<TRow>>;

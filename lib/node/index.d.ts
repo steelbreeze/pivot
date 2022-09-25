@@ -9,7 +9,7 @@ export declare type Row = {
 };
 /** A predicate used to determine if a row of data is associated with a point of a dimension and its associated metadata (used for labelling purposes). */
 export declare type Criteria<TRow> = Predicate<TRow> & {
-    metadata: Array<Pair<Value, Key>>;
+    metadata: Array<Pair<Key, Value>>;
 };
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
 export declare type Dimension<TRow> = Array<Criteria<TRow>>;
