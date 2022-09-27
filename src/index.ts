@@ -36,7 +36,7 @@ export const dimension = <TSource extends Record<Key, Value>>(key: Key, values: 
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
 export const cube = <TSource>(source: Array<TSource>, y: Dimension<TSource>, x: Dimension<TSource>): Cube<TSource> =>
-	y.map(slice([...source])).map(table => x.map(slice(table)));
+	y.map(slicer([...source])).map(table => x.map(slicer(table)));
 
 /**
  * Queries data from a cube, or any matrix structure.
@@ -79,7 +79,7 @@ export const average = <TSource>(callback: Function<TSource, number>): Function<
  * Creates a call back used to slice and dice source data by a dimension.
  * @hidden 
  */
-const slice = <TSource>(source: Array<TSource>): Function<Criteria<TSource>, Array<TSource>> => {
+const slicer = <TSource>(source: Array<TSource>): Function<Criteria<TSource>, Array<TSource>> => {
 	return (criteria: Criteria<TSource>) => {
 		let length = 0, result = source.filter(value => criteria(value) || !(source[length++] = value));
 
