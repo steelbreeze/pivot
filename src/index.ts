@@ -36,7 +36,7 @@ export const dimension = <TSource extends Record<Key, Value>>(key: Key, values: 
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
 export const cube = <TSource>(source: Array<TSource>, y: Dimension<TSource>, x: Dimension<TSource>): Cube<TSource> =>
-	y.map(slicer([...source])).map(table => x.map(slicer(table)));
+	y.map(slicer([...source])).map(slice => x.map(slicer(slice)));
 
 /**
  * Queries data from a cube, or any matrix structure.
