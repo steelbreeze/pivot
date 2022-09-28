@@ -4,15 +4,15 @@ export declare type Value = any;
 /** The type of keys supported. */
 export declare type Key = string | number;
 /** A predicate used to determine if source data is associated with a point of a dimension and its associated metadata (used for labelling purposes). */
-export declare type Criteria<TSource> = Predicate<TSource> & {
+export declare type Criteria<TRecord> = Predicate<TRecord> & {
     metadata: Array<Pair<Key, Value>>;
 };
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
-export declare type Dimension<TSource> = Array<Criteria<TSource>>;
+export declare type Dimension<TRecord> = Array<Criteria<TRecord>>;
 /** A matrix is a two-dimensional data structure. */
-export declare type Matrix<TSource> = Array<Array<TSource>>;
+export declare type Matrix<TRecord> = Array<Array<TRecord>>;
 /** A cube of data. */
-export declare type Cube<TSource> = Matrix<Array<TSource>>;
+export declare type Cube<TRecord> = Matrix<Array<TRecord>>;
 /**
  * Creates a dimension from an array of values.
  * @param values A distinct list of values for the dimension.
@@ -20,7 +20,7 @@ export declare type Cube<TSource> = Matrix<Array<TSource>>;
  * @param callback An optional callback to build the dimensions criteria for each of the values provided.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export declare const dimension: <TSource extends Record<Key, any>>(key: Key, values: Array<Value>, callback?: Callback<any, Criteria<TSource>>) => Dimension<TSource>;
+export declare const dimension: <TRecord extends Record<Key, any>>(key: Key, values: Array<Value>, callback?: Callback<any, Criteria<TRecord>>) => Dimension<TRecord>;
 /**
  * Pivots a table by two axes
  * @param source The source data, an array of records.
@@ -28,31 +28,31 @@ export declare const dimension: <TSource extends Record<Key, any>>(key: Key, val
  * @param x The dimension to use for the x axis.
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
-export declare const cube: <TSource>(source: TSource[], y: Dimension<TSource>, x: Dimension<TSource>) => Cube<TSource>;
+export declare const cube: <TRecord>(source: TRecord[], y: Dimension<TRecord>, x: Dimension<TRecord>) => Cube<TRecord>;
 /**
  * Queries data from a cube, or any matrix structure.
- * @param source The source data.
+ * @param source The source data, a matrix of records.
  * @param callback A callback function to create a result from each cell of the cube.
  */
-export declare const map: <TSource, TResult>(source: Matrix<TSource>, callback: Callback<TSource, TResult>) => Matrix<TResult>;
+export declare const map: <TRecord, TResult>(source: Matrix<TRecord>, callback: Callback<TRecord, TResult>) => Matrix<TResult>;
 /**
  * A generator, used to filter data within a cube.
  * @param callback A predicate to test source data to see if it should be included in the filter results.
  */
-export declare const filter: <TSource>(callback: Callback<TSource, boolean>) => Function<TSource[], TSource[]>;
+export declare const filter: <TRecord>(callback: Callback<TRecord, boolean>) => Function<TRecord[], TRecord[]>;
 /**
  * A generator, used to transform the source data in a cube to another representation.
  * @param callback A function to transform a source record into the desired result.
  */
-export declare const select: <TSource, TResult>(callback: Callback<TSource, TResult>) => Function<TSource[], TResult[]>;
+export declare const select: <TRecord, TResult>(callback: Callback<TRecord, TResult>) => Function<TRecord[], TResult[]>;
 /**
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row of source data.
  */
-export declare const sum: <TSource>(callback: Function<TSource, number>) => Function<TSource[], number>;
+export declare const sum: <TRecord>(callback: Function<TRecord, number>) => Function<TRecord[], number>;
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each row of source data.
  * @returns Returns a callback function that can be passed into the map function returning the average of the values for a cell or NaN if there are no values in that cell.
  */
-export declare const average: <TSource>(callback: Function<TSource, number>) => Function<TSource[], number>;
+export declare const average: <TRecord>(callback: Function<TRecord, number>) => Function<TRecord[], number>;
