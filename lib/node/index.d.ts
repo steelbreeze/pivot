@@ -47,12 +47,12 @@ export declare const filter: <TRecord>(callback: Callback<TRecord, boolean>) => 
 export declare const select: <TRecord, TResult>(callback: Callback<TRecord, TResult>) => Function<TRecord[], TResult[]>;
 /**
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
- * @param selector A callback function to derive a numerical value for each row of source data.
+ * @param selector A callback function to derive a numerical value for each record in the source data.
  */
 export declare const sum: <TRecord>(callback: Function<TRecord, number>) => Function<TRecord[], number>;
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube.
- * @param selector A callback function to derive a numerical value for each row of source data.
+ * @param selector A callback function to derive a numerical value for each record in the source data.
  * @returns Returns a callback function that can be passed into the map function returning the average of the values for a cell or NaN if there are no values in that cell.
  */
 export declare const average: <TRecord>(callback: Function<TRecord, number>) => Function<TRecord[], number>;
