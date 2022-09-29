@@ -36,7 +36,7 @@ export const dimension = <TRecord extends Record<Key, Value>>(key: Key, values: 
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
 export const cube = <TRecord>(source: Array<TRecord>, y: Dimension<TRecord>, x: Dimension<TRecord>): Cube<TRecord> =>
-	y.map(slicer([...source])).map(slice => x.map(slicer(slice)));
+	slicer([...source], y).map(slice => slicer(slice, x));
 
 /**
  * Queries data from a cube, or any matrix structure.
@@ -80,12 +80,11 @@ export const average = <TRecord>(callback: Function<TRecord, number>): Function<
  * Acts just as Array.prototype.filter, but the returned results are removed from the source array meaning less items will be evaluated for the next iteration through a dimensions criteria.
  * @hidden 
  */
-const slicer = <TRecord>(source: Array<TRecord>): Function<Criteria<TRecord>, Array<TRecord>> => {
-	return (criteria: Criteria<TRecord>) => {
+const slicer = <TRecord>(source: Array<TRecord>, dimension: Dimension<TRecord>): Matrix<TRecord> =>
+	dimension.map((criteria: Criteria<TRecord>) => {
 		let length = 0, result = source.filter(record => criteria(record) || !(source[length++] = record));
 
 		source.length = length;
 
 		return result;
-	};
-}
+	});
