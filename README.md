@@ -69,27 +69,26 @@ USA             28
 > The full example code can be found [here](src/example/index.ts).
 
 Alternatively, as can be seen in the [web example](https://steelbreeze.net/pivot), non-numerical content can also be queried, mapping the source data to an arbitrary selection:
-```javascript
-const result = pivot.map(cube, pivot.select(player => `${player.givenName}&nbsp;${player.familyName}`));
-
+```JavaScript
+const result = pivot.map(cube, pivot.select(player => `${player.givenName} ${player.familyName}`));
 ```
  Resulting in this sort of output:
-||Defender|Forward|Goalkeeper|Midfielder|
+||Goalkeeper|Defender|Midfielder|Forward|
 |-|-|-|-|-|
-|**Belgium**|Denis&nbsp;Odoi||||			
-|**Cameroon**||||Andre-Frank&nbsp;Zambo&nbsp;Anguissa|
-|**Denmark**|Joachim&nbsp;Anderson|||
-|**England**|Tosin&nbsp;Abarabioyo, Joe&nbsp;Bryan|Ademola&nbsp;Lookman||Ruben&nbsp;Loftus-Cheek, Harrison&nbsp;Reed, Josh&nbsp;Onomah, Fabio&nbsp;Carvalho|
-|**France**|Terence&nbsp;Kongolo||Alphonse&nbsp;Areola|
-|**Gabon**||||Mario&nbsp;Lemina|
-|**Jamaica**|Michael&nbsp;Hector|Bobby&nbsp;De&nbsp;Cordova-Reid||
-|**Netherlands**|Kenny&nbsp;Tete|||
-|**Nigeria**|Ola Aina|Josh&nbsp;Maja||
-|**Portugal**||Ivan&nbsp;Cavaleiro||
-|**Scotland**||||Kevin&nbsp;McDonald, Tom&nbsp;Cairney|
-|**Serbia**||Aleksander&nbsp;Mitrovic||
-|**Slovakia**|||Marek&nbsp;Rodak|
-|**Spain**|||Fabrico&nbsp;Agosto&nbsp;Ramirez|
-|**USA**|Tim&nbsp;Ream, Antonee&nbsp;Robinson|||
+|**Belgium**||Denis&nbsp;Odoi|||			
+|**Cameroon**|||Andre-Frank&nbsp;Zambo&nbsp;Anguissa||
+|**Denmark**||Joachim&nbsp;Anderson||
+|**England**||Tosin&nbsp;Abarabioyo, Joe&nbsp;Bryan|Ruben&nbsp;Loftus-Cheek, Harrison&nbsp;Reed, Josh&nbsp;Onomah, Fabio&nbsp;Carvalho|Ademola&nbsp;Lookman|
+|**France**|Alphonse&nbsp;Areola|Terence&nbsp;Kongolo||
+|**Gabon**|||Mario&nbsp;Lemina||
+|**Jamaica**||Michael&nbsp;Hector||Bobby&nbsp;De&nbsp;Cordova-Reid|
+|**Netherlands**||Kenny&nbsp;Tete||
+|**Nigeria**||Ola Aina||Josh&nbsp;Maja|
+|**Portugal**||||Ivan&nbsp;Cavaleiro|
+|**Scotland**|||Kevin&nbsp;McDonald, Tom&nbsp;Cairney||
+|**Serbia**||||Aleksander&nbsp;Mitrovic|
+|**Slovakia**|Marek&nbsp;Rodak||||
+|**Spain**|Fabrico&nbsp;Agosto&nbsp;Ramirez||||
+|**USA**||Tim&nbsp;Ream, Antonee&nbsp;Robinson|||
 
 > Data and calculations correct as of: 2021-05-23.
