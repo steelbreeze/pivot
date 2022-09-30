@@ -1,5 +1,5 @@
-import { Player, squad } from './fulham';
 import * as pivot from '..';
+import { Player, squad } from './fulham';
 
 const x = pivot.dimension('position', ['Goalkeeper', 'Defender', 'Midfielder', 'Forward']);
 const y = pivot.dimension('country', squad.map(player => player.country).filter((value, index, source) => source.indexOf(value) === index).sort());
