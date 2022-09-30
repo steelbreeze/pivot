@@ -1,7 +1,6 @@
 import { Player, squad } from './fulham';
 import * as pivot from '..';
 
-// create dimensions derived from the squad data
 const x = pivot.dimension('position', ['Goalkeeper', 'Defender', 'Midfielder', 'Forward']);
 const y = pivot.dimension('country', squad.map(player => player.country).filter((value, index, source) => source.indexOf(value) === index).sort());
 
@@ -12,12 +11,12 @@ let cube = pivot.cube(squad, y, x);
 
 console.timeEnd('Cube creation');
 
-// find the average age of players by position by country
-const result = pivot.map(cube, pivot.average(age));
+// find the average age of players by position by country as at 2021-05-23
+const result = pivot.map(cube, pivot.average(age(new Date('2021-05-23'))));
 
-// Calculate a person's age from their date of birth
-function age(person: Player): number {
-	return new Date(new Date('2021-05-23').getTime() - person.dateOfBirth.getTime()).getUTCFullYear() - 1970;
+// Creates a callback to calculate a players age from their date of birth as at a given date
+function age(asAt: Date): (player: Player) => number {
+	return (player: Player) => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
 }
 
 // ugly code to pretty print the result with axes
