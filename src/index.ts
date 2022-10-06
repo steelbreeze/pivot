@@ -1,4 +1,4 @@
-import { Callback, Function, Pair, Predicate } from '@steelbreeze/types';
+import { Callback, Function, Predicate } from '@steelbreeze/types';
 
 /** The type of values that can be in the source data. */
 export type Value = any;
@@ -7,7 +7,7 @@ export type Value = any;
 export type Key = string | number;
 
 /** A predicate used to determine if source data is associated with a point of a dimension and its associated metadata (used for labelling purposes). */
-export type Criteria<TRecord> = Predicate<TRecord> & { metadata: Array<Pair<Key, Value>> };
+export type Criteria<TRecord> = Predicate<TRecord> & { metadata?: any };
 
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
 export type Dimension<TRecord> = Array<Criteria<TRecord>>;
@@ -25,7 +25,7 @@ export type Cube<TRecord> = Matrix<Array<TRecord>>;
  * @param callback An optional callback to build the dimensions criteria for each of the values provided.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export const dimension = <TRecord extends Record<Key, Value>>(key: Key, values: Array<Value>, callback: Callback<Value, Criteria<TRecord>> = value => Object.assign((record: TRecord) => record[key] === value, { metadata: [{ key, value }] })): Dimension<TRecord> =>
+export const dimension = <TRecord extends Record<Key, Value>>(key: Key, values: Array<Value>, callback: Callback<Value, Criteria<TRecord>> = value => record => record[key] === value): Dimension<TRecord> =>
 	values.map(callback);
 
 /**

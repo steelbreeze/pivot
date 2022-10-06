@@ -1,11 +1,11 @@
-import { Callback, Function, Pair, Predicate } from '@steelbreeze/types';
+import { Callback, Function, Predicate } from '@steelbreeze/types';
 /** The type of values that can be in the source data. */
 export declare type Value = any;
 /** The type of keys supported. */
 export declare type Key = string | number;
 /** A predicate used to determine if source data is associated with a point of a dimension and its associated metadata (used for labelling purposes). */
 export declare type Criteria<TRecord> = Predicate<TRecord> & {
-    metadata: Array<Pair<Key, Value>>;
+    metadata?: any;
 };
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
 export declare type Dimension<TRecord> = Array<Criteria<TRecord>>;

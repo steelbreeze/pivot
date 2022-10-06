@@ -1,8 +1,8 @@
 import * as pivot from '..';
 import { Player, squad } from './fulham';
 
-const x = pivot.dimension('position', ['Goalkeeper', 'Defender', 'Midfielder', 'Forward']);
-const y = pivot.dimension('country', squad.map(player => player.country).filter((value, index, source) => source.indexOf(value) === index).sort());
+const x = pivot.dimension('position', ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'], label('position'));
+const y = pivot.dimension('country', squad.map(player => player.country).filter((value, index, source) => source.indexOf(value) === index).sort(), label('country'));
 
 console.time('Cube creation');
 
@@ -20,12 +20,20 @@ function age(asAt: Date): (player: Player) => number {
 }
 
 // ugly code to pretty print the result with axes
-console.log(`\t${x.map(c => print(c.metadata[0].value)).join('\t')}`);
-result.forEach((row, i) => console.log(`${print(y[i].metadata[0].value)}\t${row.map(print).join('\t')}`));
+console.log(`\t${x.map(c => print(c.metadata)).join('\t')}`);
+result.forEach((row, i) => console.log(`${print(y[i].metadata)}\t${row.map(print).join('\t')}`));
 
 // Print a value in 7 characters and truncate with ellipsis
 function print(value: any) {
 	const str = String(value || '');
 
 	return str.length < 8 ? str : (str.substring(0, 6) + '\u2026');
+}
+
+function label<TRecord extends Record<pivot.Key, pivot.Value>>(key: pivot.Key) {
+	return (value: pivot.Value) => Object.assign(
+		(row: TRecord) => row[key] === value,
+		{
+			metadata: value
+		});
 }
