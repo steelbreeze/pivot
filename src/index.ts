@@ -7,10 +7,10 @@ export type Value = any;
 export type Key = string | number;
 
 /** A predicate used to determine if source data is associated with a point of a dimension and its associated metadata (used for labelling purposes). */
-export type Criteria<TRecord> = Predicate<TRecord> & { metadata?: any };
+export type Criteria<TRecord, TMetadata> = Predicate<TRecord> & { metadata?: TMetadata };
 
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
-export type Dimension<TRecord> = Array<Criteria<TRecord>>;
+export type Dimension<TRecord, TMetadata> = Array<Criteria<TRecord, TMetadata>>;
 
 /** A matrix is a two-dimensional data structure. */
 export type Matrix<TRecord> = Array<Array<TRecord>>;
@@ -25,7 +25,7 @@ export type Cube<TRecord> = Matrix<Array<TRecord>>;
  * @param callback An optional callback to build the dimensions criteria for each of the values provided.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export const dimension = <TRecord extends Record<Key, Value>>(key: Key, values: Array<Value>, callback: Callback<Value, Criteria<TRecord>> = value => record => record[key] === value): Dimension<TRecord> =>
+export const dimension = <TRecord extends Record<Key, Value>, TMetadata>(key: Key, values: Array<Value>, callback: Callback<Value, Criteria<TRecord, TMetadata>> = value => record => record[key] === value): Dimension<TRecord, TMetadata> =>
 	values.map(callback);
 
 /**
@@ -35,7 +35,7 @@ export const dimension = <TRecord extends Record<Key, Value>>(key: Key, values: 
  * @param x The dimension to use for the x axis.
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
-export const cube = <TRecord>(source: Array<TRecord>, y: Dimension<TRecord>, x: Dimension<TRecord>): Cube<TRecord> =>
+export const cube = <TRecord, TMetadata>(source: Array<TRecord>, y: Dimension<TRecord, TMetadata>, x: Dimension<TRecord, TMetadata>): Cube<TRecord> =>
 	slicer([...source], y).map(slice => slicer(slice, x));
 
 /**
@@ -80,8 +80,8 @@ export const average = <TRecord>(callback: Function<TRecord, number>): Function<
  * Acts just as Array.prototype.filter, but the returned results are removed from the source array meaning less items will be evaluated for the next iteration through a dimensions criteria.
  * @hidden 
  */
-const slicer = <TRecord>(source: Array<TRecord>, dimension: Dimension<TRecord>): Matrix<TRecord> =>
-	dimension.map((criteria: Criteria<TRecord>) => {
+const slicer = <TRecord, TMetadata>(source: Array<TRecord>, dimension: Dimension<TRecord, TMetadata>): Matrix<TRecord> =>
+	dimension.map(criteria => {
 		let length = 0, result = source.filter(record => criteria(record) || !(source[length++] = record));
 
 		source.length = length;

@@ -4,11 +4,11 @@ export declare type Value = any;
 /** The type of keys supported. */
 export declare type Key = string | number;
 /** A predicate used to determine if source data is associated with a point of a dimension and its associated metadata (used for labelling purposes). */
-export declare type Criteria<TRecord> = Predicate<TRecord> & {
-    metadata?: any;
+export declare type Criteria<TRecord, TMetadata> = Predicate<TRecord> & {
+    metadata?: TMetadata;
 };
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
-export declare type Dimension<TRecord> = Array<Criteria<TRecord>>;
+export declare type Dimension<TRecord, TMetadata> = Array<Criteria<TRecord, TMetadata>>;
 /** A matrix is a two-dimensional data structure. */
 export declare type Matrix<TRecord> = Array<Array<TRecord>>;
 /** A cube of data. */
@@ -20,7 +20,7 @@ export declare type Cube<TRecord> = Matrix<Array<TRecord>>;
  * @param callback An optional callback to build the dimensions criteria for each of the values provided.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export declare const dimension: <TRecord extends Record<Key, any>>(key: Key, values: Array<Value>, callback?: Callback<any, Criteria<TRecord>>) => Dimension<TRecord>;
+export declare const dimension: <TRecord extends Record<Key, any>, TMetadata>(key: Key, values: Array<Value>, callback?: Callback<any, Criteria<TRecord, TMetadata>>) => Dimension<TRecord, TMetadata>;
 /**
  * Pivots a table by two axes
  * @param source The source data, an array of records.
@@ -28,7 +28,7 @@ export declare const dimension: <TRecord extends Record<Key, any>>(key: Key, val
  * @param x The dimension to use for the x axis.
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
-export declare const cube: <TRecord>(source: TRecord[], y: Dimension<TRecord>, x: Dimension<TRecord>) => Cube<TRecord>;
+export declare const cube: <TRecord, TMetadata>(source: TRecord[], y: Dimension<TRecord, TMetadata>, x: Dimension<TRecord, TMetadata>) => Cube<TRecord>;
 /**
  * Queries data from a cube, or any matrix structure.
  * @param source The source data, a matrix of records.
