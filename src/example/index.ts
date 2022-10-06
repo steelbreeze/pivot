@@ -1,8 +1,13 @@
 import * as pivot from '..';
 import { Player, squad } from './fulham';
 
-const x = pivot.dimension('position', ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'], label('position'));
-const y = pivot.dimension('country', squad.map(player => player.country).filter((value, index, source) => source.indexOf(value) === index).sort(), label('country'));
+// the source of dimensions are just arrays of values
+const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
+const countries = squad.map(player => player.country).filter((value, index, source) => source.indexOf(value) === index).sort();
+
+// create the dimensions, referencing the atttribute within the source and the unique values they have
+const x = pivot.dimension('position', positions);
+const y = pivot.dimension('country', countries);
 
 console.time('Cube creation');
 
@@ -19,21 +24,13 @@ function age(asAt: Date): (player: Player) => number {
 	return (player: Player) => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
 }
 
-// ugly code to pretty print the result with axes
-console.log(`\t${x.map(c => print(c.metadata)).join('\t')}`);
-result.forEach((row, i) => console.log(`${print(y[i].metadata)}\t${row.map(print).join('\t')}`));
+// pretty print the result with axes
+console.log(`\t${positions.map(print).join('\t')}`);
+console.log(result.map((row, index) => [countries[index], ...row].map(print).join('\t')).join('\n'));
 
 // Print a value in 7 characters and truncate with ellipsis
 function print(value: any) {
 	const str = String(value || '');
 
 	return str.length < 8 ? str : (str.substring(0, 6) + '\u2026');
-}
-
-function label<TRecord extends Record<pivot.Key, pivot.Value>>(key: pivot.Key) {
-	return (value: pivot.Value) => Object.assign(
-		(row: TRecord) => row[key] === value,
-		{
-			metadata: value
-		});
 }
