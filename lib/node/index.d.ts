@@ -3,7 +3,7 @@ import { Callback, Function, Predicate } from '@steelbreeze/types';
 export declare type Value = any;
 /** The type of keys supported. */
 export declare type Key = string | number;
-/** A predicate used to determine if source data is associated with a point of a dimension and its associated metadata (used for labelling purposes). */
+/** A predicate used to determine if source data is associated with a point of a dimension and its optional associated metadata. */
 export declare type Criteria<TRecord, TMetadata> = Predicate<TRecord> & {
     metadata?: TMetadata;
 };

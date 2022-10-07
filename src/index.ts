@@ -6,7 +6,7 @@ export type Value = any;
 /** The type of keys supported. */
 export type Key = string | number;
 
-/** A predicate used to determine if source data is associated with a point of a dimension and its associated metadata (used for labelling purposes). */
+/** A predicate used to determine if source data is associated with a point of a dimension and its optional associated metadata. */
 export type Criteria<TRecord, TMetadata> = Predicate<TRecord> & { metadata?: TMetadata };
 
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
