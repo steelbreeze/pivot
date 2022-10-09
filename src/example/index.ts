@@ -35,6 +35,6 @@ function print(value: any) {
 	return str.length < 8 ? str : (str.substring(0, 6) + '\u2026');
 }
 
-function criteria<TRecord extends Record<pivot.Key, pivot.Value>>(key: pivot.Key) {
-	return (value: pivot.Value) => Object.assign((record: TRecord) => record[key] === value, Object.fromEntries([[key, value]]) );
+function criteria(key: keyof Player) {
+	return (value: pivot.Value) => Object.assign((player: Player) => player[key] === value, Object.fromEntries([[key, value]]) );
 }
