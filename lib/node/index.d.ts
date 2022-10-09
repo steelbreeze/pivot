@@ -2,13 +2,11 @@ import { Callback, Function, Predicate } from '@steelbreeze/types';
 /** The type of values that can be in the source data. */
 export declare type Value = any;
 /** The type of keys supported. */
-export declare type Key = string | number;
+export declare type Key = Exclude<keyof Value, Symbol>;
 /** A predicate used to determine if source data is associated with a point of a dimension and its optional associated metadata. */
-export declare type Criteria<TRecord, TMetadata> = Predicate<TRecord> & {
-    metadata?: TMetadata;
-};
+export declare type Criteria<TRecord> = Predicate<TRecord> & Record<Key, Value>;
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
-export declare type Dimension<TRecord, TMetadata> = Array<Criteria<TRecord, TMetadata>>;
+export declare type Dimension<TRecord> = Array<Criteria<TRecord>>;
 /** A matrix is a two-dimensional data structure. */
 export declare type Matrix<TRecord> = Array<Array<TRecord>>;
 /** A cube of data. */
@@ -20,7 +18,7 @@ export declare type Cube<TRecord> = Matrix<Array<TRecord>>;
  * @param criteria An optional callback to build the dimensions criteria for each of the values provided.
  * @returns Returns a simple dimension with a single criterion for each key/value combination.
  */
-export declare const dimension: <TRecord extends Record<Key, any>, TMetadata>(key: Key, values: Array<Value>, criteria?: Callback<any, Criteria<TRecord, TMetadata>>) => Dimension<TRecord, TMetadata>;
+export declare const dimension: <TRecord extends Record<Key, any>>(key: Key, values: Array<Value>, criteria?: Callback<any, Criteria<TRecord>>) => Dimension<TRecord>;
 /**
  * Pivots a table by two axes
  * @param source The source data, an array of records.
@@ -28,7 +26,7 @@ export declare const dimension: <TRecord extends Record<Key, any>, TMetadata>(ke
  * @param x The dimension to use for the x axis.
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
-export declare const cube: <TRecord, TMetadata>(source: TRecord[], y: Dimension<TRecord, TMetadata>, x: Dimension<TRecord, TMetadata>) => Cube<TRecord>;
+export declare const cube: <TRecord>(source: TRecord[], y: Dimension<TRecord>, x: Dimension<TRecord>) => Cube<TRecord>;
 /**
  * Queries data from a cube, or any matrix structure.
  * @param source The source data, a matrix of records.

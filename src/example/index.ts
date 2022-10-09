@@ -26,7 +26,7 @@ function age(asAt: Date): (player: Player) => number {
 
 // pretty print the result with axes
 console.log(`\t${positions.map(print).join('\t')}`);
-console.log(result.map((row, index) => [y[index].metadata!.country, ...row].map(print).join('\t')).join('\n'));
+console.log(result.map((row, index) => [y[index].country, ...row].map(print).join('\t')).join('\n'));
 
 // Print a value in 7 characters and truncate with ellipsis
 function print(value: any) {
@@ -36,5 +36,5 @@ function print(value: any) {
 }
 
 function criteria<TRecord extends Record<pivot.Key, pivot.Value>>(key: pivot.Key) {
-	return (value: pivot.Value) => Object.assign((record: TRecord) => record[key] === value, { metadata: Object.fromEntries([[key, value]]) });
+	return (value: pivot.Value) => Object.assign((record: TRecord) => record[key] === value, Object.fromEntries([[key, value]]) );
 }
