@@ -7,7 +7,7 @@ const countries = squad.map(player => player.country).filter((value, index, sour
 
 // create simple dimensions, referencing the atttribute within the source and the unique values they have
 const x = pivot.dimension('position', positions);
-const y = pivot.dimension('country', countries);
+const y = pivot.dimension('country', countries, criteria('country'));
 
 console.time('Cube creation');
 
@@ -26,11 +26,15 @@ function age(asAt: Date): (player: Player) => number {
 
 // pretty print the result with axes
 console.log(`\t${positions.map(print).join('\t')}`);
-console.log(result.map((row, index) => [countries[index], ...row].map(print).join('\t')).join('\n'));
+console.log(result.map((row, index) => [y[index].metadata!.country, ...row].map(print).join('\t')).join('\n'));
 
 // Print a value in 7 characters and truncate with ellipsis
 function print(value: any) {
 	const str = String(value || '');
 
 	return str.length < 8 ? str : (str.substring(0, 6) + '\u2026');
+}
+
+function criteria<TRecord extends Record<pivot.Key, pivot.Value>>(key: pivot.Key) {
+	return (value: pivot.Value) => Object.assign((record: TRecord) => record[key] === value, { metadata: Object.fromEntries([[key, value]]) });
 }
