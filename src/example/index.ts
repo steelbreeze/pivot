@@ -36,5 +36,5 @@ function print(value: any) {
 }
 
 function criteria(key: keyof Player) {
-	return (value: pivot.Value) => Object.assign((player: Player) => player[key] === value, Object.fromEntries([[key, value]]) );
+	return (value: any) => Object.assign((player: Player) => player[key] === value, Object.fromEntries([[key, value]]) );
 }
