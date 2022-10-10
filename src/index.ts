@@ -28,7 +28,7 @@ export type Cube<TRecord> = Matrix<Array<TRecord>>;
  * @param criteria An optional callback to build the dimensions criteria for each of the values provided.
  * @returns Returns a simple dimension with a single criterion for each key/value combination and associated metadata.
  */
-export const dimension = <TRecord extends Record<Value>>(key: Key<Value>, values: Array<Value>, criteria: Callback<Value, Criteria<TRecord>> = value => Object.assign((record: TRecord) => record[key] === value, { metadata: [{ key, value }] })): Dimension<TRecord> =>
+export const dimension = <TRecord extends Record<Value>>(key: Key<Value>, values: Array<Value>, criteria: Callback<Value, Criteria<TRecord>> = (value: Value) => (record: TRecord) => record[key] === value): Dimension<TRecord> =>
 	values.map(criteria);
 
 /**
@@ -68,7 +68,7 @@ export const select = <TRecord, TResult>(selector: Callback<TRecord, TResult>): 
  * @param selector A callback function to derive a numerical value for each record in the source data.
  */
 export const sum = <TRecord>(selector: Function<TRecord, number>): Function<Array<TRecord>, number> =>
-	source => source.reduce((total, source) => total + selector(source), 0);
+	source => source.reduce((total: number, source: TRecord) => total + selector(source), 0);
 
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube.
@@ -83,11 +83,11 @@ export const average = <TRecord>(selector: Function<TRecord, number>): Function<
  * Acts just as Array.prototype.filter, but the returned results are removed from the source array meaning less items will be evaluated for the next iteration through a dimensions criteria.
  * @hidden 
  */
-const slicer = <TRecord>(source: Array<TRecord>, dimension: Dimension<TRecord>): Matrix<TRecord> =>
-	dimension.map(criteria => {
-		let length = 0, result = source.filter(record => criteria(record) || !(source[length++] = record));
+const slicer = <TRecord>(records: Array<TRecord>, dimension: Dimension<TRecord>): Matrix<TRecord> =>
+	dimension.map((predicate: Predicate<TRecord>) => {
+		let length = 0, result = records.filter((record: TRecord) => predicate(record) || !(records[length++] = record));
 
-		source.length = length;
+		records.length = length;
 
 		return result;
 	});
