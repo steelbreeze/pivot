@@ -7,7 +7,7 @@ export type Value = any;
 export type Key<TValue> = Exclude<keyof TValue, Symbol>;
 
 /** A prototype for an object. */
-export type Record<TValue> = {[key in Key<TValue>]: TValue};
+export type Record<TValue> = { [key in Key<TValue>]: TValue };
 
 /** A predicate used to determine if source data is associated with a point of a dimension and its optional associated metadata. */
 export type Criteria<TRecord> = Predicate<TRecord> & Record<Value>;
@@ -26,9 +26,9 @@ export type Cube<TRecord> = Matrix<Array<TRecord>>;
  * @param values A distinct list of values for the dimension.
  * @param key The name to give this dimension.
  * @param criteria An optional callback to build the dimensions criteria for each of the values provided.
- * @returns Returns a simple dimension with a single criterion for each key/value combination.
+ * @returns Returns a simple dimension with a single criterion for each key/value combination and associated metadata.
  */
-export const dimension = <TRecord extends Record<Value>>(key: Key<Value>, values: Array<Value>, criteria: Callback<Value, Criteria<TRecord>> = value => record => record[key] === value): Dimension<TRecord> =>
+export const dimension = <TRecord extends Record<Value>>(key: Key<Value>, values: Array<Value>, criteria: Callback<Value, Criteria<TRecord>> = value => Object.assign((record: TRecord) => record[key] === value, { metadata: [{ key, value }] })): Dimension<TRecord> =>
 	values.map(criteria);
 
 /**
