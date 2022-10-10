@@ -1,5 +1,5 @@
 import { Callback, Function, Predicate } from '@steelbreeze/types';
-/** The type of keys for a given value. */
+/** The type of keys for a data structure. */
 export declare type Key = string | number;
 /** A predicate used to determine if source data is associated with a point of a dimension and its optional associated metadata. */
 export declare type Criteria<TRecord> = Predicate<TRecord> & Record<Key, any>;
