@@ -78,8 +78,8 @@ export const average = <TRecord>(selector: Function<TRecord, number>): Function<
  * @hidden 
  */
 const slicer = <TRecord>(records: Array<TRecord>, dimension: Dimension<TRecord>): Matrix<TRecord> =>
-	dimension.map((predicate: Predicate<TRecord>) => {
-		let length = 0, result = records.filter((record: TRecord) => predicate(record) || !(records[length++] = record));
+	dimension.map((criteria: Criteria<TRecord>) => {
+		let length = 0, result = records.filter((record: TRecord) => criteria(record) || !(records[length++] = record));
 
 		records.length = length;
 
