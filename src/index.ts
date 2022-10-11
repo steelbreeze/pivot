@@ -19,7 +19,7 @@ export type Cube<TRecord> = Matrix<Array<TRecord>>;
  * @param criteria An optional callback to build the dimensions criteria for each of the values provided.
  * @returns Returns a simple dimension with a single criterion for each key/value combination and associated metadata.
  */
-export const dimension = <TRecord>(key: keyof TRecord, values: Array<any>, criteria: Callback<any, Criteria<TRecord>> = (value: any) => (record: TRecord) => record[key] === value): Dimension<TRecord> =>
+export const dimension = <TRecord, TKey extends keyof TRecord = keyof TRecord>(key: TKey, values: Array<TRecord[TKey]>, criteria: Callback<TRecord[TKey], Criteria<TRecord>> = value => record => record[key] === value): Dimension<TRecord> =>
 	values.map(criteria);
 
 /**

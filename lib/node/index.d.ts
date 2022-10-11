@@ -9,12 +9,13 @@ export declare type Matrix<TRecord> = Array<Array<TRecord>>;
 export declare type Cube<TRecord> = Matrix<Array<TRecord>>;
 /**
  * Creates a dimension from an array of values.
+ * @param TRecord The type of the records that this dimension will apply to.
  * @param values A distinct list of values for the dimension.
  * @param key The name to give this dimension.
  * @param criteria An optional callback to build the dimensions criteria for each of the values provided.
  * @returns Returns a simple dimension with a single criterion for each key/value combination and associated metadata.
  */
-export declare const dimension: <TRecord>(key: keyof TRecord, values: Array<any>, criteria?: Callback<any, Criteria<TRecord>>) => Dimension<TRecord>;
+export declare const dimension: <TRecord, TKey extends keyof TRecord = keyof TRecord>(key: TKey, values: TRecord[TKey][], criteria?: Callback<TRecord[TKey], Criteria<TRecord>>) => Dimension<TRecord>;
 /**
  * Pivots a table by two axes
  * @param source The source data, an array of records.
