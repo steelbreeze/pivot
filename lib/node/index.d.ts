@@ -1,8 +1,6 @@
 import { Callback, Function, Predicate } from '@steelbreeze/types';
-/** The type of keys for a data structure. */
-export declare type Key = string | number;
 /** A predicate used to determine if source data is associated with a point of a dimension and its optional associated metadata. */
-export declare type Criteria<TRecord> = Predicate<TRecord> & Record<Key, any>;
+export declare type Criteria<TRecord> = Predicate<TRecord> & Record<keyof any, any>;
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
 export declare type Dimension<TRecord> = Array<Criteria<TRecord>>;
 /** A matrix is a two-dimensional data structure. */
@@ -16,7 +14,7 @@ export declare type Cube<TRecord> = Matrix<Array<TRecord>>;
  * @param criteria An optional callback to build the dimensions criteria for each of the values provided.
  * @returns Returns a simple dimension with a single criterion for each key/value combination and associated metadata.
  */
-export declare const dimension: <TRecord extends Record<Key, any>>(key: Key, values: Array<any>, criteria?: Callback<any, Criteria<TRecord>>) => Dimension<TRecord>;
+export declare const dimension: <TRecord>(key: keyof TRecord, values: Array<any>, criteria?: Callback<any, Criteria<TRecord>>) => Dimension<TRecord>;
 /**
  * Pivots a table by two axes
  * @param source The source data, an array of records.

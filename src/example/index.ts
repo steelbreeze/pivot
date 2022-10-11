@@ -6,8 +6,8 @@ const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
 const countries = squad.map(player => player.country).filter((value, index, source) => source.indexOf(value) === index).sort();
 
 // create simple dimensions, referencing the atttribute within the source and the unique values they have
-const x = pivot.dimension('position', positions);
-const y = pivot.dimension('country', countries, criteria('country'));
+const x = pivot.dimension<Player>('position', positions);
+const y = pivot.dimension<Player>('country', countries, criteria('country'));
 
 console.time('Cube creation');
 
