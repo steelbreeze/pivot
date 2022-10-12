@@ -35,6 +35,7 @@ function print(value: any) {
 	return str.length < 8 ? str : (str.substring(0, 6) + '\u2026');
 }
 
+// build a custom criteria that will label criteria with the key/value
 function criteria(key: keyof Player) {
-	return (value: any) => Object.assign((player: Player) => player[key] === value, Object.fromEntries([[key, value]]) );
+	return (value: Player[keyof Player]) => Object.assign((player: Player) => player[key] === value, Object.fromEntries([[key, value]]) );
 }
