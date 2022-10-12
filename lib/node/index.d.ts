@@ -1,6 +1,6 @@
 import { Callback, Function, Predicate } from '@steelbreeze/types';
 /** A predicate used to determine if source data is associated with a point of a dimension and its optional associated metadata. */
-export declare type Criteria<TRecord> = Predicate<TRecord> & Record<keyof any, any>;
+export declare type Criteria<TRecord> = Predicate<TRecord> & any;
 /** An dimension to pivot a table by; this is a set of criteria for the dimension. */
 export declare type Dimension<TRecord> = Array<Criteria<TRecord>>;
 /** A matrix is a two-dimensional data structure. */
@@ -9,13 +9,12 @@ export declare type Matrix<TRecord> = Array<Array<TRecord>>;
 export declare type Cube<TRecord> = Matrix<Array<TRecord>>;
 /**
  * Creates a dimension from an array of values.
- * @param TRecord The type of the records that this dimension will apply to.
  * @param values A distinct list of values for the dimension.
  * @param key The name to give this dimension.
  * @param criteria An optional callback to build the dimensions criteria for each of the values provided.
  * @returns Returns a simple dimension with a single criterion for each key/value combination and associated metadata.
  */
-export declare const dimension: <TRecord, TKey extends keyof TRecord = keyof TRecord>(key: TKey, values: TRecord[TKey][], criteria?: Callback<TRecord[TKey], Criteria<TRecord>>) => Dimension<TRecord>;
+export declare const dimension: <TRecord, TKey extends keyof TRecord = keyof TRecord>(key: TKey, values: TRecord[TKey][], criteria?: Callback<TRecord[TKey], any>) => Dimension<TRecord>;
 /**
  * Pivots a table by two axes
  * @param source The source data, an array of records.
