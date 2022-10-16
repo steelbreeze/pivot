@@ -3,7 +3,10 @@ import { Callback, Function, Predicate } from '@steelbreeze/types';
 export declare type Matrix<TRecord> = Array<Array<TRecord>>;
 /** A cube of data. */
 export declare type Cube<TRecord> = Matrix<Array<TRecord>>;
-/** Create a callback used in a map operation to create a dimension. */
+/** Create a callback used in a map operation to create the criteria for each point on a dimension.
+ * @param key The property in the source data to base this criteria on.
+ * @remarks Use a bespoke version of this function if custom criteria that includes metadata is required.
+ */
 export declare const criteria: <TRecord>(key: keyof TRecord) => Callback<TRecord[keyof TRecord], Predicate<TRecord>>;
 /**
  * Pivots a table by two axes

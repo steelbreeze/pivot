@@ -10,7 +10,7 @@ type Criteria = Predicate<Player> & { label: Player[Keys] };
 
 // the source of dimensions are just arrays of values
 const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
-const countries = squad.map(player => player.country).filter((value, index, source) => source.indexOf(value) === index).sort();
+const countries = squad.map(player => player.country).filter(distinct).sort();
 
 // create simple dimensions, referencing the atttribute within the source and the unique values they have
 const x = positions.map(pivot.criteria('position'));
@@ -45,4 +45,9 @@ function print(value: any) {
 // build a custom criteria that will label criteria with the key/value
 function criteriaWithMeta(key: Keys): Callback<Player[Keys], Criteria> {
 	return (value: Player[Keys]) => Object.assign((player: Player) => player[key] === value, { label: value });
+}
+
+// function to create a filter that return only distinct values from an array
+function distinct<T>(value: T, index: number, source: Array<T>): boolean {
+	return source.indexOf(value) === index;
 }

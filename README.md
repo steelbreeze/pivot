@@ -33,7 +33,7 @@ import { Player, squad } from './fulham';
 
 // the source of dimensions are just arrays of values
 const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
-const countries = squad.map(player => player.country).filter((value, index, source) => source.indexOf(value) === index).sort();
+const countries = squad.map(player => player.country).filter(distinct).sort();
 
 // create simple dimensions, referencing the atttribute within the source and the unique values they have
 const x = positions.map(pivot.criteria('position'));
