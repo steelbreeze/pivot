@@ -81,8 +81,8 @@
 		];
 
 		// create axes out of the dimensions derived from the squad data
-		const position = pivot.dimension('position', ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'], labelled('position'));
-		const country = pivot.dimension('country', squad.map(player => player.country).filter((value, index, source) => source.indexOf(value) === index).sort(), labelled('country'));
+		const position = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'].map(labelled('position'));
+		const country = squad.map(player => player.country).filter((value, index, source) => source.indexOf(value) === index).sort().map(labelled('country'));
 
 		// create the pivot cube
 		const cube = pivot.cube(squad, country, position);
