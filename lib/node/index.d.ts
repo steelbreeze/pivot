@@ -1,7 +1,7 @@
 import { Callback, Function, Predicate } from '@steelbreeze/types';
 /** A matrix is a two-dimensional data structure. */
 export declare type Matrix<TRecord> = Array<Array<TRecord>>;
-/** A cube of data. */
+/** A cube is a three dimensional data structure. */
 export declare type Cube<TRecord> = Matrix<Array<TRecord>>;
 /** Create a callback used in a map operation to create the criteria for each point on a dimension.
  * @param key The property in the source data to base this criteria on.

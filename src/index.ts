@@ -3,15 +3,15 @@ import { Callback, Function, Predicate } from '@steelbreeze/types';
 /** A matrix is a two-dimensional data structure. */
 export type Matrix<TRecord> = Array<Array<TRecord>>;
 
-/** A cube of data. */
+/** A cube is a three dimensional data structure. */
 export type Cube<TRecord> = Matrix<Array<TRecord>>;
 
-/** Create a callback used in a map operation to create the criteria for each point on a dimension.
+/** Create a callback to used in a map operation to create the criteria for each point on a dimension.
  * @param key The property in the source data to base this criteria on.
  * @remarks Use a bespoke version of this function if custom criteria that includes metadata is required.
  */
 export const criteria = <TRecord>(key: keyof TRecord): Callback<TRecord[keyof TRecord], Predicate<TRecord>> =>
-	(value: TRecord[keyof TRecord]) => (record: TRecord) => record[key] === value;
+	value => record => record[key] === value;
 
 /**
  * Pivots a table by two axes
@@ -21,7 +21,7 @@ export const criteria = <TRecord>(key: keyof TRecord): Callback<TRecord[keyof TR
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
 export const cube = <TRecord>(source: Array<TRecord>, y: Array<Predicate<TRecord>>, x: Array<Predicate<TRecord>>): Cube<TRecord> =>
-	slicer([...source], y).map(slice => slicer(slice, x));
+	split([...source], y).map(slice => split(slice, x));
 
 /**
  * Queries data from a cube.
@@ -50,7 +50,7 @@ export const select = <TRecord, TResult>(selector: Callback<TRecord, TResult>): 
  * @param selector A callback function to derive a numerical value for each record in the source data.
  */
 export const sum = <TRecord>(selector: Function<TRecord, number>): Function<Array<TRecord>, number> =>
-	source => source.reduce((total: number, source: TRecord) => total + selector(source), 0);
+	source => source.reduce((total, source) => total + selector(source), 0);
 
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube.
@@ -65,9 +65,9 @@ export const average = <TRecord>(selector: Function<TRecord, number>): Function<
  * Acts just as Array.prototype.filter, but the returned results are removed from the source array meaning less items will be evaluated for the next iteration through a dimensions criteria.
  * @hidden 
  */
-const slicer = <TRecord>(records: Array<TRecord>, dimension: Array<Predicate<TRecord>>): Matrix<TRecord> =>
-	dimension.map((criteria: Predicate<TRecord>) => {
-		let length = 0, result = records.filter((record: TRecord) => criteria(record) || !(records[length++] = record));
+const split = <TRecord>(records: Array<TRecord>, dimension: Array<Predicate<TRecord>>): Matrix<TRecord> =>
+	dimension.map(criteria => {
+		let length = 0, result = records.filter(record => criteria(record) || !(records[length++] = record));
 
 		records.length = length;
 

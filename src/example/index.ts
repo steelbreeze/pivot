@@ -1,12 +1,12 @@
 import * as pivot from '..';
 import { Player, squad } from './fulham';
-import { Callback, Predicate } from '@steelbreeze/types';
+import { Callback, Pair, Predicate } from '@steelbreeze/types';
 
 // The keys into the player type
 type Keys = keyof Player;
 
 // critera for a dimension with a little associated metadata
-type Criteria = Predicate<Player> & { label: Player[Keys] };
+type Criteria = Predicate<Player> & Pair<keyof Player, Player[keyof Player]>;
 
 // the source of dimensions are just arrays of values
 const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
@@ -33,7 +33,7 @@ function age(asAt: Date): (player: Player) => number {
 
 // pretty print the result with axes
 console.log(`\t${positions.map(print).join('\t')}`);
-console.log(result.map((row, index) => [y[index].label, ...row].map(print).join('\t')).join('\n'));
+console.log(result.map((row, index) => [y[index].value, ...row].map(print).join('\t')).join('\n'));
 
 // Print a value in 7 characters and truncate with ellipsis
 function print(value: any) {
@@ -44,7 +44,7 @@ function print(value: any) {
 
 // build a custom criteria that will label criteria with the key/value
 function criteriaWithMeta(key: Keys): Callback<Player[Keys], Criteria> {
-	return (value: Player[Keys]) => Object.assign((player: Player) => player[key] === value, { label: value });
+	return (value: Player[Keys]) => Object.assign((player: Player) => player[key] === value, { key, value });
 }
 
 // function to create a filter that return only distinct values from an array
