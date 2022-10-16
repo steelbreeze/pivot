@@ -1,20 +1,10 @@
 import { Callback, Function, Predicate } from '@steelbreeze/types';
-/** A predicate used to determine if source data is associated with a point of a dimension and its optional associated metadata. */
-export declare type Criteria<TRecord> = Predicate<TRecord> & any;
-/** An dimension to pivot a table by; this is a set of criteria for the dimension. */
-export declare type Dimension<TRecord> = Array<Criteria<TRecord>>;
 /** A matrix is a two-dimensional data structure. */
 export declare type Matrix<TRecord> = Array<Array<TRecord>>;
 /** A cube of data. */
 export declare type Cube<TRecord> = Matrix<Array<TRecord>>;
-/**
- * Creates a dimension from an array of values.
- * @param values A distinct list of values for the dimension.
- * @param key The name to give this dimension.
- * @param criteria An optional callback to build the dimensions criteria for each of the values provided.
- * @returns Returns a simple dimension with a single criterion for each key/value combination and associated metadata.
- */
-export declare const dimension: <TRecord, TKey extends keyof TRecord = keyof TRecord>(key: TKey, values: TRecord[TKey][], criteria?: Callback<TRecord[TKey], any>) => Dimension<TRecord>;
+/** Create a callback used in a map operation to create a dimension. */
+export declare const criteria: <TRecord>(key: keyof TRecord) => Callback<TRecord[keyof TRecord], Predicate<TRecord>>;
 /**
  * Pivots a table by two axes
  * @param source The source data, an array of records.
@@ -22,7 +12,7 @@ export declare const dimension: <TRecord, TKey extends keyof TRecord = keyof TRe
  * @param x The dimension to use for the x axis.
  * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
-export declare const cube: <TRecord>(source: TRecord[], y: Dimension<TRecord>, x: Dimension<TRecord>) => Cube<TRecord>;
+export declare const cube: <TRecord>(source: TRecord[], y: Predicate<TRecord>[], x: Predicate<TRecord>[]) => Cube<TRecord>;
 /**
  * Queries data from a cube.
  * @param source The source data, a matrix of records.

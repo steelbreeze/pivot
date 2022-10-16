@@ -1,13 +1,20 @@
 import * as pivot from '..';
 import { Player, squad } from './fulham';
+import { Callback, Predicate } from '@steelbreeze/types';
+
+// The keys into the player type
+type Keys = keyof Player;
+
+// critera for a dimension with a little associated metadata
+type Criteria = Predicate<Player> & { label: Player[Keys] };
 
 // the source of dimensions are just arrays of values
 const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
 const countries = squad.map(player => player.country).filter((value, index, source) => source.indexOf(value) === index).sort();
 
 // create simple dimensions, referencing the atttribute within the source and the unique values they have
-const x = pivot.dimension<Player>('position', positions);
-const y = pivot.dimension<Player>('country', countries, criteria('country'));
+const x = positions.map(pivot.criteria('position'));
+const y = countries.map(criteriaWithMeta('country'));
 
 console.time('Cube creation');
 
@@ -26,7 +33,7 @@ function age(asAt: Date): (player: Player) => number {
 
 // pretty print the result with axes
 console.log(`\t${positions.map(print).join('\t')}`);
-console.log(result.map((row, index) => [y[index].country, ...row].map(print).join('\t')).join('\n'));
+console.log(result.map((row, index) => [y[index].label, ...row].map(print).join('\t')).join('\n'));
 
 // Print a value in 7 characters and truncate with ellipsis
 function print(value: any) {
@@ -36,6 +43,6 @@ function print(value: any) {
 }
 
 // build a custom criteria that will label criteria with the key/value
-function criteria(key: keyof Player) {
-	return (value: Player[keyof Player]) => Object.assign((player: Player) => player[key] === value, Object.fromEntries([[key, value]]) );
+function criteriaWithMeta(key: Keys): Callback<Player[Keys], Criteria> {
+	return (value: Player[Keys]) => Object.assign((player: Player) => player[key] === value, { label: value });
 }

@@ -1,7 +1,7 @@
 # pivot
 [![Maintainability](https://api.codeclimate.com/v1/badges/c8ed29d6e2fa0bc0d582/maintainability)](https://codeclimate.com/github/steelbreeze/pivot/maintainability)
 
-A minimalist pivot table library for TypeScript/JavaScript. While small (a mere 531 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite dimensions, filtering.
+A minimalist pivot table library for TypeScript/JavaScript. While small (a mere 512 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite dimensions, filtering.
 
 The library also provides a modest set of numerical selectors. Suggestions for additions, or better still contributions, are welcome.
 
@@ -31,9 +31,13 @@ The following is the result of pivoting publicly available information about the
 import * as pivot from '@steelbreeze/pivot';
 import { Player, squad } from './fulham';
 
-// create dimensions, one hard-coded, the other derived from the squad data
-const x = pivot.dimension('position', ['Goalkeeper', 'Defender', 'Midfielder', 'Forward']);
-const y = pivot.dimension('country', squad.map(player => player.country).filter((value, index, source) => source.indexOf(value) === index).sort());
+// the source of dimensions are just arrays of values
+const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
+const countries = squad.map(player => player.country).filter((value, index, source) => source.indexOf(value) === index).sort();
+
+// create simple dimensions, referencing the atttribute within the source and the unique values they have
+const x = positions.map(pivot.criteria('position'));
+const y = countries.map(criteriaWithMeta('country'));
 
 // create the pivot cube from the squad data using position and country for x and y axes
 let cube = pivot.cube(squad, y, x);
