@@ -19,9 +19,9 @@ export declare const cube: <TRecord>(source: TRecord[], y: Dimension<TRecord>, x
 /**
  * Queries data from a cube.
  * @param source The source data, a matrix of records.
- * @param callback A callback function to create a result from each cell of the cube.
+ * @param query A callback function to create a result from each cell of the cube.
  */
-export declare const map: <TRecord, TResult>(source: Matrix<TRecord>, callback: Callback<TRecord, TResult>) => Matrix<TResult>;
+export declare const map: <TRecord, TResult>(source: Matrix<TRecord>, query: Callback<TRecord, TResult>) => Matrix<TResult>;
 /**
  * A generator, used to filter data within a cube.
  * @param predicate A predicate to test source data to see if it should be included in the filter results.

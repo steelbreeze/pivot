@@ -27,10 +27,10 @@ export const cube = <TRecord>(source: Array<TRecord>, y: Dimension<TRecord>, x: 
 /**
  * Queries data from a cube.
  * @param source The source data, a matrix of records.
- * @param callback A callback function to create a result from each cell of the cube.
+ * @param query A callback function to create a result from each cell of the cube.
  */
-export const map = <TRecord, TResult>(source: Matrix<TRecord>, callback: Callback<TRecord, TResult>): Matrix<TResult> =>
-	source.map(slice => slice.map(callback));
+export const map = <TRecord, TResult>(source: Matrix<TRecord>, query: Callback<TRecord, TResult>): Matrix<TResult> =>
+	source.map(slice => slice.map(query));
 
 /**
  * A generator, used to filter data within a cube.
