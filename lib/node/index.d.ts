@@ -1,27 +1,27 @@
 import { Callback, Function, Predicate } from '@steelbreeze/types';
+/** A dimension is a series of predicates used to partition data. */
+export declare type Dimension<TRecord> = Array<Predicate<TRecord>>;
 /** A matrix is a two-dimensional data structure. */
 export declare type Matrix<TRecord> = Array<Array<TRecord>>;
 /** A cube is a three dimensional data structure. */
 export declare type Cube<TRecord> = Matrix<Array<TRecord>>;
-/** Create a callback used in a map operation to create the criteria for each point on a dimension.
+/** Create a callback to used in a map operation to create the criteria for each point on a dimension.
  * @param key The property in the source data to base this criteria on.
- * @remarks Use a bespoke version of this function if custom criteria that includes metadata is required.
  */
 export declare const criteria: <TRecord>(key: keyof TRecord) => Callback<TRecord[keyof TRecord], Predicate<TRecord>>;
 /**
- * Pivots a table by two axes
+ * Pivots a table by two axes returning a cube.
  * @param source The source data, an array of records.
  * @param y The dimension to use for the y axis.
  * @param x The dimension to use for the x axis.
- * @returns Returns an cube, being the source table split by the criteria of the dimensions used for the x and y axes.
  */
-export declare const cube: <TRecord>(source: TRecord[], y: Predicate<TRecord>[], x: Predicate<TRecord>[]) => Cube<TRecord>;
+export declare const cube: <TRecord>(source: TRecord[], y: Dimension<TRecord>, x: Dimension<TRecord>) => Cube<TRecord>;
 /**
  * Queries data from a cube.
  * @param source The source data, a matrix of records.
- * @param mapper A callback function to create a result from each cell of the cube.
+ * @param callback A callback function to create a result from each cell of the cube.
  */
-export declare const map: <TRecord, TResult>(source: Matrix<TRecord>, mapper: Callback<TRecord, TResult>) => Matrix<TResult>;
+export declare const map: <TRecord, TResult>(source: Matrix<TRecord>, callback: Callback<TRecord, TResult>) => Matrix<TResult>;
 /**
  * A generator, used to filter data within a cube.
  * @param predicate A predicate to test source data to see if it should be included in the filter results.
@@ -40,6 +40,5 @@ export declare const sum: <TRecord>(selector: Function<TRecord, number>) => Func
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each record in the source data.
- * @returns Returns a callback function that can be passed into the map function returning the average of the values for a cell or NaN if there are no values in that cell.
  */
 export declare const average: <TRecord>(selector: Function<TRecord, number>) => Function<TRecord[], number>;
