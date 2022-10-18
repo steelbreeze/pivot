@@ -1,19 +1,19 @@
 import * as pivot from '..';
-import * as fulham from './fulham';
+import { Player, squad} from './fulham';
 import { Callback, Pair, Predicate } from '@steelbreeze/types';
 
 // the source of dimensions are just arrays of values
 const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
-const countries = fulham.squad.map(player => player.country).filter(distinct).sort();
+const countries = squad.map(player => player.country).filter(distinct).sort();
 
 // create simple dimensions, referencing the atttribute within the source and the unique values they have
-const x = positions.map(pivot.criteria<fulham.Player>('position'));
-const y = countries.map(criteriaMeta<fulham.Player>('country'));
+const x = positions.map(pivot.criteria<Player>('position'));
+const y = countries.map(customCriteria<Player>('country'));
 
 console.time('Cube creation');
 
 // create the pivot cube from the squad data using position and country for x and y axes
-let cube = pivot.cube(fulham.squad, y, x);
+let cube = pivot.cube(squad, y, x);
 
 console.timeEnd('Cube creation');
 
@@ -42,6 +42,6 @@ function distinct<T>(value: T, index: number, source: Array<T>): boolean {
 }
 
 // build a custom criteria that will label criteria with the key and value that are checked
-function criteriaMeta<TRecord>(key: keyof TRecord): Callback<TRecord[keyof TRecord], Predicate<TRecord> & Pair<keyof TRecord, TRecord[keyof TRecord]>> {
+function customCriteria<TRecord>(key: keyof TRecord): Callback<TRecord[keyof TRecord], Predicate<TRecord> & Pair<keyof TRecord, TRecord[keyof TRecord]>> {
 	return value => Object.assign((record: TRecord) => record[key] === value, { key, value });
 }
