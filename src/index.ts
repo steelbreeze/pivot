@@ -9,7 +9,7 @@ export type Matrix<TRecord> = Array<Array<TRecord>>;
 /** A cube is a three dimensional data structure. */
 export type Cube<TRecord> = Matrix<Array<TRecord>>;
 
-/** Create a callback to used in a map operation to create the criteria for each point on a dimension.
+/** Create a callback to used in a map operation to create the criteria for each point on a dimension from a set of simple values.
  * @param key The property in the source data to base this criteria on.
  */
 export const criteria = <TRecord>(key: keyof TRecord): Callback<TRecord[keyof TRecord], Predicate<TRecord>> =>
@@ -22,7 +22,7 @@ export const criteria = <TRecord>(key: keyof TRecord): Callback<TRecord[keyof TR
  * @param x The dimension to use for the x axis.
  */
 export const cube = <TRecord>(source: Array<TRecord>, y: Dimension<TRecord>, x: Dimension<TRecord>): Cube<TRecord> =>
-	split([...source], y).map(slice => split(slice, x));
+	partition([...source], y).map(slice => partition(slice, x));
 
 /**
  * Queries data from a cube.
@@ -64,7 +64,7 @@ export const average = <TRecord>(selector: Function<TRecord, number>): Function<
  * Splits an array of records into many arrasy of records based on the dimensions criteria.
  * @hidden 
  */
-const split = <TRecord>(records: Array<TRecord>, dimension: Dimension<TRecord>): Matrix<TRecord> =>
+const partition = <TRecord>(records: Array<TRecord>, dimension: Dimension<TRecord>): Matrix<TRecord> =>
 	dimension.map(criteria => {
 		let length = 0, result = records.filter(record => criteria(record) || !(records[length++] = record));
 
