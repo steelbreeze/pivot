@@ -1,19 +1,19 @@
 import * as pivot from '..';
-import { Player, squad } from './fulham';
+import * as fulham from './fulham';
 import { Callback, Pair, Predicate } from '@steelbreeze/types';
 
 // the source of dimensions are just arrays of values
 const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
-const countries = squad.map(player => player.country).filter(distinct).sort();
+const countries = fulham.squad.map(player => player.country).filter(distinct).sort();
 
 // create simple dimensions, referencing the atttribute within the source and the unique values they have
-const x = positions.map(pivot.criteria<Player>('position'));
-const y = countries.map(criteriaMeta<Player>('country'));
+const x = positions.map(pivot.criteria<fulham.Player>('position'));
+const y = countries.map(criteriaMeta<fulham.Player>('country'));
 
 console.time('Cube creation');
 
 // create the pivot cube from the squad data using position and country for x and y axes
-let cube = pivot.cube(squad, y, x);
+let cube = pivot.cube(fulham.squad, y, x);
 
 console.timeEnd('Cube creation');
 
@@ -21,8 +21,8 @@ console.timeEnd('Cube creation');
 const result = pivot.map(cube, pivot.average(age(new Date('2021-05-23'))));
 
 // Creates a callback to calculate a players age from their date of birth as at a given date
-function age(asAt: Date): (player: Player) => number {
-	return (player: Player) => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
+function age(asAt: Date): (person: { dateOfBirth: Date }) => number {
+	return (player) => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
 }
 
 // pretty print the result with axes

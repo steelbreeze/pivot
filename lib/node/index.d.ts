@@ -11,17 +11,17 @@ export declare type Cube<TRecord> = Matrix<Array<TRecord>>;
 export declare const criteria: <TRecord>(key: keyof TRecord) => Callback<TRecord[keyof TRecord], Predicate<TRecord>>;
 /**
  * Pivots a table by two axes returning a cube.
- * @param source The source data, an array of records.
+ * @param records The source data, an array of records.
  * @param y The dimension to use for the y axis.
  * @param x The dimension to use for the x axis.
  */
-export declare const cube: <TRecord>(source: TRecord[], y: Dimension<TRecord>, x: Dimension<TRecord>) => Cube<TRecord>;
+export declare const cube: <TRecord>(records: TRecord[], y: Dimension<TRecord>, x: Dimension<TRecord>) => Cube<TRecord>;
 /**
  * Queries data from a cube.
- * @param source The source data, a matrix of records.
+ * @param matrix The source data, a matrix of records.
  * @param query A callback function to create a result from each cell of the cube.
  */
-export declare const map: <TRecord, TResult>(source: Matrix<TRecord>, query: Callback<TRecord, TResult>) => Matrix<TResult>;
+export declare const map: <TRecord, TResult>(matrix: Matrix<TRecord>, query: Callback<TRecord, TResult>) => Matrix<TResult>;
 /**
  * A generator, used to filter data within a cube.
  * @param predicate A predicate to test source data to see if it should be included in the filter results.
