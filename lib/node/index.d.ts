@@ -5,7 +5,8 @@ export declare type Dimension<TRecord> = Array<Predicate<TRecord>>;
 export declare type Matrix<TRecord> = Array<Array<TRecord>>;
 /** A cube is a three dimensional data structure. */
 export declare type Cube<TRecord> = Matrix<Array<TRecord>>;
-/** Create a callback to used in a map operation to create the criteria for each point on a dimension from a set of simple values.
+/**
+ * Create a callback to used in a map operation to create the criteria for each point on a dimension from a set of simple values.
  * @param key The property in the source data to base this criteria on.
  */
 export declare const criteria: <TRecord>(key: keyof TRecord) => Callback<TRecord[keyof TRecord], Predicate<TRecord>>;

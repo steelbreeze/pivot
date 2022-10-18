@@ -9,7 +9,8 @@ export type Matrix<TRecord> = Array<Array<TRecord>>;
 /** A cube is a three dimensional data structure. */
 export type Cube<TRecord> = Matrix<Array<TRecord>>;
 
-/** Create a callback to used in a map operation to create the criteria for each point on a dimension from a set of simple values.
+/**
+ * Create a callback to used in a map operation to create the criteria for each point on a dimension from a set of simple values.
  * @param key The property in the source data to base this criteria on.
  */
 export const criteria = <TRecord>(key: keyof TRecord): Callback<TRecord[keyof TRecord], Predicate<TRecord>> =>
