@@ -61,7 +61,7 @@ export const average = <TRecord>(selector: Function<TRecord, number>): Function<
 	source => sum(selector)(source) / source.length;
 
 /**
- * Creates a callback used within a map operation to slice & dice source data by a dimension.
+ * Splits an array of records into many arrasy of records based on the dimensions criteria.
  * @hidden 
  */
 const split = <TRecord>(records: Array<TRecord>, dimension: Dimension<TRecord>): Matrix<TRecord> =>

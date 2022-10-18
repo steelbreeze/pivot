@@ -2,19 +2,13 @@ import * as pivot from '..';
 import { Player, squad } from './fulham';
 import { Callback, Pair, Predicate } from '@steelbreeze/types';
 
-// The keys into the player type
-type Keys = keyof Player;
-
-// critera for a dimension with a little associated metadata
-type Criteria = Predicate<Player> & Pair<keyof Player, Player[keyof Player]>;
-
 // the source of dimensions are just arrays of values
 const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
 const countries = squad.map(player => player.country).filter(distinct).sort();
 
 // create simple dimensions, referencing the atttribute within the source and the unique values they have
 const x = positions.map(pivot.criteria<Player>('position'));
-const y = countries.map(criteriaWithMeta('country'));
+const y = countries.map(criteriaMeta<Player>('country'));
 
 console.time('Cube creation');
 
@@ -42,12 +36,12 @@ function print(value: any) {
 	return str.length < 8 ? str : (str.substring(0, 6) + '\u2026');
 }
 
-// build a custom criteria that will label criteria with the key/value
-function criteriaWithMeta(key: Keys): Callback<Player[Keys], Criteria> {
-	return (value: Player[Keys]) => Object.assign((player: Player) => player[key] === value, { key, value });
-}
-
 // function to create a filter that return only distinct values from an array
 function distinct<T>(value: T, index: number, source: Array<T>): boolean {
 	return source.indexOf(value) === index;
+}
+
+// build a custom criteria that will label criteria with the key and value that are checked
+function criteriaMeta<TRecord>(key: keyof TRecord): Callback<TRecord[keyof TRecord], Predicate<TRecord> & Pair<keyof TRecord, TRecord[keyof TRecord]>> {
+	return value => Object.assign((record: TRecord) => record[key] === value, { key, value });
 }

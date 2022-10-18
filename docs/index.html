@@ -81,8 +81,8 @@
 		];
 
 		// create axes out of the dimensions derived from the squad data
-		const position = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'].map(labelled('position'));
-		const country = squad.map(player => player.country).filter((value, index, source) => source.indexOf(value) === index).sort().map(labelled('country'));
+		const position = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'].map(criteria('position'));
+		const country = squad.map(player => player.country).filter((value, index, source) => source.indexOf(value) === index).sort().map(criteria('country'));
 
 		// create the pivot cube
 		const cube = pivot.cube(squad, country, position);
@@ -107,11 +107,13 @@
 			return `<td${c ? ` class="${c}"` : ``}>${t.join(', ')}</td>`;
 		}
 
-		function labelled(key) {
+		// create criteria with little metadata
+		function criteria(key) {
 			return value => Object.assign(
 				row => row[key] === value,
 				{
 					metadata: [
+//						{ key: 'key', value: key },
 						{ key, value }
 					]
 				});
