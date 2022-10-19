@@ -9,7 +9,7 @@ export declare type Cube<TRecord> = Matrix<Array<TRecord>>;
  * Create a callback to used in a map operation to create the criteria for each point on a dimension from a set of simple values.
  * @param key The property in the source data to base this criteria on.
  */
-export declare const criteria: <TRecord>(key: keyof TRecord) => Callback<TRecord[keyof TRecord], Predicate<TRecord>>;
+export declare const criteria: <TRecord>(key: keyof TRecord) => Function<TRecord[keyof TRecord], Predicate<TRecord>>;
 /**
  * Pivots a table by two axes returning a cube.
  * @param records The source data, an array of records.

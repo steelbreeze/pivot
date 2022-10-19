@@ -1,6 +1,6 @@
 import * as pivot from '..';
 import { Player, squad} from './fulham';
-import { Callback, Pair, Predicate } from '@steelbreeze/types';
+import { Function, Pair, Predicate } from '@steelbreeze/types';
 
 // the source of dimensions are just arrays of values
 const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
@@ -42,6 +42,6 @@ function distinct<T>(value: T, index: number, source: Array<T>): boolean {
 }
 
 // build a custom criteria that will label criteria with the key and value that are checked
-function customCriteria<TRecord>(key: keyof TRecord): Callback<TRecord[keyof TRecord], Predicate<TRecord> & Pair<keyof TRecord, TRecord[keyof TRecord]>> {
+function customCriteria<TRecord>(key: keyof TRecord): Function<TRecord[keyof TRecord], Predicate<TRecord> & Pair<keyof TRecord, TRecord[keyof TRecord]>> {
 	return value => Object.assign((record: TRecord) => record[key] === value, { key, value });
 }
