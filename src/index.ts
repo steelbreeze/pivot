@@ -66,8 +66,8 @@ export const average = <TRecord>(selector: Function<TRecord, number>): Function<
  * @hidden 
  */
 const partition = <TRecord>(records: Array<TRecord>, dimension: Dimension<TRecord>): Matrix<TRecord> =>
-	dimension.map(predicate => {
-		let length = 0, result = records.filter(record => predicate(record) || !(records[length++] = record));
+	dimension.map(criteria => {
+		let length = 0, result = records.filter(record => criteria(record) || !(records[length++] = record));
 
 		records.length = length;
 
