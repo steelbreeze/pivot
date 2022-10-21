@@ -41,7 +41,7 @@ function distinct<T>(value: T, index: number, source: Array<T>): boolean {
 	return source.indexOf(value) === index;
 }
 
-// build a custom criteria that will label criteria with the key and value that are checked
+// build a custom criteria consisting of the predicate and custom metadata describing the key and value that will be tested
 function customCriteria<TRecord>(key: keyof TRecord): Function<TRecord[keyof TRecord], Predicate<TRecord> & Pair<keyof TRecord, TRecord[keyof TRecord]>> {
 	return value => Object.assign((record: TRecord) => record[key] === value, { key, value });
 }
