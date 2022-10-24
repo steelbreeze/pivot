@@ -23,7 +23,7 @@ export const criteria = <TRecord>(key: keyof TRecord): Function<TRecord[keyof TR
  * @param x The dimension to use for the x axis.
  */
 export const cube = <TRecord>(records: Array<TRecord>, y: Dimension<TRecord>, x: Dimension<TRecord>): Cube<TRecord> =>
-	partition([...records], y).map(slice => partition(slice, x));
+	slice(y)([...records]).map(slice(x));
 
 /**
  * Queries data from a cube.
@@ -31,7 +31,7 @@ export const cube = <TRecord>(records: Array<TRecord>, y: Dimension<TRecord>, x:
  * @param query A callback function to create a result from each cell of the cube.
  */
 export const map = <TRecord, TResult>(cube: Cube<TRecord>, query: Callback<Array<TRecord>, TResult>): Matrix<TResult> =>
-	cube.map(slice => slice.map(query));
+	cube.map(matrix => matrix.map(query));
 
 /**
  * A generator, used to filter data within a cube.
@@ -62,11 +62,11 @@ export const average = <TRecord>(selector: Function<TRecord, number>): Function<
 	records => sum(selector)(records) / records.length;
 
 /**
- * Splits an array of records into many arrasy of records based on the dimensions criteria.
+ * Returns a function that splits an array of records into many arrays of records based on the dimensions criteria.
  * @hidden 
  */
-const partition = <TRecord>(records: Array<TRecord>, dimension: Dimension<TRecord>): Matrix<TRecord> =>
-	dimension.map(criteria => {
+const slice = <TRecord>(dimension: Dimension<TRecord>): Function<Array<TRecord>, Matrix<TRecord>> =>
+	records => dimension.map(criteria => {
 		let length = 0, result = records.filter(record => criteria(record) || !(records[length++] = record));
 
 		records.length = length;
