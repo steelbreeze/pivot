@@ -1,6 +1,5 @@
 import * as pivot from '..';
 import { Player, squad} from './fulham';
-import { Function, Pair, Predicate } from '@steelbreeze/types';
 
 // the source of dimensions are just arrays of values
 const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
@@ -8,7 +7,7 @@ const countries = squad.map(player => player.country).filter(distinct).sort();
 
 // create simple dimensions, referencing the atttribute within the source and the unique values they have
 const x = positions.map(pivot.criteria<Player>('position'));
-const y = countries.map(customCriteria<Player>('country'));
+const y = countries.map(customCriteria('country'));
 
 console.time('Cube creation');
 
@@ -42,6 +41,6 @@ function distinct<T>(value: T, index: number, source: Array<T>): boolean {
 }
 
 // build a custom criteria consisting of the predicate and custom metadata describing the key and value that will be tested
-function customCriteria<TRecord>(key: keyof TRecord): Function<TRecord[keyof TRecord], Predicate<TRecord> & Pair<keyof TRecord, TRecord[keyof TRecord]>> {
-	return value => Object.assign((record: TRecord) => record[key] === value, { key, value });
+function customCriteria(key: keyof Player) {
+	return (value: Player[typeof key]) => Object.assign((player: Player) => player[key] === value, { value });
 }
