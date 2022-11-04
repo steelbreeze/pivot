@@ -1,10 +1,8 @@
 import { Callback, Function, Predicate } from '@steelbreeze/types';
 /** A dimension is a series of predicates used to partition data. */
 export declare type Dimension<TRecord> = Array<Predicate<TRecord>>;
-/** A matrix is a two-dimensional data structure. */
-export declare type Matrix<TRecord> = Array<Array<TRecord>>;
 /** A cube is a three dimensional data structure. */
-export declare type Cube<TRecord> = Matrix<Array<TRecord>>;
+export declare type Cube<TRecord> = Array<Array<Array<TRecord>>>;
 /**
  * Create a callback to used in a map operation to create the criteria for each point on a dimension from a set of simple values.
  * @param key The property in the source data to base this criteria on.
@@ -22,7 +20,7 @@ export declare const cube: <TRecord>(records: TRecord[], y: Dimension<TRecord>, 
  * @param cube The source data, a matrix of records.
  * @param query A callback function to create a result from each cell of the cube.
  */
-export declare const map: <TRecord, TResult>(cube: Cube<TRecord>, query: Callback<TRecord[], TResult>) => Matrix<TResult>;
+export declare const map: <TRecord, TResult>(cube: Cube<TRecord>, query: Callback<TRecord[], TResult>) => TResult[][];
 /**
  * A generator, used to filter data within a cube.
  * @param predicate A predicate to test source data to see if it should be included in the filter results.

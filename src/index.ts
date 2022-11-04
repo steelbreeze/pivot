@@ -3,11 +3,8 @@ import { Callback, Function, Predicate } from '@steelbreeze/types';
 /** A dimension is a series of predicates used to partition data. */
 export type Dimension<TRecord> = Array<Predicate<TRecord>>;
 
-/** A matrix is a two-dimensional data structure. */
-export type Matrix<TRecord> = Array<Array<TRecord>>;
-
 /** A cube is a three dimensional data structure. */
-export type Cube<TRecord> = Matrix<Array<TRecord>>;
+export type Cube<TRecord> = Array<Array<Array<TRecord>>>;
 
 /**
  * Create a callback to used in a map operation to create the criteria for each point on a dimension from a set of simple values.
@@ -23,14 +20,14 @@ export const criteria = <TRecord>(key: keyof TRecord): Function<TRecord[keyof TR
  * @param x The dimension to use for the x axis.
  */
 export const cube = <TRecord>(records: Array<TRecord>, y: Dimension<TRecord>, x: Dimension<TRecord>): Cube<TRecord> =>
-	slice(y)([...records]).map(slice(x));
+	y.map(Array.prototype.filter, records).map(matrix => x.map(Array.prototype.filter, matrix));
 
 /**
  * Queries data from a cube.
  * @param cube The source data, a matrix of records.
  * @param query A callback function to create a result from each cell of the cube.
  */
-export const map = <TRecord, TResult>(cube: Cube<TRecord>, query: Callback<Array<TRecord>, TResult>): Matrix<TResult> =>
+export const map = <TRecord, TResult>(cube: Cube<TRecord>, query: Callback<Array<TRecord>, TResult>): Array<Array<TResult>> =>
 	cube.map(matrix => matrix.map(query));
 
 /**
@@ -60,16 +57,3 @@ export const sum = <TRecord>(selector: Function<TRecord, number>): Function<Arra
  */
 export const average = <TRecord>(selector: Function<TRecord, number>): Function<Array<TRecord>, number> =>
 	records => sum(selector)(records) / records.length;
-
-/**
- * Returns a function that splits an array of records into many arrays of records based on the dimensions criteria.
- * @hidden 
- */
-const slice = <TRecord>(dimension: Dimension<TRecord>): Function<Array<TRecord>, Matrix<TRecord>> =>
-	records => dimension.map(criteria => {
-		let length = 0, result = records.filter(record => criteria(record) || !(records[length++] = record));
-
-		records.length = length;
-
-		return result;
-	});
