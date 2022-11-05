@@ -1,5 +1,11 @@
 import * as pivot from '..';
-import { Player, squad} from './fulham';
+import { Player, squad } from './fulham';
+import { Function, Predicate } from '@steelbreeze/types';
+
+// some types derived from Player to aid in custom criteria
+type PlayerKey = keyof Player;
+type PlayerValue = Player[PlayerKey];
+type CustomCriteria = Predicate<Player> & { value: PlayerValue };
 
 // the source of dimensions are just arrays of values
 const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
@@ -41,6 +47,6 @@ function distinct<T>(value: T, index: number, source: Array<T>): boolean {
 }
 
 // build a custom criteria consisting of the predicate and custom metadata describing the key and value that will be tested
-function customCriteria(key: keyof Player) {
-	return (value: Player[typeof key]) => Object.assign((player: Player) => player[key] === value, { value });
+function customCriteria(key: PlayerKey): Function<PlayerValue, CustomCriteria> {
+	return (value: PlayerValue) => Object.assign((player: Player) => player[key] === value, { value });
 }

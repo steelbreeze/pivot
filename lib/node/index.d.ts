@@ -22,10 +22,6 @@ export declare const cube: <TRecord>(records: TRecord[], y: Dimension<TRecord>, 
  */
 export declare const map: <TRecord, TResult>(cube: Cube<TRecord>, query: Callback<TRecord[], TResult>) => TResult[][];
 /**
- * A generator, used to transform the source data in a cube to another representation.
- * @param selector A function to transform a source record into the desired result.
- */
-/**
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each record in the source data.
  */
