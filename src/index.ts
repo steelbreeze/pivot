@@ -1,4 +1,4 @@
-import { Function, Predicate as Criteria } from '@steelbreeze/types';
+import { Callback, Function, Predicate as Criteria } from '@steelbreeze/types';
 
 /** A dimension is a series of criteria used to partition data. */
 export type Dimension<TRecord> = Array<Criteria<TRecord>>;
@@ -27,7 +27,7 @@ export const cube = <TRecord>(records: Array<TRecord>, y: Dimension<TRecord>, x:
  * @param cube The source data, a matrix of records.
  * @param query A callback function to create a result from each cell of the cube.
  */
-export const map = <TRecord, TResult>(cube: Cube<TRecord>, query: Function<Array<TRecord>, TResult>): Array<Array<TResult>> =>
+export const map = <TRecord, TResult>(cube: Cube<TRecord>, query: Callback<Array<TRecord>, TResult>): Array<Array<TResult>> =>
 	cube.map(matrix => matrix.map(query));
 
 /**
