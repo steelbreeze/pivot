@@ -25,4 +25,4 @@ const y = data.map(row => row.b).filter((value, index, source) => source.indexOf
 const cube = pivot.cube(data, x, y);
 
 // Display the values of 'c' seen in the data
-console.log(pivot.map(cube, pivot.select(t => t.c)));
+console.log(pivot.map(cube, records => records.map(t => t.c)));
