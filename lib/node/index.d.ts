@@ -22,11 +22,6 @@ export declare const cube: <TRecord>(records: TRecord[], y: Dimension<TRecord>, 
  */
 export declare const map: <TRecord, TResult>(cube: Cube<TRecord>, query: Callback<TRecord[], TResult>) => TResult[][];
 /**
- * A generator, used to filter data within a cube.
- * @param predicate A predicate to test source data to see if it should be included in the filter results.
- */
-export declare const filter: <TRecord>(predicate: Predicate<TRecord>) => Function<TRecord[], TRecord[]>;
-/**
  * A generator, used to transform the source data in a cube to another representation.
  * @param selector A function to transform a source record into the desired result.
  */

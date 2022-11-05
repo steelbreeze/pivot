@@ -31,13 +31,6 @@ export const map = <TRecord, TResult>(cube: Cube<TRecord>, query: Callback<Array
 	cube.map(matrix => matrix.map(query));
 
 /**
- * A generator, used to filter data within a cube.
- * @param predicate A predicate to test source data to see if it should be included in the filter results.
- */
-export const filter = <TRecord>(predicate: Predicate<TRecord>): Function<Array<TRecord>, Array<TRecord>> =>
-	records => records.filter(predicate);
-
-/**
  * A generator, used to transform the source data in a cube to another representation.
  * @param selector A function to transform a source record into the desired result.
  */
