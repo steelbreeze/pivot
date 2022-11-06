@@ -36,7 +36,7 @@ const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
 const countries = fulham.squad.map(player => player.country).filter(distinct).sort();
 
 // create simple dimensions, referencing the atttribute within the source and the unique values they have
-const x = positions.map(pivot.criteria<Player>('position'));
+const x = positions.map(pivot.criteria('position'));
 const y = countries.map(customCriteria('country'));
 
 // create the pivot cube from the squad data using position and country for x and y axes
