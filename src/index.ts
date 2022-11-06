@@ -1,7 +1,7 @@
 import { Callback, Function, Predicate as Criteria } from '@steelbreeze/types';
 
 /** A dimension is a series of criteria used to partition data. */
-export type Dimension<TRecord> = Array<Criteria<TRecord>>;
+export type Dimension<TRecord, TCriteria extends Criteria<TRecord>> = Array<TCriteria>;
 
 /** A cube is a three dimensional data structure. */
 export type Cube<TRecord> = Array<Array<Array<TRecord>>>;
@@ -19,7 +19,7 @@ export const criteria = <TRecord>(key: keyof TRecord): Function<TRecord[keyof TR
  * @param y The dimension to use for the y axis.
  * @param x The dimension to use for the x axis.
  */
-export const cube = <TRecord>(records: Array<TRecord>, y: Dimension<TRecord>, x: Dimension<TRecord>): Cube<TRecord> =>
+export const cube = <TRecord, TCriteria extends Criteria<TRecord>>(records: Array<TRecord>, y: Dimension<TRecord, TCriteria>, x: Dimension<TRecord, TCriteria>): Cube<TRecord> =>
 	y.map(Array.prototype.filter, records).map(slice => x.map(Array.prototype.filter, slice));
 
 /**
