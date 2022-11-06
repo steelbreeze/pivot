@@ -18,7 +18,7 @@ const y = countries.map(customCriteria('country'));
 console.time('Cube creation');
 
 // create the pivot cube from the squad data using position and country for x and y axes
-let cube = pivot.cube(squad, y, x);
+let cube = pivot.cube<Player>(squad, y, x);
 
 console.timeEnd('Cube creation');
 
