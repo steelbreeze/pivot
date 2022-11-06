@@ -16,10 +16,10 @@ const data: Data[] = [
 ];
 
 // create a dimension with pre-defined values for the property 'a' in the data.
-const x = [1, 2, 3].map(pivot.criteria('a'));
+const x = [1, 2, 3].map(pivot.criteria<Data>('a'));
 
 // create a dimension with derived values for the property 'b' in the data.
-const y = data.map(row => row.b).filter((value, index, source) => source.indexOf(value) === index).map(pivot.criteria('b'));
+const y = data.map(row => row.b).filter((value, index, source) => source.indexOf(value) === index).map(pivot.criteria<Data>('b'));
 
 // create a cube from the data using the x and y dimensions
 const cube = pivot.cube(data, x, y);
