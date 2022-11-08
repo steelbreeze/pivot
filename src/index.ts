@@ -23,7 +23,20 @@ export const criteria = <TRecord>(key: keyof TRecord): Function<TRecord[keyof TR
  * @param x The dimension to use for the x axis.
  */
 export const cube = <TRecord>(records: Array<TRecord>, y: Dimension<TRecord>, x: Dimension<TRecord>): Cube<TRecord> =>
-	y.map(Array.prototype.filter, records).map(slice => x.map(Array.prototype.filter, slice));
+	y.map(slice([...records])).map(records => x.map(slice(records)));
+
+/**
+ * Slices a record set by criteria.
+ * @hidden 
+ */
+const slice = <TRecord>(records: Array<TRecord>): Function<Criteria<TRecord>, Array<TRecord>> =>
+	criteria => {
+		let length = 0, result = records.filter(record => criteria(record) || !(records[length++] = record));
+
+		records.length = length;
+
+		return result;
+	};
 
 /**
  * Queries data from a cube.
@@ -41,8 +54,13 @@ export const sum = <TRecord>(selector: Function<TRecord, number>): Function<Arra
 	records => records.reduce((total, source) => total + selector(source), 0);
 
 /**
+ * A function to count the number of records in a cube cell.
+ */
+export const count: Function<Array<any>, number> = records => records.length;
+
+/**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each record in the source data.
  */
 export const average = <TRecord>(selector: Function<TRecord, number>): Function<Array<TRecord>, number> =>
-	records => sum(selector)(records) / records.length;
+	records => sum(selector)(records) / count(records);
