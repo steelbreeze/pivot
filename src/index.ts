@@ -23,20 +23,20 @@ export const criteria = <TRecord>(key: keyof TRecord): Function<TRecord[keyof TR
  * @param x The dimension to use for the x axis.
  */
 export const cube = <TRecord>(records: Array<TRecord>, y: Dimension<TRecord>, x: Dimension<TRecord>): Cube<TRecord> =>
-	y.map(slice([...records])).map(records => x.map(slice(records)));
+	slice(y)([...records]).map(slice(x));
 
 /**
- * Slices a record set by criteria.
+ * Generates a function to slice a record set by a dimension.
  * @hidden 
  */
-const slice = <TRecord>(records: Array<TRecord>): Function<Criteria<TRecord>, Array<TRecord>> =>
-	criteria => {
+const slice = <TRecord>(dimension: Dimension<TRecord>): Function<Array<TRecord>, Matrix<TRecord>> =>
+	records => dimension.map(criteria => {
 		let length = 0, result = records.filter(record => criteria(record) || !(records[length++] = record));
 
 		records.length = length;
 
 		return result;
-	};
+	});
 
 /**
  * Queries data from a cube.
