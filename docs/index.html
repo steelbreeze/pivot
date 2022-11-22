@@ -42,15 +42,10 @@
 		<h3>Fulham Football Club men's squad at the end of the 2020/21 season</h3>
 		<table id="squad"></table>
 	</main>
-	<footer>
-		<p>Copyright &copy; <span id="created_at"></span>-<span id="pushed_at"></span> <span id="created_by"></span></p>
-	</footer>
+	<html-include href="https://steelbreeze.net/components/footer.html"></html-include>
+	<script src = "https://steelbreeze.net/components/html-include.js"></script>
 	<script src="./dist/pivot.min.js"></script>
 	<script type="module">
-		import * as footer from 'https://steelbreeze.net/footer.js';
-
-		footer.init('https://api.github.com/repos/steelbreeze/pivot');
-
 		const squad = [
 			{ shirt: 1, position: 'Goalkeeper', givenName: 'Alphonse', familyName: 'Areola', country: 'France', dateOfBirth: new Date('1993-02-27') },
 			{ shirt: 12, position: 'Goalkeeper', givenName: 'Marek', familyName: 'Rodak', country: 'Slovakia', dateOfBirth: new Date('1996-12-13') },
