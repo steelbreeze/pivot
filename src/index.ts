@@ -31,7 +31,7 @@ export const cube = <TRecord>(records: Array<TRecord>, y: Dimension<TRecord>, x:
  */
 const slice = <TRecord>(dimension: Dimension<TRecord>, records: Array<TRecord>): Matrix<TRecord> =>
 	dimension.map(criteria => {
-		let length = 0, result = records.filter(record => criteria(record) || !(records[length++] = record));
+		var length = 0, result = records.filter(record => criteria(record) || !(records[length++] = record));
 
 		records.length = length;
 
