@@ -10,7 +10,8 @@ const data: Array<Data> = [];
 const x: pivot.Dimension<Data> = [];
 const y: pivot.Dimension<Data> = []
 
-// generate test data and axes
+console.time('Create data')
+
 for(let i = 0; i < 100; i++) {
 	for(let j = 0; j < 100; j++) {
 		for(let k = 0; k < 100; k++) {
@@ -22,10 +23,9 @@ for(let i = 0; i < 100; i++) {
 	y.push(record => record.j === i);
 }
 
+console.timeEnd('Create data')
 console.time('Create cube')
 
 pivot.cube(data, y, x);
 
 console.timeEnd('Create cube')
-
-//console.log(cube);
