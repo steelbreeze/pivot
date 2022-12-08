@@ -6,26 +6,33 @@ interface Data {
 	k: number;
 }
 
-const data: Array<Data> = [];
-const x: pivot.Dimension<Data> = [];
-const y: pivot.Dimension<Data> = []
+function test(scale: number): void {
 
-console.time('Create data')
+	const data: Array<Data> = [];
+	const x: pivot.Dimension<Data> = [];
+	const y: pivot.Dimension<Data> = []
 
-for(let i = 0; i < 100; i++) {
-	for(let j = 0; j < 100; j++) {
-		for(let k = 0; k < 100; k++) {
-			data.push({i, j, k});
+	console.time(`Create data with ${Math.pow(scale, 3)} records`);
+
+	for (let i = 0; i < scale; i++) {
+		for (let j = 0; j < scale; j++) {
+			for (let k = 0; k < scale; k++) {
+				data.push({ i, j, k });
+			}
 		}
+
+		x.push(record => record.i === i);
+		y.push(record => record.j === i);
 	}
 
-	x.push(record => record.i === i);
-	y.push(record => record.j === i);
+	console.timeEnd(`Create data with ${Math.pow(scale, 3)} records`);
+	console.time('Create cube')
+
+	pivot.cube(data, y, x);
+
+	console.timeEnd('Create cube')
 }
 
-console.timeEnd('Create data')
-console.time('Create cube')
-
-pivot.cube(data, y, x);
-
-console.timeEnd('Create cube')
+test(100);
+test(10);
+test(1);
