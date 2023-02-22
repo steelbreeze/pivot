@@ -41,13 +41,8 @@ export const sum = <TRecord>(selector: Function<TRecord, number>): Function<Arra
 	records => records.reduce((total, source) => total + selector(source), 0);
 
 /**
- * A function to count the number of records in a cube cell.
- */
-export const count: Function<Array<any>, number> = records => records.length;
-
-/**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each record in the source data.
  */
 export const average = <TRecord>(selector: Function<TRecord, number>): Function<Array<TRecord>, number> =>
-	records => sum(selector)(records) / count(records);
+	records => sum(selector)(records) / records.length;

@@ -29,10 +29,6 @@ export declare const map: <TRecord, TResult>(cube: Cube<TRecord>, query: Callbac
  */
 export declare const sum: <TRecord>(selector: Function<TRecord, number>) => Function<TRecord[], number>;
 /**
- * A function to count the number of records in a cube cell.
- */
-export declare const count: Function<Array<any>, number>;
-/**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each record in the source data.
  */
