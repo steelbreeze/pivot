@@ -7,7 +7,7 @@ export type Dimension<TRecord> = Array<Criteria<TRecord>>;
 export type Matrix<TRecord> = Array<Array<TRecord>>;
 
 /** A cube is a matrix containing arrays of records. */
-export type Cube<TRecord> = Matrix<Array<TRecord>>;
+export type Cube<TRecord> = Array<Array<Array<TRecord>>>;
 
 /**
  * Create a callback to used in a map operation to create the criteria for each point on a dimension from a set of simple values.

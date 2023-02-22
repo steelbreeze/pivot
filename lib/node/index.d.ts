@@ -4,7 +4,7 @@ export declare type Dimension<TRecord> = Array<Criteria<TRecord>>;
 /** A matrix is a two dimensional data structure. */
 export declare type Matrix<TRecord> = Array<Array<TRecord>>;
 /** A cube is a matrix containing arrays of records. */
-export declare type Cube<TRecord> = Matrix<Array<TRecord>>;
+export declare type Cube<TRecord> = Array<Array<Array<TRecord>>>;
 /**
  * Create a callback to used in a map operation to create the criteria for each point on a dimension from a set of simple values.
  * @param key The property in the source data to base this criteria on.
