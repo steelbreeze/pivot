@@ -15,8 +15,8 @@
   "devDependencies": {
     "@steelbreeze/types": "^1.2.0",
     "typedoc": "^0.22.11",
-    "typescript": "^4.2.4",
-    "webpack-cli": "^4.7.0"
+    "typescript": "latest",
+    "webpack-cli": "latest"
   },
   "scripts": {
     "build": "tsc -p . && webpack && cp lib/web/*.js docs/dist",
