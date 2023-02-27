@@ -1,6 +1,6 @@
-import { Callback, Function, Predicate as Criteria } from '@steelbreeze/types';
+import { Callback, Function, Predicate } from '@steelbreeze/types';
 /** A dimension is a series of criteria used to partition data. */
-export declare type Dimension<TRecord> = Array<Criteria<TRecord>>;
+export declare type Dimension<TRecord> = Array<Predicate<TRecord>>;
 /** A matrix is a two dimensional data structure. */
 export declare type Matrix<TRecord> = Array<Array<TRecord>>;
 /** A cube is a matrix containing arrays of records. */
@@ -9,7 +9,7 @@ export declare type Cube<TRecord> = Array<Array<Array<TRecord>>>;
  * Create a callback to used in a map operation to create the criteria for each point on a dimension from a set of simple values.
  * @param key The property in the source data to base this criteria on.
  */
-export declare const criteria: <TRecord>(key: keyof TRecord) => Function<TRecord[keyof TRecord], Criteria<TRecord>>;
+export declare const criteria: <TRecord>(key: keyof TRecord) => Function<TRecord[keyof TRecord], Predicate<TRecord>>;
 /**
  * Pivots a table by two axes returning a cube.
  * @param records The source data, an array of records.
