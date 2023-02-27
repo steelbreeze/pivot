@@ -5,7 +5,7 @@ import { Function, Predicate } from '@steelbreeze/types';
 // some types derived from Player to aid in custom criteria
 type PlayerKey = keyof Player;
 type PlayerValue = Player[PlayerKey];
-type CustomCriteria = Predicate<Player> & { value: PlayerValue };
+type CustomCriteria = Predicate<Player> & { meta: { key: PlayerKey, value: PlayerValue } };
 
 // the source of dimensions are just arrays of values
 const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
@@ -28,7 +28,7 @@ function age(asAt: Date): (person: { dateOfBirth: Date }) => number {
 
 // pretty print the result with axes
 console.log(`\t${positions.map(print).join('\t')}`);
-console.log(result.map((row, index) => [y[index].value, ...row].map(print).join('\t')).join('\n'));
+console.log(result.map((row, index) => [y[index].meta.value, ...row].map(print).join('\t')).join('\n'));
 
 // Print a value in 7 characters and truncate with ellipsis
 function print(value: any) {
@@ -44,5 +44,5 @@ function distinct<T>(value: T, index: number, source: Array<T>): boolean {
 
 // build a custom criteria consisting of the predicate and custom metadata describing the key and value that will be tested
 function customCriteria(key: PlayerKey): Function<PlayerValue, CustomCriteria> {
-	return (value: PlayerValue) => Object.assign((player: Player) => player[key] === value, { value });
+	return (value: PlayerValue) => Object.assign((player: Player) => player[key] === value, { meta: { key, value } });
 }
