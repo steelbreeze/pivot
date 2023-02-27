@@ -6,7 +6,7 @@ export type Dimension<TRecord> = Array<Predicate<TRecord>>;
 /** A matrix is a two dimensional data structure. */
 export type Matrix<TRecord> = Array<Array<TRecord>>;
 
-/** A cube is a matrix containing arrays of records. */
+/** A cube is a three dimensional data structure. */
 export type Cube<TRecord> = Array<Array<Array<TRecord>>>;
 
 /**
