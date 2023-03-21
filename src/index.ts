@@ -23,7 +23,7 @@ export const criteria = <TRecord>(key: keyof TRecord): Function<TRecord[keyof TR
  * @param x The dimension to use for the x axis.
  */
 export const cube = <TRecord>(records: Array<TRecord>, y: Dimension<TRecord>, x: Dimension<TRecord>): Cube<TRecord> =>
-	y.map(Array.prototype.filter, records).map(records => x.map(Array.prototype.filter, records));
+	y.map(Array.prototype.filter, records).map(matrix => x.map(Array.prototype.filter, matrix));
 
 /**
  * Queries data from a cube.
