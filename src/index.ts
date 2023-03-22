@@ -23,7 +23,7 @@ export const criteria = <TRecord>(key: keyof TRecord): Function<TRecord[keyof TR
  * @param x The dimension to use for the x axis.
  */
 export const cube = <TRecord>(records: Array<TRecord>, y: Dimension<TRecord>, x: Dimension<TRecord>): Cube<TRecord> =>
-	y.map(Array.prototype.filter, records).map((matrix: Matrix<TRecord>) => x.map(Array.prototype.filter, matrix));
+	slicer(y)(records).map(slicer(x));
 
 /**
  * Queries data from a cube.
@@ -46,3 +46,11 @@ export const sum = <TRecord>(selector: Function<TRecord, number>): Function<Arra
  */
 export const average = <TRecord>(selector: Function<TRecord, number>): Function<Array<TRecord>, number> =>
 	(records: Array<TRecord>) => sum(selector)(records) / records.length;
+
+/**
+ * A generator that creates a function to slice source data by the criteria in a dimension
+ * @param dimension The dimension used to slice the source data
+ * @hidden
+ */
+const slicer = <TRecord>(dimension: Dimension<TRecord>) =>
+	(records: Array<TRecord>) => dimension.map(Array.prototype.filter, records);
