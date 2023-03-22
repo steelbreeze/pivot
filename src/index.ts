@@ -52,5 +52,5 @@ export const average = <TRecord>(selector: Function<TRecord, number>): Function<
  * @param dimension The dimension used to slice the source data
  * @hidden
  */
-const slicer = <TRecord>(dimension: Dimension<TRecord>) =>
+const slicer = <TRecord>(dimension: Dimension<TRecord>): Function<Array<TRecord>, Matrix<TRecord>> =>
 	(records: Array<TRecord>) => dimension.map(Array.prototype.filter, records);
