@@ -33,3 +33,9 @@ export declare const sum: <TRecord>(selector: Function<TRecord, number>) => Func
  * @param selector A callback function to derive a numerical value for each record in the source data.
  */
 export declare const average: <TRecord>(selector: Function<TRecord, number>) => Function<TRecord[], number>;
+/**
+ * A generator that creates a function to slice source data by the criteria in a dimension
+ * @param dimension The dimension used to slice the source data
+ * @hidden
+ */
+export declare const slicer: <TRecord>(dimension: Dimension<TRecord>) => Function<TRecord[], Matrix<TRecord>>;
