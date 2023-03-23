@@ -28,22 +28,22 @@ The documentation can be found [here](http://steelbreeze.net/pivot/api/v3), and 
 ## Example
 The following is the result of pivoting publicly available information about the Fulham Football Club [men's squad](https://web.archive.org/web/20210516151437/https://www.fulhamfc.com/teams) at the end of the 2020/21 season, calculating the average age of players by position and country.
 ```typescript
-import * as pivot from '@steelbreeze/pivot';
+import { criteria, cube, map, average } from '@steelbreeze/pivot';
 import { Player, squad } from './fulham';
 
 // the source of dimensions are just arrays of values
 const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
-const countries = fulham.squad.map(player => player.country).filter(distinct).sort();
+const countries = squad.map(player => player.country).filter(distinct).sort();
 
 // create simple dimensions, referencing the atttribute within the source and the unique values they have
-const x = positions.map(pivot.criteria('position'));
-const y = countries.map(customCriteria('country'));
+const x = positions.map(criteria('position'));
+const y = countries.map(country);
 
 // create the pivot cube from the squad data using position and country for x and y axes
-let cube = pivot.cube(squad, y, x);
+let cubed = cube(squad, y, x);
 
 // find the average age of players by position by country as at 2021-05-23
-const result = pivot.map(cube, pivot.average(age(new Date('2021-05-23'))));
+const result = map(cubed, average(age(new Date('2021-05-23'))));
 ```
 The full example can be found [here](https://github.com/steelbreeze/pivot/tree/main/src/example).
 
