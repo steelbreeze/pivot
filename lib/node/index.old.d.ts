@@ -11,11 +11,12 @@ export declare type Cube<TRecord> = Array<Array<Array<TRecord>>>;
  */
 export declare const criteria: <TRecord>(key: keyof TRecord) => Function<TRecord[keyof TRecord], Predicate<TRecord>>;
 /**
- * Pivots a table by n axes returning an n-cube.
+ * Pivots a table by two axes returning a cube.
  * @param records The source data, an array of records.
- * @param dimensions The dimensions to use to pivot the n-cube.
+ * @param y The dimension to use for the y axis.
+ * @param x The dimension to use for the x axis.
  */
-export declare const cube: <TRecord>(records: TRecord[], dimension: Dimension<TRecord>, ...dimensions: Dimension<TRecord>[]) => Array<any>;
+export declare const cube: <TRecord>(records: TRecord[], y: Dimension<TRecord>, x: Dimension<TRecord>) => Cube<TRecord>;
 /**
  * Queries data from a cube.
  * @param cube The source data, a matrix of records.
@@ -32,3 +33,9 @@ export declare const sum: <TRecord>(selector: Function<TRecord, number>) => Func
  * @param selector A callback function to derive a numerical value for each record in the source data.
  */
 export declare const average: <TRecord>(selector: Function<TRecord, number>) => Function<TRecord[], number>;
+/**
+ * A generator that creates a function to slice source data by the criteria in a dimension
+ * @param dimension The dimension used to slice the source data
+ * @hidden
+ */
+export declare const slicer: <TRecord>(dimension: Dimension<TRecord>) => Function<TRecord[], Matrix<TRecord>>;
