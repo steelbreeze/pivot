@@ -22,8 +22,8 @@ export const criteria = <TRecord>(key: keyof TRecord): Function<TRecord[keyof TR
  * @param dimension The first dimension to use to pivot the n-cube.
  * @param dimensions Any additional dimensions to use to pivot the n-cube.
  */
-export const cube = <TRecord>(records: Array<TRecord>, dimension: Dimension<TRecord>, ...dimensions: Array<Dimension<TRecord>>): Array<any> =>
-	dimension.map<any>(criteria => dimensions.length ? cube(records.filter(criteria), dimensions[0], ...dimensions.slice(1)) : records.filter(criteria));
+export const cube = <TRecord>(records: Array<TRecord>, dimension: Dimension<TRecord>, ...dimensions: Array<Dimension<TRecord>>): Matrix<any> =>
+	dimension.map(criteria => dimensions.length ? cube(records.filter(criteria), dimensions[0], ...dimensions.slice(1)) : records.filter(criteria));
 
 /**
  * Queries data from a cube.

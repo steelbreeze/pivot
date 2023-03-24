@@ -13,9 +13,10 @@ export declare const criteria: <TRecord>(key: keyof TRecord) => Function<TRecord
 /**
  * Pivots a table by n axes returning an n-cube.
  * @param records The source data, an array of records.
- * @param dimensions The dimensions to use to pivot the n-cube.
+ * @param dimension The first dimension to use to pivot the n-cube.
+ * @param dimensions Any additional dimensions to use to pivot the n-cube.
  */
-export declare const cube: <TRecord>(records: TRecord[], dimension: Dimension<TRecord>, ...dimensions: Dimension<TRecord>[]) => Array<any>;
+export declare const cube: <TRecord>(records: TRecord[], dimension: Dimension<TRecord>, ...dimensions: Dimension<TRecord>[]) => Matrix<any>;
 /**
  * Queries data from a cube.
  * @param cube The source data, a matrix of records.
