@@ -28,7 +28,7 @@ function test(scale: number): void {
 	console.timeEnd(`Create data with ${Math.pow(scale, 3)} records`);
 	console.time('Create cube')
 
-	pivot.pivot(data, y, x);
+	pivot.cube(data, y, x);
 
 	console.timeEnd('Create cube')
 }
