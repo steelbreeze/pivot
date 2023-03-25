@@ -42,7 +42,7 @@ const x = positions.map(criteria('position'));
 const y = countries.map(criteria('country'));
 
 // create the pivot cube from the squad data using position and country for x and y axes
-let cube = pivot(squad, [y, x]);
+let cubed = cube(squad, y, x);
 
 // find the average age of players by position by country as at 2021-05-23
 const result = map(cubed, average(age(new Date('2021-05-23'))));
