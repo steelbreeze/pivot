@@ -1,13 +1,13 @@
 import { Callback, Function, Predicate } from '@steelbreeze/types';
-/** A dimension is a series of criteria used to partition data. */
+/** A dimension is a series of predicates used to partition data. */
 export declare type Dimension<TSource> = Array<Predicate<TSource>>;
 /** A matrix is a two dimensional data structure. */
 export declare type Matrix<TSource> = Array<Array<TSource>>;
 /** A cube is a three dimensional data structure. */
 export declare type Cube<TSource> = Array<Array<Array<TSource>>>;
 /**
- * Create a callback to used in a map operation to create the criteria for each point on a dimension from a set of simple values.
- * @param key The property in the source data to base this criteria on.
+ * Create a callback to used in a map operation to create the predicate for each point on a dimension from a set of simple values.
+ * @param key The property in the source data to base this predicate on.
  */
 export declare const criteria: <TSource>(key: keyof TSource) => Function<TSource[keyof TSource], Predicate<TSource>>;
 /**

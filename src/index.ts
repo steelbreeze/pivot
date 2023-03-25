@@ -1,6 +1,6 @@
 import { Callback, Function, Predicate } from '@steelbreeze/types';
 
-/** A dimension is a series of criteria used to partition data. */
+/** A dimension is a series of predicates used to partition data. */
 export type Dimension<TSource> = Array<Predicate<TSource>>;
 
 /** A matrix is a two dimensional data structure. */
@@ -10,8 +10,8 @@ export type Matrix<TSource> = Array<Array<TSource>>;
 export type Cube<TSource> = Array<Array<Array<TSource>>>;
 
 /**
- * Create a callback to used in a map operation to create the criteria for each point on a dimension from a set of simple values.
- * @param key The property in the source data to base this criteria on.
+ * Create a callback to used in a map operation to create the predicate for each point on a dimension from a set of simple values.
+ * @param key The property in the source data to base this predicate on.
  */
 export const criteria = <TSource>(key: keyof TSource): Function<TSource[keyof TSource], Predicate<TSource>> =>
 	(value: TSource[keyof TSource]) => (obj: TSource) => obj[key] === value;
@@ -23,7 +23,7 @@ export const criteria = <TSource>(key: keyof TSource): Function<TSource[keyof TS
  * @returns Returns an n-cube; minimally a Matrix if only one dimension passed, a Cube if two dimensions passed, and so one as more dimensions added.
  */
 export const pivot = <TSource>(source: Array<TSource>, [first, ...remaining]: Array<Dimension<TSource>>): Matrix<any> =>
-	first.map(criteria => remaining.length ? pivot(source.filter(criteria), remaining) : source.filter(criteria));
+	first.map(predicate => remaining.length ? pivot(source.filter(predicate), remaining) : source.filter(predicate));
 
 /**
  * Queries data from a cube.
