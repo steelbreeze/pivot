@@ -1,7 +1,7 @@
 # pivot
 [![Maintainability](https://api.codeclimate.com/v1/badges/c8ed29d6e2fa0bc0d582/maintainability)](https://codeclimate.com/github/steelbreeze/pivot/maintainability)
 
-A minimalist pivot table library for TypeScript/JavaScript. While small (a mere 383 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite dimensions, filtering.
+A minimalist pivot table library for TypeScript/JavaScript. While small (a mere 400 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite dimensions, filtering.
 
 The library also provides a modest set of numerical selectors. Suggestions for additions, or better still contributions, are welcome.
 
@@ -30,7 +30,7 @@ The documentation can be found [here](http://steelbreeze.net/pivot/api/v3), and 
 ## Example
 The following is the result of pivoting publicly available information about the Fulham Football Club [men's squad](https://web.archive.org/web/20210516151437/https://www.fulhamfc.com/teams) at the end of the 2020/21 season, calculating the average age of players by position and country.
 ```typescript
-import { criteria, cube, map, average } from '@steelbreeze/pivot';
+import { criteria, pivot, map, average } from '@steelbreeze/pivot';
 import { Player, squad } from './fulham';
 
 // the source of dimensions are just arrays of values
