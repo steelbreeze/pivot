@@ -1,7 +1,7 @@
 # pivot
 [![Maintainability](https://api.codeclimate.com/v1/badges/c8ed29d6e2fa0bc0d582/maintainability)](https://codeclimate.com/github/steelbreeze/pivot/maintainability)
 
-A minimalist pivot table library for TypeScript/JavaScript. While small (a mere 408 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite dimensions, filtering.
+A minimalist pivot table library for TypeScript/JavaScript. While small (a mere 376 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite dimensions, filtering.
 
 The library also provides a modest set of numerical selectors. Suggestions for additions, or better still contributions, are welcome.
 
@@ -9,6 +9,8 @@ The library also provides a modest set of numerical selectors. Suggestions for a
 There are plenty of pivot table libraries in existence, so why create another one? Well, this is a spin-off from the [steelbreeze/landscape](https://github.com/steelbreeze/landscape) project, where instead of aggregating numerical data from the pivot cube, non-numerical data is needed.
 
 It also focuses just on dimension and cube creation, without any layout considerations keeping it small and unopinionated.
+### n-cubes
+The libary allows 1-n dimensions to be passed into the cube function allowing n-cube (or hypercube) generation.
 
 ## Installation
 ### NPM
@@ -40,7 +42,7 @@ const x = positions.map(criteria('position'));
 const y = countries.map(criteria('country'));
 
 // create the pivot cube from the squad data using position and country for x and y axes
-let cubed = cube(squad, y, x);
+let cubed = cube(squad, [y, x]);
 
 // find the average age of players by position by country as at 2021-05-23
 const result = map(cubed, average(age(new Date('2021-05-23'))));

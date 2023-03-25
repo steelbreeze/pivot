@@ -11,10 +11,11 @@ export declare type Cube<TRecord> = Array<Array<Array<TRecord>>>;
  */
 export declare const criteria: <TRecord>(key: keyof TRecord) => Function<TRecord[keyof TRecord], Predicate<TRecord>>;
 /**
- * Pivots a table by n axes returning an n-cube.
+ * Pivots a table by n dimensions returning an n-cube.
  * @param records The source data, an array of records.
  * @param dimension The first dimension to use to pivot the n-cube.
  * @param dimensions Any additional dimensions to use to pivot the n-cube.
+ * @returns Returns an n-cube minimally a Matrix if only one dimension passed, a Cube if two dimensions passed an so one as more dimensions added.
  */
 export declare const cube: <TRecord>(records: TRecord[], [dimension, ...dimensions]: Dimension<TRecord>[]) => Matrix<any>;
 /**
