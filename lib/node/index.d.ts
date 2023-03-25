@@ -17,7 +17,7 @@ export declare const criteria: <TSource>(key: keyof TSource) => Function<TSource
  * @param additional 0-n additional dimensions to pivot the source data by.
  * @returns Returns an n-cube; minimally a Matrix if only one dimension passed, a Cube if two dimensions passed, and so one as more dimensions added.
  */
-export declare const cube: <TSource>(source: TSource[], first: Dimension<TSource>, ...additional: Dimension<TSource>[]) => Matrix<any>;
+export declare const cube: <TSource>(source: TSource[], first: Dimension<TSource>, ...[next, ...tail]: Dimension<TSource>[]) => Matrix<any>;
 /**
  * Queries data from a cube.
  * @param cube The cube to query data from.
