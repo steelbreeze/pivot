@@ -22,7 +22,7 @@ const x = [1, 2, 3].map(pivot.criteria('a'));
 const y = data.map(row => row.b).filter((value, index, source) => source.indexOf(value) === index).map(pivot.criteria('b'));
 
 // create a cube from the data using the x and y dimensions
-const cube = pivot.cube(data, [x, y]);
+const cube = pivot.pivot(data, [x, y]);
 
 // Display the values of 'c' seen in the data
 console.log(pivot.map(cube, records => records.map(t => (t as Data).c)));

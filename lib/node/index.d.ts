@@ -1,36 +1,35 @@
 import { Callback, Function, Predicate } from '@steelbreeze/types';
 /** A dimension is a series of criteria used to partition data. */
-export declare type Dimension<TRecord> = Array<Predicate<TRecord>>;
+export declare type Dimension<TSource> = Array<Predicate<TSource>>;
 /** A matrix is a two dimensional data structure. */
-export declare type Matrix<TRecord> = Array<Array<TRecord>>;
+export declare type Matrix<TSource> = Array<Array<TSource>>;
 /** A cube is a three dimensional data structure. */
-export declare type Cube<TRecord> = Array<Array<Array<TRecord>>>;
+export declare type Cube<TSource> = Array<Array<Array<TSource>>>;
 /**
  * Create a callback to used in a map operation to create the criteria for each point on a dimension from a set of simple values.
  * @param key The property in the source data to base this criteria on.
  */
-export declare const criteria: <TRecord>(key: keyof TRecord) => Function<TRecord[keyof TRecord], Predicate<TRecord>>;
+export declare const criteria: <TSource>(key: keyof TSource) => Function<TSource[keyof TSource], Predicate<TSource>>;
 /**
- * Pivots a table by n dimensions returning an n-cube.
- * @param records The source data, an array of records.
- * @param dimension The first dimension to use to pivot the n-cube.
- * @param dimensions Any additional dimensions to use to pivot the n-cube.
- * @returns Returns an n-cube minimally a Matrix if only one dimension passed, a Cube if two dimensions passed an so one as more dimensions added.
+ * Pivots source data by n dimensions returning an n-cube.
+ * @param source The source data, an array of objects.
+ * @param dimensions The dimensions to use to pivot the n-cube.
+ * @returns Returns an n-cube; minimally a Matrix if only one dimension passed, a Cube if two dimensions passed and so one as more dimensions added.
  */
-export declare const cube: <TRecord>(records: TRecord[], [dimension, ...dimensions]: Dimension<TRecord>[]) => Matrix<any>;
+export declare const pivot: <TSource>(source: TSource[], [first, ...dimensions]: Dimension<TSource>[]) => Matrix<any>;
 /**
  * Queries data from a cube.
- * @param cube The source data, a matrix of records.
+ * @param cube The cube to query data from.
  * @param query A callback function to create a result from each cell of the cube.
  */
-export declare const map: <TRecord, TResult>(cube: Cube<TRecord>, query: Callback<TRecord[], TResult>) => Matrix<TResult>;
+export declare const map: <TSource, TResult>(cube: Cube<TSource>, query: Callback<TSource[], TResult>) => Matrix<TResult>;
 /**
  * A generator, to create a function to pass into query that sums numerical values derived from rows in a cube.
- * @param selector A callback function to derive a numerical value for each record in the source data.
+ * @param selector A callback function to derive a numerical value for each object in the source data.
  */
-export declare const sum: <TRecord>(selector: Function<TRecord, number>) => Function<TRecord[], number>;
+export declare const sum: <TSource>(selector: Function<TSource, number>) => Function<TSource[], number>;
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube.
- * @param selector A callback function to derive a numerical value for each record in the source data.
+ * @param selector A callback function to derive a numerical value for each object in the source data.
  */
-export declare const average: <TRecord>(selector: Function<TRecord, number>) => Function<TRecord[], number>;
+export declare const average: <TSource>(selector: Function<TSource, number>) => Function<TSource[], number>;
