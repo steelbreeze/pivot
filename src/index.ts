@@ -17,7 +17,7 @@ export const criteria = <TSource>(key: keyof TSource): Function<TSource[keyof TS
 	(value: TSource[keyof TSource]) => (obj: TSource) => obj[key] === value;
 
 /**
- * Pivots source data by n dimensions returning an n-cube.
+ * Pivots source data by one or more dimensions returning an n-cube.
  * @param source The source data, an array of objects.
  * @param dimensions The dimensions to use to pivot the n-cube.
  * @returns Returns an n-cube; minimally a Matrix if only one dimension passed, a Cube if two dimensions passed, and so one as more dimensions added.
