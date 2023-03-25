@@ -16,7 +16,7 @@ export declare const criteria: <TRecord>(key: keyof TRecord) => Function<TRecord
  * @param dimension The first dimension to use to pivot the n-cube.
  * @param dimensions Any additional dimensions to use to pivot the n-cube.
  */
-export declare const cube: <TRecord>(records: TRecord[], dimension: Dimension<TRecord>, ...dimensions: Dimension<TRecord>[]) => Matrix<any>;
+export declare const cube: <TRecord>(records: TRecord[], [dimension, ...dimensions]: Dimension<TRecord>[]) => Matrix<any>;
 /**
  * Queries data from a cube.
  * @param cube The source data, a matrix of records.

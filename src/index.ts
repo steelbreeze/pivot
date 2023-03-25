@@ -17,13 +17,13 @@ export const criteria = <TRecord>(key: keyof TRecord): Function<TRecord[keyof TR
 	(value: TRecord[keyof TRecord]) => (record: TRecord) => record[key] === value;
 
 /**
- * Pivots a table by n axes returning an n-cube.
+ * Pivots a table by n dimensions returning an n-cube.
  * @param records The source data, an array of records.
  * @param dimension The first dimension to use to pivot the n-cube.
  * @param dimensions Any additional dimensions to use to pivot the n-cube.
  */
-export const cube = <TRecord>(records: Array<TRecord>, dimension: Dimension<TRecord>, ...dimensions: Array<Dimension<TRecord>>): Matrix<any> =>
-	dimension.map(criteria => dimensions.length ? cube(records.filter(criteria), dimensions[0], ...dimensions.slice(1)) : records.filter(criteria));
+export const cube = <TRecord>(records: Array<TRecord>, [dimension, ...dimensions]: Array<Dimension<TRecord>>): Matrix<any> =>
+	dimension.map(criteria => dimensions.length ? cube(records.filter(criteria), dimensions) : records.filter(criteria));
 
 /**
  * Queries data from a cube.
