@@ -29,10 +29,10 @@ export function criteria<TSource>(key: keyof TSource): Function<TSource[keyof TS
 /**
  * Pivots source data by one dimension.
  * @param source The source data, an array of objects.
- * @param dimension The dimension used to pivot the source data.
+ * @param first The dimension used to pivot the source data.
  * @returns Returns a matrix, the source data sliced according to the dimension.
  */
-export function pivot<TSource>(source: Array<TSource>, dimension: Dimension<TSource>): Matrix<TSource>;
+export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>): Matrix<TSource>;
 
 /**
  * Pivots source data by two dimensions.
@@ -53,8 +53,8 @@ export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>
 export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, ...dimensions: Array<Dimension<TSource>>): Cube<any>;
 
 // implemntation of the single pivot function satisfying all three of the function prototypes above
-export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...further: Array<Dimension<TSource>>) {
-	return first.map(predicate => second ? pivot(source.filter(predicate), second, ...further) : source.filter(predicate));
+export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...dimensions: Array<Dimension<TSource>>) {
+	return first.map(predicate => second ? pivot(source.filter(predicate), second, ...dimensions) : source.filter(predicate));
 }
 
 /**

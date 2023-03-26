@@ -18,10 +18,10 @@ export declare function criteria<TSource>(key: keyof TSource): Function<TSource[
 /**
  * Pivots source data by one dimension.
  * @param source The source data, an array of objects.
- * @param dimension The dimension used to pivot the source data.
+ * @param first The dimension used to pivot the source data.
  * @returns Returns a matrix, the source data sliced according to the dimension.
  */
-export declare function pivot<TSource>(source: Array<TSource>, dimension: Dimension<TSource>): Matrix<TSource>;
+export declare function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>): Matrix<TSource>;
 /**
  * Pivots source data by two dimensions.
  * @param source The source data, an array of objects.
