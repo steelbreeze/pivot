@@ -22,7 +22,7 @@ export const distinct = <TSource>(value: TSource, index: number, source: Array<T
  * @param key The property in the source data to base this predicate on.
  */
 export const criteria = <TSource>(key: keyof TSource): Function<TSource[keyof TSource], Predicate<TSource>> =>
-	(value: TSource[keyof TSource]) => (obj: TSource) => obj[key] === value;
+	(criterion: TSource[keyof TSource]) => (value: TSource) => value[key] === criterion;
 
 /**
  * Pivots source data by one or more dimensions returning an n-cube.
