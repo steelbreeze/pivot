@@ -4,7 +4,7 @@ import { squad } from './fulham';
 // the position dimension we want in a custom order
 const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
 
-// the countries dimension we derive from the data and order alphabetically
+// the countries dimension we derive from the squad data and order alphabetically
 const countries = squad.map(player => player.country).filter(distinct).sort();
 
 // we then create dimensions which also reference a property in the source data 

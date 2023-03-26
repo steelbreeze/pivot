@@ -46,10 +46,11 @@ export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>
 /**
  * Pivots source data by more than two dimensions returning an n-cube.
  * @param source The source data, an array of objects.
- * @param dimensions 3-n dimensions to pivot the source data by.
+ * @param first The first dimension used to pivot the source data.
+ * @param dimensions 2-n additional dimensions to pivot the source data by.
  * @returns Returns an n-cube (the type of which depends on how many dimensions are passed in, but minimally Cube<Array<TSource>>).
  */
-export function pivot<TSource>(source: Array<TSource>, ...dimensions: Array<Dimension<TSource>>): Cube<any>;
+export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, ...dimensions: Array<Dimension<TSource>>): Cube<any>;
 
 // implemntation of the single pivot function satisfying all three of the function prototypes above
 export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...further: Array<Dimension<TSource>>) {
