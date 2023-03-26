@@ -16,14 +16,27 @@ export declare function distinct<TSource>(value: TSource, index: number, source:
  */
 export declare function criteria<TSource>(key: keyof TSource): Function<TSource[keyof TSource], Predicate<TSource>>;
 /**
- * Pivots source data by one or more dimensions returning an n-cube.
+ * Pivots source data by one dimension.
  * @param source The source data, an array of objects.
- * @param first The first dimension to pivot the source data by.
- * @param second An optional second dimension to pivot the source data by.
- * @param further 0-n further dimensions to pivot the source data by.
- * @returns Returns an n-cube; minimally a Matrix if only the first dimension is passed, a Cube if two dimensions passed, and so one as more dimensions added.
+ * @param dimension The dimension used to pivot the source data.
+ * @returns Returns a matrix, the source data sliced according to the dimension.
  */
-export declare function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...further: Array<Dimension<TSource>>): Matrix<any>;
+export declare function pivot<TSource>(source: Array<TSource>, dimension: Dimension<TSource>): Matrix<TSource>;
+/**
+ * Pivots source data by two dimensions.
+ * @param source The source data, an array of objects.
+ * @param first The first dimension used to pivot the source data.
+ * @param second The second dimension used to pivot the source data.
+ * @returns Returns a cube, the source data sliced according to the first dimension and diced according to the second dimension.
+ */
+export declare function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second: Dimension<TSource>): Cube<TSource>;
+/**
+ * Pivots source data by more than two dimensions returning an n-cube.
+ * @param source The source data, an array of objects.
+ * @param dimensions 3-n dimensions to pivot the source data by.
+ * @returns Returns an n-cube (the type of which depends on how many dimensions are passed in, but minimally Cube<Array<TSource>>).
+ */
+export declare function pivot<TSource>(source: Array<TSource>, ...dimensions: Array<Dimension<TSource>>): Cube<any>;
 /**
  * Queries data from a cube; data previously pivoted by two dimensions.
  * @param cube The cube to query data from.

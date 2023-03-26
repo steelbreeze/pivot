@@ -1,4 +1,4 @@
-import { Cube, criteria, distinct, pivot, map } from '..';
+import { criteria, distinct, pivot, map } from '..';
 
 interface Data {
 	a: number;
@@ -22,7 +22,7 @@ const x = [1, 2, 3].map(criteria('a'));
 const y = data.map(row => row.b).filter(distinct).map(criteria('b'));
 
 // create a cube from the data using the x and y dimensions
-const cube: Cube<Data> = pivot(data, x, y);
+const cube = pivot(data, x, y);
 
 // Display the values of 'c' seen in the data
 console.log(map(cube, records => records.map(t => t.c)));
