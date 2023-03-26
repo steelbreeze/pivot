@@ -1,4 +1,4 @@
-import * as pivot from '..';
+import { Dimension, pivot } from '..';
 
 interface Data {
 	i: number;
@@ -9,8 +9,8 @@ interface Data {
 function test(scale: number): void {
 
 	const data: Array<Data> = [];
-	const x: pivot.Dimension<Data> = [];
-	const y: pivot.Dimension<Data> = []
+	const x: Dimension<Data> = [];
+	const y: Dimension<Data> = []
 
 	console.time(`Create data with ${Math.pow(scale, 3)} records`);
 
@@ -28,7 +28,7 @@ function test(scale: number): void {
 	console.timeEnd(`Create data with ${Math.pow(scale, 3)} records`);
 	console.time('Create cube')
 
-	pivot.pivot(data, y, x);
+	pivot(data, y, x);
 
 	console.timeEnd('Create cube')
 }
