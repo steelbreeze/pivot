@@ -35,7 +35,7 @@
 	</nav>
 	<header>
 		<h1>steelbreeze/pivot</h1>
-		<p>Minimalist JavaScript library written in TypeScript to pivot data by two dimensions.</p>
+		<p>Minimalist JavaScript library written in TypeScript to pivot data by one or more dimensions.</p>
 	</header>
 	<main>
 		<h2>Example</h2>
@@ -77,10 +77,10 @@
 
 		// create axes out of the dimensions derived from the squad data
 		const position = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'].map(criteria('position'));
-		const country = squad.map(player => player.country).filter((value, index, source) => source.indexOf(value) === index).sort().map(criteria('country'));
+		const country = squad.map(player => player.country).filter(pivot.distinct).sort().map(criteria('country'));
 
 		// create the pivot cube
-		const cube = pivot.cube(squad, country, position);
+		const cube = pivot.pivot(squad, country, position);
 
 		// find the average age of players by position by country, select just the full name
 		const result = pivot.map(cube, players => players.map(player => `${player.givenName} ${player.familyName}`));

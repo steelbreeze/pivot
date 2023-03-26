@@ -1,10 +1,10 @@
-import * as pivot from '..';
+import { Cube, criteria, distinct, pivot, map } from '..';
 
 interface Data {
 	a: number;
 	b: number;
 	c: string;
-} 
+}
 
 // a simple data set comprising 4 rows with some dimensional data
 const data: Data[] = [
@@ -16,13 +16,13 @@ const data: Data[] = [
 ];
 
 // create a dimension with pre-defined values for the property 'a' in the data.
-const x = [1, 2, 3].map(pivot.criteria('a'));
+const x = [1, 2, 3].map(criteria('a'));
 
 // create a dimension with derived values for the property 'b' in the data.
-const y = data.map(row => row.b).filter((value, index, source) => source.indexOf(value) === index).map(pivot.criteria('b'));
+const y = data.map(row => row.b).filter(distinct).map(criteria('b'));
 
 // create a cube from the data using the x and y dimensions
-const cube = pivot.cube(data, x, y);
+const cube: Cube<Data> = pivot(data, x, y);
 
 // Display the values of 'c' seen in the data
-console.log(pivot.map(cube, records => records.map(t => (t as Data).c)));
+console.log(map(cube, records => records.map(t => t.c)));

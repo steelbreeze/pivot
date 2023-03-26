@@ -1,7 +1,7 @@
 {
   "name": "@steelbreeze/pivot",
-  "version": "3.7.1",
-  "description": "Minimal TypeScript / JavaScript pivot table library",
+  "version": "4.0.0",
+  "description": "Minimal TypeScript / JavaScript n-cube library",
   "main": "lib/node/index.js",
   "module": "lib/node/index.js",
   "typings": "lib/node/index.d.ts",
@@ -13,7 +13,6 @@
     "dist": "lib/web"
   },
   "devDependencies": {
-    "@steelbreeze/types": "^1.2.0",
     "typedoc": "^0.22.11",
     "typescript": "latest",
     "webpack-cli": "latest"
