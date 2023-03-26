@@ -30,7 +30,7 @@ The documentation can be found [here](http://steelbreeze.net/pivot/api/v3), and 
 ## Example
 The following is the result of pivoting publicly available information about the Fulham Football Club [men's squad](https://web.archive.org/web/20210516151437/https://www.fulhamfc.com/teams) at the end of the 2020/21 season, calculating the average age of players by position and country.
 ```typescript
-import { criteria, pivot, map, average } from '@steelbreeze/pivot';
+import { criteria, cube, map, average } from '@steelbreeze/pivot';
 import { Player, squad } from './fulham';
 
 // the source of dimensions are just arrays of values
