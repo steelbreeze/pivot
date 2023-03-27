@@ -47,14 +47,15 @@ export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>
  * Pivots source data by more than two dimensions returning an n-cube.
  * @param source The source data, an array of objects.
  * @param first The first dimension used to pivot the source data.
- * @param dimensions Additional dimensions to pivot the source data by.
+ * @param second The second dimension used to pivot the source data.
+ * @param others Additional dimensions to pivot the source data by.
  * @returns Returns an n-cube (the type of which depends on how many dimensions are passed in, but minimally Cube<Array<TSource>> for three dimensions).
  */
-export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, ...dimensions: Array<Dimension<TSource>>): Cube<any>;
+export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Cube<any>; // TODO: find a way to make second non-optional yet keeping typing of previous two overloads
 
 // implemntation of the single pivot function satisfying all three of the function prototypes above
-export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...dimensions: Array<Dimension<TSource>>) {
-	return first.map(predicate => second ? pivot(source.filter(predicate), second, ...dimensions) : source.filter(predicate));
+export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...others: Array<Dimension<TSource>>) {
+	return first.map(predicate => second ? pivot(source.filter(predicate), second, ...others) : source.filter(predicate));
 }
 
 /**
