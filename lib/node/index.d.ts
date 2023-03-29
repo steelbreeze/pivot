@@ -31,14 +31,20 @@ export declare function pivot<TSource>(source: Array<TSource>, first: Dimension<
  */
 export declare function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second: Dimension<TSource>): Cube<TSource>;
 /**
- * Pivots source data by more than two dimensions returning an n-cube.
+ * Pivots source data by three or more dimensions returning an n-cube.
  * @param source The source data, an array of objects.
  * @param first The first dimension used to pivot the source data.
  * @param second The second dimension used to pivot the source data.
+ * @param third The third dimension used to pivot the source data.
  * @param others Additional dimensions to pivot the source data by.
  * @returns Returns an n-cube (the type of which depends on how many dimensions are passed in, but minimally Cube<Array<TSource>> for three dimensions).
  */
-export declare function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Cube<any>;
+export declare function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second: Dimension<TSource>, third: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Cube<any>;
+/**
+ * Prototype for the recursive call within pivot implementation; not intented for external consumption
+ * @hidden
+ */
+export declare function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Matrix<TSource> | Cube<any>;
 /**
  * Queries data from a cube; data previously pivoted by two dimensions.
  * @param cube The cube to query data from.
