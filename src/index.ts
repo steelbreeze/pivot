@@ -35,7 +35,7 @@ export function criteria<TSource>(key: keyof TSource): Function<TSource[keyof TS
 export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>): Matrix<TSource>;
 
 /**
- * Pivots source data by two dimensions.
+ * Pivots source data by two dimensions returning a cube.
  * @param source The source data, an array of objects.
  * @param first The first dimension used to pivot the source data.
  * @param second The second dimension used to pivot the source data.
@@ -52,7 +52,7 @@ export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>
  * @param others Additional dimensions to pivot the source data by.
  * @returns Returns an n-cube (the type of which depends on how many dimensions are passed in, but minimally Cube<Array<TSource>> for three dimensions).
  */
-export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second: Dimension<TSource>, third: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Cube<any>;
+export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second: Dimension<TSource>, third: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Cube<Array<any>>;
 
 /**
  * Prototype for the recursive call within pivot implementation; not intented for external consumption
