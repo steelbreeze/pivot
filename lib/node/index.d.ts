@@ -9,12 +9,12 @@ export declare type Matrix<TSource> = Array<Array<TSource>>;
 /** A cube is a three dimensional data structure. */
 export declare type Cube<TSource> = Array<Array<Array<TSource>>>;
 /** Function to pass into Array.prototype.filter to return unique values */
-export declare function distinct<TSource>(value: TSource, index: number, source: Array<TSource>): boolean;
+export declare const distinct: <TSource>(value: TSource, index: number, source: TSource[]) => boolean;
 /**
  * Create a callback to used in a map operation to create the predicate for each point on a dimension from a set of simple values.
  * @param key The property in the source data to base this predicate on.
  */
-export declare function criteria<TSource>(key: keyof TSource): Function<TSource[keyof TSource], Predicate<TSource>>;
+export declare const criteria: <TSource>(key: keyof TSource) => Function<TSource[keyof TSource], Predicate<TSource>>;
 /**
  * Pivots source data by one dimension.
  * @param source The source data, an array of objects.
@@ -50,14 +50,14 @@ export declare function pivot<TSource>(source: Array<TSource>, first: Dimension<
  * @param cube The cube to query data from.
  * @param query A callback function to create a result from each cell of the cube.
  */
-export declare function map<TSource, TResult>(cube: Cube<TSource>, query: Function<Array<TSource>, TResult>): Matrix<TResult>;
+export declare const map: <TSource, TResult>(cube: Cube<TSource>, query: Function<TSource[], TResult>) => Matrix<TResult>;
 /**
  * A generator, to create a function to pass into a cube map operation as the query parameter that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each object in the source data.
  */
-export declare function sum<TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number>;
+export declare const sum: <TSource>(selector: Function<TSource, number>) => Function<TSource[], number>;
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each object in the source data.
  */
-export declare function average<TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number>;
+export declare const average: <TSource>(selector: Function<TSource, number>) => Function<TSource[], number>;

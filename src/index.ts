@@ -14,17 +14,15 @@ export type Matrix<TSource> = Array<Array<TSource>>;
 export type Cube<TSource> = Array<Array<Array<TSource>>>;
 
 /** Function to pass into Array.prototype.filter to return unique values */
-export function distinct<TSource>(value: TSource, index: number, source: Array<TSource>): boolean {
-	return source.indexOf(value) === index;
-}
+export const distinct = <TSource>(value: TSource, index: number, source: Array<TSource>): boolean =>
+	source.indexOf(value) === index;
 
 /**
  * Create a callback to used in a map operation to create the predicate for each point on a dimension from a set of simple values.
  * @param key The property in the source data to base this predicate on.
  */
-export function criteria<TSource>(key: keyof TSource): Function<TSource[keyof TSource], Predicate<TSource>> {
-	return (criterion: TSource[keyof TSource]) => (value: TSource) => value[key] === criterion;
-}
+export const criteria = <TSource>(key: keyof TSource): Function<TSource[keyof TSource], Predicate<TSource>> =>
+	(criterion: TSource[keyof TSource]) => (value: TSource) => value[key] === criterion;
 
 /**
  * Pivots source data by one dimension.
@@ -70,22 +68,19 @@ export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>
  * @param cube The cube to query data from.
  * @param query A callback function to create a result from each cell of the cube.
  */
-export function map<TSource, TResult>(cube: Cube<TSource>, query: Function<Array<TSource>, TResult>): Matrix<TResult> {
-	return cube.map((matrix: Matrix<TSource>) => matrix.map(query));
-}
+export const map = <TSource, TResult>(cube: Cube<TSource>, query: Function<Array<TSource>, TResult>): Matrix<TResult> =>
+	cube.map((matrix: Matrix<TSource>) => matrix.map(query));
 
 /**
  * A generator, to create a function to pass into a cube map operation as the query parameter that sums numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each object in the source data.
  */
-export function sum<TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number> {
-	return (source: Array<TSource>) => source.reduce((total: number, source: TSource) => total + selector(source), 0);
-}
+export const sum = <TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number> =>
+	(source: Array<TSource>) => source.reduce((total: number, source: TSource) => total + selector(source), 0);
 
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube.
  * @param selector A callback function to derive a numerical value for each object in the source data.
  */
-export function average<TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number> {
-	return (source: Array<TSource>) => sum(selector)(source) / source.length;
-}
+export const average = <TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number> =>
+	(source: Array<TSource>) => sum(selector)(source) / source.length;
