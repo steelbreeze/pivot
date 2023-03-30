@@ -56,10 +56,10 @@ export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>
  * Prototype for the recursive call within pivot implementation; not intented for external consumption
  * @hidden 
  */
-export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Matrix<TSource> | Cube<any>;
+export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Matrix<any>;
 
 // implemntation of the single pivot function satisfying all three of the function prototypes above
-export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...others: Array<Dimension<TSource>>) {
+export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Matrix<any> {
 	return first.map(predicate => second ? pivot(source.filter(predicate), second, ...others) : source.filter(predicate));
 }
 

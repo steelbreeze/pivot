@@ -44,7 +44,7 @@ export declare function pivot<TSource>(source: Array<TSource>, first: Dimension<
  * Prototype for the recursive call within pivot implementation; not intented for external consumption
  * @hidden
  */
-export declare function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Matrix<TSource> | Cube<any>;
+export declare function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Matrix<any>;
 /**
  * Queries data from a cube; data previously pivoted by two dimensions.
  * @param cube The cube to query data from.
