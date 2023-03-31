@@ -24,44 +24,24 @@ export const distinct = <TSource>(value: TSource, index: number, source: Array<T
 export const criteria = <TSource>(key: keyof TSource): Function<TSource[keyof TSource], Predicate<TSource>> =>
 	(criterion: TSource[keyof TSource]) => (value: TSource) => value[key] === criterion;
 
-/**
- * Pivots source data by one dimension.
- * @param source The source data, an array of objects.
- * @param first The dimension used to pivot the source data.
- * @returns Returns a matrix, the source data sliced according to the dimension.
- */
-export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>): Matrix<TSource>;
+// internal implemntation of the pivot function. Note, this needs to be seperate from the external API as the recursion within does not use the external API.
+const pivotImplementation = <TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Matrix<any> =>
+	first.map(predicate => second ? pivotImplementation(source.filter(predicate), second, ...others) : source.filter(predicate));
 
 /**
- * Pivots source data by two dimensions returning a cube.
- * @param source The source data, an array of objects.
- * @param first The first dimension used to pivot the source data.
- * @param second The second dimension used to pivot the source data.
- * @returns Returns a cube, the source data sliced according to the first dimension and diced according to the second dimension.
- */
-export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second: Dimension<TSource>): Cube<TSource>;
-
-/**
- * Pivots source data by three or more dimensions returning an n-cube.
+ * Pivots source data by one or more dimensions returning an n-cube.
  * @param source The source data, an array of objects.
  * @param first The first dimension used to pivot the source data.
  * @param second The second dimension used to pivot the source data.
  * @param third The third dimension used to pivot the source data.
  * @param others Additional dimensions to pivot the source data by.
- * @returns Returns an n-cube (the type of which depends on how many dimensions are passed in, but minimally Cube<Array<TSource>> for three dimensions).
+ * @returns Returns an n-cube, the type of which depends on how many dimensions are passed in: Matrix<TSource> for one dimension; Cube<TSource> for two dimension; Cube<Array<TSource> for three dimensions, etc..
  */
-export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second: Dimension<TSource>, third: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Cube<Array<any>>;
-
-/**
- * Prototype for the recursive call within pivot implementation; not intented for external consumption
- * @hidden 
- */
-export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Matrix<any>;
-
-// implemntation of the single pivot function satisfying all three of the function prototypes above
-export function pivot<TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Matrix<any> {
-	return first.map(predicate => second ? pivot(source.filter(predicate), second, ...others) : source.filter(predicate));
-}
+export const pivot: {
+	<TSource>(source: Array<TSource>, first: Dimension<TSource>): Matrix<TSource>;
+	<TSource>(source: Array<TSource>, first: Dimension<TSource>, second: Dimension<TSource>): Cube<TSource>;
+	<TSource>(source: Array<TSource>, first: Dimension<TSource>, second: Dimension<TSource>, third: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Cube<Array<any>>;
+} = pivotImplementation;
 
 /**
  * Queries data from a cube; data previously pivoted by two dimensions.
