@@ -26,7 +26,16 @@ export const criteria = <TSource>(key: keyof TSource): Function<TSource[keyof TS
 
 // internal implemntation of the pivot function. Note, this needs to be seperate from the external API as the recursion within does not use the external API.
 const pivotImplementation = <TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Matrix<any> =>
-	first.map(predicate => second ? pivotImplementation(source.filter(predicate), second, ...others) : source.filter(predicate));
+	first.map(predicate => second ? pivotImplementation(split(source, predicate), second, ...others) : split(source, predicate));
+
+// internal alternative to Array.prototype.filter that strips returned records from the source thereby speeding evaluation of other dimensional criteria
+const split = <TSource>(source: Array<TSource>, predicate: Predicate<TSource>): Array<TSource> => {
+	var length = 0, result = source.filter(record => predicate(record) || !(source[length++] = record));
+
+	source.length = length;
+
+	return result;
+}
 
 /**
  * Pivots source data by one or more dimensions returning an n-cube.
@@ -41,7 +50,7 @@ export const pivot: {
 	<TSource>(source: Array<TSource>, first: Dimension<TSource>): Matrix<TSource>;
 	<TSource>(source: Array<TSource>, first: Dimension<TSource>, second: Dimension<TSource>): Cube<TSource>;
 	<TSource>(source: Array<TSource>, first: Dimension<TSource>, second: Dimension<TSource>, third: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Cube<Array<any>>;
-} = pivotImplementation;
+} = <TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Matrix<any> => pivotImplementation([...source], first, second, ...others);
 
 /**
  * Queries data from a cube; data previously pivoted by two dimensions.
