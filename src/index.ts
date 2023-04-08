@@ -32,7 +32,19 @@ const pivotImplementation = <TSource>(source: Array<TSource>, first: Dimension<T
 		let remaining = 0;
 
 		// perform the filter and repack records that do not match the predicate at the start of the source
-		let slice = source.filter(record => predicate(record) || !(source[remaining++] = record));
+		let slice = source.filter((record, index) => {
+			const result = predicate(record);
+
+			if (!result) {
+				if (index !== remaining) {
+					source[remaining] = record;
+				}
+
+				remaining++;
+			}
+
+			return result;
+		});
 
 		// update the source length to just the remaining records, thereby eliminating the reevaluation of items filtered out on subsiquent iterations
 		source.length = remaining;
