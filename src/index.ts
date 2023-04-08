@@ -24,33 +24,6 @@ export const distinct = <TSource>(value: TSource, index: number, source: Array<T
 export const criteria = <TSource>(key: keyof TSource): Function<TSource[keyof TSource], Predicate<TSource>> =>
 	(criterion: TSource[keyof TSource]) => (value: TSource) => value[key] === criterion;
 
-// implemntation of the pivot function. Note, this needs to be seperate from the external API as the recursion within does not use the external API; it also destroys the source passed in.
-const pivotImplementation = <TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Matrix<any> =>
-	first.map(predicate => second ? pivotImplementation(partition(source, predicate), second, ...others) : partition(source, predicate));
-
-// partition an array in two, returning those that match the predicate.
-const partition = <TSource>(source: Array<TSource>, predicate: Predicate<TSource>): Array<TSource> => {
-	let remaining = 0;
-
-	let slice = source.filter((record, index) => {
-		const result = predicate(record);
-
-		if (!result) {
-			if (index !== remaining) {
-				source[remaining] = record;
-			}
-
-			remaining++;
-		}
-
-		return result;
-	});
-
-	source.length = remaining;
-
-	return slice;
-}
-
 /**
  * Pivots source data by one or more dimensions returning an n-cube.
  * @param source The source data, an array of objects.
@@ -65,6 +38,21 @@ export const pivot: {
 	<TSource>(source: Array<TSource>, first: Dimension<TSource>, second: Dimension<TSource>): Cube<TSource>;
 	<TSource>(source: Array<TSource>, first: Dimension<TSource>, second: Dimension<TSource>, third: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Cube<Array<any>>;
 } = <TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Matrix<any> => pivotImplementation([...source], first, second, ...others);
+
+// implemntation of the pivot function. Note, this needs to be seperate from the external API as the recursion within does not use the external API; it also destroys the source passed in.
+const pivotImplementation = <TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Matrix<any> =>
+	first.map(predicate => second ? pivotImplementation(slice(source, predicate), second, ...others) : slice(source, predicate));
+
+// slice an array in two, returning records that match the predicate and removing them from the source.
+const slice = <TSource>(source: Array<TSource>, predicate: Predicate<TSource>): Array<TSource> => {
+	let remaining = 0;
+
+	const filtered = source.filter((record, index) => predicate(record) || (index === remaining ? remaining++ : source[remaining++] = record, false));
+
+	source.length = remaining;
+
+	return filtered;
+}
 
 /**
  * Queries data from a cube; data previously pivoted by two dimensions.
