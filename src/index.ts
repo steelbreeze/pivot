@@ -24,34 +24,32 @@ export const distinct = <TSource>(value: TSource, index: number, source: Array<T
 export const criteria = <TSource>(key: keyof TSource): Function<TSource[keyof TSource], Predicate<TSource>> =>
 	(criterion: TSource[keyof TSource]) => (value: TSource) => value[key] === criterion;
 
-// internal implemntation of the pivot function. Note, this needs to be seperate from the external API as the recursion within does not use the external API; it also destroys the source passed in.
+// implemntation of the pivot function. Note, this needs to be seperate from the external API as the recursion within does not use the external API; it also destroys the source passed in.
 const pivotImplementation = <TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Matrix<any> =>
-	// evaluate each predicate of the first dimension
-	first.map(predicate => {
-		// count of records remaining after those that match the predicate are filtered out
-		let remaining = 0;
+	first.map(predicate => second ? pivotImplementation(partition(source, predicate), second, ...others) : partition(source, predicate));
 
-		// perform the filter and repack records that do not match the predicate at the start of the source
-		let slice = source.filter((record, index) => {
-			const result = predicate(record);
+// partition an array in two, returning those that match the predicate.
+const partition = <TSource>(source: Array<TSource>, predicate: Predicate<TSource>): Array<TSource> => {
+	let remaining = 0;
 
-			if (!result) {
-				if (index !== remaining) {
-					source[remaining] = record;
-				}
+	let slice = source.filter((record, index) => {
+		const result = predicate(record);
 
-				remaining++;
+		if (!result) {
+			if (index !== remaining) {
+				source[remaining] = record;
 			}
 
-			return result;
-		});
+			remaining++;
+		}
 
-		// update the source length to just the remaining records, thereby eliminating the reevaluation of items filtered out on subsiquent iterations
-		source.length = remaining;
-
-		// if there are more dimensions recurse, otherwise just return the slice
-		return second ? pivotImplementation(slice, second, ...others) : slice;
+		return result;
 	});
+
+	source.length = remaining;
+
+	return slice;
+}
 
 /**
  * Pivots source data by one or more dimensions returning an n-cube.
