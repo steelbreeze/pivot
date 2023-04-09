@@ -45,11 +45,11 @@ const pivotImplementation = <TSource>(source: Array<TSource>, first: Dimension<T
 
 // slice an array in two, returning records that match the predicate and removing them from the source.
 const slice = <TSource>(source: Array<TSource>, predicate: Predicate<TSource>): Array<TSource> => {
-	let index = 0, remaining = 0;
-	let record, filtered: Array<TSource> = [];
+	const filtered: Array<TSource> = [];
+	let remaining: number = 0;
 
-	for (; index < source.length; ++index) {
-		record = source[index];
+	for (let index: number = 0; index < source.length; ++index) {
+		const record: TSource = source[index];
 
 		if (predicate(record)) {
 			filtered.push(record);
