@@ -41,7 +41,7 @@ export const pivot: {
 
 // implemntation of the pivot function. Note, this needs to be seperate from the external API as the recursion within does not use the external API; it also destroys the source passed in.
 const pivotImplementation = <TSource>(source: Array<TSource>, first: Dimension<TSource>, second?: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Matrix<any> =>
-	first.map(predicate => second ? pivotImplementation(slice(source, predicate), second, ...others) : slice(source, predicate));
+	second ? first.map(predicate => pivotImplementation(slice(source, predicate), second, ...others)) : first.map(predicate => slice(source, predicate));
 
 // slice an array in two, returning records that match the predicate and removing them from the source.
 const slice = <TSource>(source: Array<TSource>, predicate: Predicate<TSource>): Array<TSource> => {
