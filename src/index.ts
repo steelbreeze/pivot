@@ -47,7 +47,19 @@ const pivotImplementation = <TSource>(source: Array<TSource>, first: Dimension<T
 const slice = <TSource>(source: Array<TSource>, predicate: Predicate<TSource>): Array<TSource> => {
 	let remaining = 0;
 
-	const filtered = source.filter((record, index) => predicate(record) || (index === remaining ? remaining++ : source[remaining++] = record, false));
+	const filtered = source.filter((record, index) => {
+		const result = predicate(record);
+
+		if (result === false) {
+			if (index !== remaining) {
+				source[remaining] = record;
+			}
+
+			++remaining;
+		}
+
+		return result;
+	});
 
 	source.length = remaining;
 
