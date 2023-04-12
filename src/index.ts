@@ -38,8 +38,8 @@ const slice = <TValue>(source: Array<TValue>, predicate: Predicate<TValue>): Arr
 }
 
 // implemntation of the pivot function, slicing and dicing for each dimension.
-const sliceAndDice = <TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> =>
-	second ? first.map(predicate => sliceAndDice(slice(source, predicate), second, ...others)) : first.map(predicate => slice(source, predicate));
+const dice = <TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> =>
+	second ? first.map(predicate => dice(slice(source, predicate), second, ...others)) : first.map(predicate => slice(source, predicate));
 
 /**
  * Create a callback to used in a map operation to create the predicate for each point on a dimension from a set of simple values.
@@ -63,7 +63,7 @@ export const pivot: {
 	<TValue>(source: Array<TValue>, first: Dimension<TValue>): Matrix<TValue>;
 	<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>): Cube<TValue>;
 	<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>, third: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Cube<Array<any>>;
-} = <TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> => sliceAndDice([...source], first, second, ...others);
+} = <TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> => dice([...source], first, second, ...others);
 
 /**
  * Queries data from a cube; data previously pivoted by two dimensions.
