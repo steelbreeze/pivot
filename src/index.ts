@@ -13,38 +13,6 @@ export type Matrix<TValue> = Array<Array<TValue>>;
 /** A cube is a three dimensional data structure. */
 export type Cube<TValue> = Array<Array<Array<TValue>>>;
 
-/** Function to pass into Array.prototype.filter to return unique values */
-export const distinct = <TValue>(value: TValue, index: number, source: Array<TValue>): boolean =>
-	source.indexOf(value) === index;
-
-/**
- * Create a callback to used in a map operation to create the predicate for each point on a dimension from a set of simple values.
- * @typeParam TValue The type of the source data.
- * @param key The property in the source data to base this predicate on.
- */
-export const criteria = <TValue>(key: keyof TValue): Function<TValue[keyof TValue], Predicate<TValue>> =>
-	(criterion: TValue[keyof TValue]) => (value: TValue) => value[key] === criterion;
-
-/**
- * Pivots source data by one or more dimensions returning an n-cube.
- * @typeParam TValue The type of the source data.
- * @param source The source data, an array of objects.
- * @param first The first dimension used to pivot the source data.
- * @param second The second dimension used to pivot the source data.
- * @param third The third dimension used to pivot the source data.
- * @param others Additional dimensions to pivot the source data by.
- * @returns Returns an n-cube, the type of which depends on how many dimensions are passed in: Matrix<TValue> for one dimension; Cube<TValue> for two dimension; Cube<Array<TValue> for three dimensions, etc..
- */
-export const pivot: {
-	<TValue>(source: Array<TValue>, first: Dimension<TValue>): Matrix<TValue>;
-	<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>): Cube<TValue>;
-	<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>, third: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Cube<Array<any>>;
-} = <TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> => pivotImplementation([...source], first, second, ...others);
-
-// implemntation of the pivot function. Note, this needs to be seperate from the external API as the recursion within does not use the external API; it also destroys the source passed in.
-const pivotImplementation = <TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> =>
-	second ? first.map(predicate => pivotImplementation(slice(source, predicate), second, ...others)) : first.map(predicate => slice(source, predicate));
-
 // slice an array in two, returning records that match the predicate and removing them from the source.
 const slice = <TValue>(source: Array<TValue>, predicate: Predicate<TValue>): Array<TValue> => {
 	const result: Array<TValue> = [];
@@ -68,6 +36,34 @@ const slice = <TValue>(source: Array<TValue>, predicate: Predicate<TValue>): Arr
 
 	return result;
 }
+
+// implemntation of the pivot function, slicing and dicing for each dimension.
+const sliceAndDice = <TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> =>
+	second ? first.map(predicate => sliceAndDice(slice(source, predicate), second, ...others)) : first.map(predicate => slice(source, predicate));
+
+/**
+ * Create a callback to used in a map operation to create the predicate for each point on a dimension from a set of simple values.
+ * @typeParam TValue The type of the source data.
+ * @param key The property in the source data to base this predicate on.
+ */
+export const criteria = <TValue>(key: keyof TValue): Function<TValue[keyof TValue], Predicate<TValue>> =>
+	(criterion: TValue[keyof TValue]) => (value: TValue) => value[key] === criterion;
+
+/**
+ * Pivots source data by one or more dimensions returning an n-cube.
+ * @typeParam TValue The type of the source data.
+ * @param source The source data, an array of objects.
+ * @param first The first dimension used to pivot the source data.
+ * @param second The second dimension used to pivot the source data.
+ * @param third The third dimension used to pivot the source data.
+ * @param others Additional dimensions to pivot the source data by.
+ * @returns Returns an n-cube, the type of which depends on how many dimensions are passed in: Matrix<TValue> for one dimension; Cube<TValue> for two dimension; Cube<Array<TValue> for three dimensions, etc..
+ */
+export const pivot: {
+	<TValue>(source: Array<TValue>, first: Dimension<TValue>): Matrix<TValue>;
+	<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>): Cube<TValue>;
+	<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>, third: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Cube<Array<any>>;
+} = <TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> => sliceAndDice([...source], first, second, ...others);
 
 /**
  * Queries data from a cube; data previously pivoted by two dimensions.
@@ -93,3 +89,7 @@ export const sum = <TValue>(selector: Function<TValue, number>): Function<Array<
  */
 export const average = <TValue>(selector: Function<TValue, number>): Function<Array<TValue>, number> =>
 	(source: Array<TValue>) => sum(selector)(source) / source.length;
+
+/** Function to pass into Array.prototype.filter to return unique values */
+export const distinct = <TValue>(value: TValue, index: number, source: Array<TValue>): boolean =>
+	source.indexOf(value) === index;

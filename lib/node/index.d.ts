@@ -8,8 +8,6 @@ export declare type Dimension<TValue> = Array<Predicate<TValue>>;
 export declare type Matrix<TValue> = Array<Array<TValue>>;
 /** A cube is a three dimensional data structure. */
 export declare type Cube<TValue> = Array<Array<Array<TValue>>>;
-/** Function to pass into Array.prototype.filter to return unique values */
-export declare const distinct: <TValue>(value: TValue, index: number, source: TValue[]) => boolean;
 /**
  * Create a callback to used in a map operation to create the predicate for each point on a dimension from a set of simple values.
  * @typeParam TValue The type of the source data.
@@ -50,3 +48,5 @@ export declare const sum: <TValue>(selector: Function<TValue, number>) => Functi
  * @param selector A callback function to derive a numerical value for each object in the source data.
  */
 export declare const average: <TValue>(selector: Function<TValue, number>) => Function<TValue[], number>;
+/** Function to pass into Array.prototype.filter to return unique values */
+export declare const distinct: <TValue>(value: TValue, index: number, source: TValue[]) => boolean;
