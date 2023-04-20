@@ -14,12 +14,12 @@ export type Matrix<TValue> = Array<Array<TValue>>;
 export type Cube<TValue> = Array<Array<Array<TValue>>>;
 
 // slice the source data into partitions, one for each criteria of the dimension
-function slice<TValue>(source: Array<TValue>, dimension: Dimension<TValue>): Matrix<TValue> {
+function partition<TValue>(source: Array<TValue>, dimension: Dimension<TValue>): Matrix<TValue> {
 	const result: Matrix<TValue> = Array.from(dimension, () => []);
 
 	for (var si = 0; si < source.length; ++si) {
 		const value = source[si];
-		
+
 		for (var di = 0; di < dimension.length; ++di) {
 			if (dimension[di](value)) {
 				result[di].push(value);
@@ -34,7 +34,7 @@ function slice<TValue>(source: Array<TValue>, dimension: Dimension<TValue>): Mat
 
 // slicd and dice the source data based on the number of dimensions passed
 const dice = <TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> =>
-	second ? slice(source, first).map(p => dice(p, second, ...others)) : slice(source, first);
+	second ? partition(source, first).map(slice => dice(slice, second, ...others)) : partition(source, first);
 
 /**
  * Create a callback to used in a map operation to create the predicate for each point on a dimension from a set of simple values.
