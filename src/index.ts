@@ -17,10 +17,10 @@ export type Cube<TValue> = Array<Array<Array<TValue>>>;
 function slice<TValue>(source: Array<TValue>, dimension: Dimension<TValue>): Matrix<TValue> {
 	const result: Matrix<TValue> = Array.from(dimension, () => []);
 
-	for (let si = 0; si < source.length; ++si) {
+	for (var si = 0; si < source.length; ++si) {
 		const value = source[si];
-
-		for (let di = 0; di < dimension.length; ++di) {
+		
+		for (var di = 0; di < dimension.length; ++di) {
 			if (dimension[di](value)) {
 				result[di].push(value);
 
