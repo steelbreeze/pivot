@@ -32,7 +32,7 @@ function partition<TValue>(source: Array<TValue>, dimension: Dimension<TValue>):
 	return result;
 }
 
-// slicd and dice the source data based on the number of dimensions passed
+// slice and dice the source data based on the number of dimensions passed
 const dice = <TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> =>
 	second ? partition(source, first).map(slice => dice(slice, second, ...others)) : partition(source, first);
 
