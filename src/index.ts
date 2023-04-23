@@ -34,7 +34,7 @@ function partition<TValue>(source: Array<TValue>, dimension: Dimension<TValue>):
 
 // slice and dice the source data based on the number of dimensions passed
 const dice = <TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> =>
-	second ? partition(source, first).map(slice => dice(slice, second, ...others)) : partition(source, first);
+	second ? partition(source, first).map((slice: Array<TValue>) => dice(slice, second, ...others)) : partition(source, first);
 
 /**
  * Create a callback to used in a map operation to create the predicate for each point on a dimension from a set of simple values.
