@@ -62,7 +62,7 @@ export const pivot: {
 	<TValue>(source: Array<TValue>, first: Dimension<TValue>): Matrix<TValue>;
 	<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>): Cube<TValue>;
 	<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>, third: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Cube<Array<any>>;
-} = <TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> => dice([...source], first, second, ...others);
+} = dice;
 
 /**
  * Queries data from a cube; data previously pivoted by two dimensions.
