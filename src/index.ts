@@ -15,10 +15,10 @@ export type Cube<TValue> = Array<Array<Array<TValue>>>;
 
 // slice the source data into partitions, one for each criteria of the dimension
 function partition<TValue>(source: Array<TValue>, dimension: Dimension<TValue>): Matrix<TValue> {
-	const result: Matrix<TValue> = [];
+	const matrix: Matrix<TValue> = [];
 
 	for (var di = 0; di < dimension.length; ++di) {
-		result[di] = [];
+		matrix[di] = [];
 	}
 
 	for (var si = 0; si < source.length; ++si) {
@@ -26,14 +26,14 @@ function partition<TValue>(source: Array<TValue>, dimension: Dimension<TValue>):
 
 		for (var di = 0; di < dimension.length; ++di) {
 			if (dimension[di](value)) {
-				result[di].push(value);
+				matrix[di].push(value);
 
 				break;
 			}
 		}
 	}
 
-	return result;
+	return matrix;
 }
 
 // slice and dice the source data based on the number of dimensions passed
