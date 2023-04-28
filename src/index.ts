@@ -15,11 +15,7 @@ export type Cube<TValue> = Array<Array<Array<TValue>>>;
 
 // slice the source data into partitions, one for each criteria of the dimension
 function partition<TValue>(source: Array<TValue>, dimension: Dimension<TValue>): Matrix<TValue> {
-	const matrix: Matrix<TValue> = [];
-
-	for (var di = 0; di < dimension.length; ++di) {
-		matrix[di] = [];
-	}
+	const matrix: Matrix<TValue> = dimension.map(() => []);
 
 	for (var si = 0; si < source.length; ++si) {
 		const value = source[si];
