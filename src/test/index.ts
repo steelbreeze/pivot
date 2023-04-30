@@ -12,12 +12,12 @@ interface Person {
 	nationality: Nationality;
 }
 
-const arnold = { name: 'Arnold', gender: 'male', age: 60, nationality: Nationality.American };
-const emily = { name: 'Emily', gender: 'female', age: 67, nationality: Nationality.American };
-const seamus = { name: 'Seamus', gender: 'male', age: 67, nationality: Nationality.British };
-const eugene = { name: 'Eugene', gender: 'male', age: 75, nationality: Nationality.British };
+const arnold: Person = { name: 'Arnold', gender: 'male', age: 60, nationality: Nationality.American };
+const emily: Person = { name: 'Emily', gender: 'female', age: 67, nationality: Nationality.American };
+const seamus: Person = { name: 'Seamus', gender: 'male', age: 67, nationality: Nationality.British };
+const eugene: Person = { name: 'Eugene', gender: 'male', age: 75, nationality: Nationality.British };
 
-const data = [arnold, emily, seamus, eugene];
+const data: Array<Person> = [arnold, emily, seamus, eugene];
 
 // derive nationality and gender dimensions from the person data
 const nationality = Object.values(Nationality).map(criteria('nationality'));
