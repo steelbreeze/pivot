@@ -13,15 +13,15 @@ export type Matrix<TValue> = Array<Array<TValue>>;
 /** A cube is a three dimensional data structure. */
 export type Cube<TValue> = Array<Array<Array<TValue>>>;
 
-// slice the source data into partitions, one for each criteria of the dimension
-function partition<TValue>(source: Array<TValue>, dimension: Dimension<TValue>): Matrix<TValue> {
-	const matrix: Matrix<TValue> = dimension.map(() => []);
+// slice and dice the source data based on the number of dimensions passed
+const pivotImplementation = <TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> => {
+	const matrix: Matrix<TValue> = first.map(() => []);
 
 	for (var si = 0; si < source.length; ++si) {
 		const value = source[si];
 
-		for (var di = 0; di < dimension.length; ++di) {
-			if (dimension[di](value)) {
+		for (var di = 0; di < first.length; ++di) {
+			if (first[di](value)) {
 				matrix[di].push(value);
 
 				break;
@@ -29,12 +29,8 @@ function partition<TValue>(source: Array<TValue>, dimension: Dimension<TValue>):
 		}
 	}
 
-	return matrix;
+	return second ? matrix.map((slice: Array<TValue>) => pivotImplementation(slice, second, ...others)) : matrix;
 }
-
-// slice and dice the source data based on the number of dimensions passed
-const dice = <TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> =>
-	second ? partition(source, first).map((slice: Array<TValue>) => dice(slice, second, ...others)) : partition(source, first);
 
 /**
  * Create a callback to used in a map operation to create the predicate for each point on a dimension from a set of simple values.
@@ -58,7 +54,7 @@ export const pivot: {
 	<TValue>(source: Array<TValue>, first: Dimension<TValue>): Matrix<TValue>;
 	<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>): Cube<TValue>;
 	<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>, third: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Cube<Array<any>>;
-} = dice;
+} = pivotImplementation;
 
 /**
  * Queries data from a cube; data previously pivoted by two dimensions.
