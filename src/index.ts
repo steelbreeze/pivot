@@ -13,6 +13,14 @@ export type Matrix<TValue> = Array<Array<TValue>>;
 /** A cube is a three dimensional data structure. */
 export type Cube<TValue> = Array<Array<Array<TValue>>>;
 
+/**
+ * Create a callback to used in a map operation to create the predicate for each point on a dimension from a set of simple values.
+ * @typeParam TValue The type of the source data.
+ * @param key The property in the source data to base this predicate on.
+ */
+export const criteria = <TValue>(key: keyof TValue): Function<TValue[keyof TValue], Predicate<TValue>> =>
+	(criterion: TValue[keyof TValue]) => (value: TValue) => value[key] === criterion;
+
 // slice and dice the source data based on the number of dimensions passed
 const pivotImplementation = <TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> => {
 	const matrix: Matrix<TValue> = first.map(() => []);
@@ -31,14 +39,6 @@ const pivotImplementation = <TValue>(source: Array<TValue>, first: Dimension<TVa
 
 	return second ? matrix.map((slice: Array<TValue>) => pivotImplementation(slice, second, ...others)) : matrix;
 }
-
-/**
- * Create a callback to used in a map operation to create the predicate for each point on a dimension from a set of simple values.
- * @typeParam TValue The type of the source data.
- * @param key The property in the source data to base this predicate on.
- */
-export const criteria = <TValue>(key: keyof TValue): Function<TValue[keyof TValue], Predicate<TValue>> =>
-	(criterion: TValue[keyof TValue]) => (value: TValue) => value[key] === criterion;
 
 /**
  * Pivots source data by one or more dimensions returning an n-cube.
