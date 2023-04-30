@@ -21,13 +21,11 @@ export type Cube<TValue> = Array<Array<Array<TValue>>>;
 export const criteria = <TValue>(key: keyof TValue): Function<TValue[keyof TValue], Predicate<TValue>> =>
 	(criterion: TValue[keyof TValue]) => (value: TValue) => value[key] === criterion;
 
-// slice and dice the source data based on the number of dimensions passed
+// private implementation of the pivot function; required for the recursive call which does not use the public interface.
 const pivotImplementation = <TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> => {
 	const matrix: Matrix<TValue> = first.map(() => []);
 
-	for (var si = 0; si < source.length; ++si) {
-		var value = source[si];
-
+	for(var value of source) {
 		for (var di = 0; di < first.length; ++di) {
 			if (first[di](value)) {
 				matrix[di].push(value);
@@ -54,7 +52,7 @@ export const pivot: {
 	<TValue>(source: Array<TValue>, first: Dimension<TValue>): Matrix<TValue>;
 	<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>): Cube<TValue>;
 	<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>, third: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Cube<Array<any>>;
-} = pivotImplementation;
+} = pivotImplementation; // NOTE: this applies a public interface called pivot over the pivotImplementation function with varying return types depending on the number of dimensions passed.
 
 /**
  * Queries data from a cube; data previously pivoted by two dimensions.
