@@ -26,7 +26,7 @@ const pivotImplementation = <TValue>(source: Array<TValue>, first: Dimension<TVa
 	const matrix: Matrix<TValue> = first.map(() => []);
 
 	for (var si = 0; si < source.length; ++si) {
-		const value = source[si];
+		var value = source[si];
 
 		for (var di = 0; di < first.length; ++di) {
 			if (first[di](value)) {
