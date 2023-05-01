@@ -10,7 +10,7 @@ There are plenty of pivot table libraries in existence, so why create another on
 
 It also focuses just on dimension and cube creation, without any layout considerations keeping it small and unopinionated.
 ### n-cubes
-The libary allows 1-n dimensions to be passed into the cube function allowing n-cube (or hypercube) generation.
+The libary allows 1-n dimensions to be passed into the pivot function allowing n-cube (or hypercube) generation.
 
 ## Installation
 ### NPM
