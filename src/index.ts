@@ -25,7 +25,7 @@ export const criteria = <TValue>(key: keyof TValue): Function<TValue[keyof TValu
 const pivotImplementation = <TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> => {
 	const matrix: Matrix<TValue> = first.map(() => []);
 
-	for(var value of source) {
+	for (var value of source) {
 		for (var di = 0; di < first.length; ++di) {
 			if (first[di](value)) {
 				matrix[di].push(value);
