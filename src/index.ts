@@ -21,23 +21,6 @@ export type Cube<TValue> = Array<Array<Array<TValue>>>;
 export const criteria = <TValue>(key: keyof TValue): Function<TValue[keyof TValue], Predicate<TValue>> =>
 	(criterion: TValue[keyof TValue]) => (value: TValue) => value[key] === criterion;
 
-// private implementation of the pivot function; required for the recursive call which does not use the public interface.
-const pivotImplementation = <TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> => {
-	const matrix: Matrix<TValue> = first.map(() => []);
-
-	for (var value of source) {
-		for (var di = 0, dl = first.length; di < dl; ++di) {
-			if (first[di](value)) {
-				matrix[di].push(value);
-
-				break;
-			}
-		}
-	}
-
-	return second ? matrix.map((slice: Array<TValue>) => pivotImplementation(slice, second, ...others)) : matrix;
-}
-
 /**
  * Pivots source data by one or more dimensions returning an n-cube.
  * @typeParam TValue The type of the source data.
@@ -82,3 +65,20 @@ export const average = <TValue>(selector: Function<TValue, number>): Function<Ar
 /** Function to pass into Array.prototype.filter to return unique values */
 export const distinct = <TValue>(value: TValue, index: number, source: Array<TValue>): boolean =>
 	source.indexOf(value) === index;
+
+// private implementation of the pivot function; required for the recursive call which does not use the public interface.
+function pivotImplementation<TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> {
+	const matrix: Matrix<TValue> = first.map(() => []);
+
+	for (var value of source) {
+		for (var di = 0, dl = first.length; di < dl; ++di) {
+			if (first[di](value)) {
+				matrix[di].push(value);
+
+				break;
+			}
+		}
+	}
+
+	return second ? matrix.map((slice: Array<TValue>) => pivotImplementation(slice, second, ...others)) : matrix;
+}
