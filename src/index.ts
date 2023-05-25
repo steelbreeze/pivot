@@ -52,7 +52,15 @@ export const map = <TValue, TResult>(cube: Cube<TValue>, query: Function<Array<T
  * @param selector A callback function to derive a numerical value for each object in the source data.
  */
 export const sum = <TValue>(selector: Function<TValue, number>): Function<Array<TValue>, number> =>
-	(source: Array<TValue>) => source.reduce((total: number, source: TValue) => total + selector(source), 0);
+	(source: Array<TValue>) => {
+		var result: number = 0;
+
+		for(var value of source) {
+			result += selector(value);
+		}
+
+		return result;
+	};
 
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube.
