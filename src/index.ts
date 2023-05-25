@@ -43,8 +43,21 @@ export const pivot: {
  * @param cube The cube to query data from.
  * @param query A callback function to create a result from each cell of the cube.
  */
-export const map = <TValue, TResult>(cube: Cube<TValue>, query: Function<Array<TValue>, TResult>): Matrix<TResult> =>
-	cube.map((matrix: Matrix<TValue>) => matrix.map(query));
+export const map = <TValue, TResult>(cube: Cube<TValue>, query: Function<Array<TValue>, TResult>): Matrix<TResult> => {
+	var result: Matrix<TResult> = [];
+
+	for (var matrix of cube) {
+		var interim: Array<TResult> = [];
+
+		for (var array of matrix) {
+			interim.push(query(array));
+		}
+
+		result.push(interim);
+	}
+
+	return result;
+}
 
 /**
  * A generator, to create a function to pass into a cube map operation as the query parameter that sums numerical values derived from rows in a cube.
@@ -55,7 +68,7 @@ export const sum = <TValue>(selector: Function<TValue, number>): Function<Array<
 	(source: Array<TValue>) => {
 		var result: number = 0;
 
-		for(var value of source) {
+		for (var value of source) {
 			result += selector(value);
 		}
 
