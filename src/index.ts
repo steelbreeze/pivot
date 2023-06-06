@@ -91,6 +91,7 @@ export const distinct = <TValue>(value: TValue, index: number, source: Array<TVa
 function pivotImplementation<TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> {
 	const matrix: Matrix<TValue> = first.map(() => []);
 
+	// partition source data according to the criteria of the first dimension
 	for (var value of source) {
 		for (var di = 0, dl = first.length; di < dl; ++di) {
 			if (first[di](value)) {
@@ -101,5 +102,16 @@ function pivotImplementation<TValue>(source: Array<TValue>, first: Dimension<TVa
 		}
 	}
 
-	return second ? matrix.map((slice: Array<TValue>) => pivotImplementation(slice, second, ...others)) : matrix;
+	// recurse of there are more dimensions, otherside just return the matrix
+	if (second) {
+		var result: Cube<TValue> = [];
+		
+		for (var slice of matrix) {
+			result.push(pivotImplementation(slice, second, ...others));
+		}
+
+		return result;
+	} else {
+		return matrix;
+	}
 }
