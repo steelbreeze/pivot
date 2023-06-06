@@ -13,7 +13,7 @@
     "dist": "lib/web"
   },
   "devDependencies": {
-    "typedoc": "^0.22.11",
+    "typedoc": "latest",
     "typescript": "latest",
     "webpack-cli": "latest"
   },

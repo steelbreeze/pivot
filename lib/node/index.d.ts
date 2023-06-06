@@ -1,13 +1,13 @@
 /** A simple function taking an agrument and returning a result */
-export declare type Function<TArg, TResult> = (arg: TArg) => TResult;
+export type Function<TArg, TResult> = (arg: TArg) => TResult;
 /** A predicate is a function returning a boolean result */
-export declare type Predicate<TArg> = Function<TArg, boolean>;
+export type Predicate<TArg> = Function<TArg, boolean>;
 /** A dimension is a series of predicates used to partition data. */
-export declare type Dimension<TValue> = Array<Predicate<TValue>>;
+export type Dimension<TValue> = Array<Predicate<TValue>>;
 /** A matrix is a two dimensional data structure. */
-export declare type Matrix<TValue> = Array<Array<TValue>>;
+export type Matrix<TValue> = Array<Array<TValue>>;
 /** A cube is a three dimensional data structure. */
-export declare type Cube<TValue> = Array<Array<Array<TValue>>>;
+export type Cube<TValue> = Array<Array<Array<TValue>>>;
 /**
  * Create a callback to used in a map operation to create the predicate for each point on a dimension from a set of simple values.
  * @typeParam TValue The type of the source data.
