@@ -105,13 +105,13 @@ function pivotImplementation<TValue>(source: Array<TValue>, first: Dimension<TVa
 	// recurse of there are more dimensions, otherside just return the matrix
 	if (second) {
 		var result: Cube<TValue> = [];
-		
+
 		for (var slice of matrix) {
 			result.push(pivotImplementation(slice, second, ...others));
 		}
 
 		return result;
-	} else {
-		return matrix;
 	}
+
+	return matrix;
 }
