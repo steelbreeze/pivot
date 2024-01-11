@@ -34,7 +34,7 @@ export const criteria = <TValue>(key: keyof TValue): Function<TValue[keyof TValu
 export const pivot: {
 	<TValue>(source: Array<TValue>, first: Dimension<TValue>): Matrix<TValue>;
 	<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>): Cube<TValue>;
-	<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>, third: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Cube<Array<any>>;
+	<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Cube<any>;
 } = pivotImplementation; // NOTE: this applies a public interface called pivot over the pivotImplementation function with varying return types depending on the number of dimensions passed.
 
 /**
@@ -88,7 +88,8 @@ export const distinct = <TValue>(value: TValue, index: number, source: Array<TVa
 	source.indexOf(value) === index;
 
 // private implementation of the pivot function; required for the recursive call which does not use the public interface.
-function pivotImplementation<TValue>(source: Array<TValue>, first: Dimension<TValue>, second?: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Matrix<any> {
+function pivotImplementation<TValue>(source: Array<TValue>, ...dimensions: Array<Dimension<TValue>>): Matrix<any> {
+	const [first, ...others] = dimensions;
 	const matrix: Matrix<TValue> = first.map(() => []);
 
 	// partition source data according to the criteria of the first dimension
@@ -102,12 +103,12 @@ function pivotImplementation<TValue>(source: Array<TValue>, first: Dimension<TVa
 		}
 	}
 
-	// recurse of there are more dimensions, otherside just return the matrix
-	if (second) {
+	// recurse if there are other dimensions, otherside just return the matrix
+	if (others.length) {
 		var result: Cube<TValue> = [];
 
 		for (var slice of matrix) {
-			result.push(pivotImplementation(slice, second, ...others));
+			result.push(pivotImplementation(slice, ...others));
 		}
 
 		return result;
