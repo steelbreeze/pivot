@@ -8,6 +8,8 @@ export type Dimension<TValue> = Array<Predicate<TValue>>;
 export type Matrix<TValue> = Array<Array<TValue>>;
 /** A cube is a three dimensional data structure. */
 export type Cube<TValue> = Array<Array<Array<TValue>>>;
+/** An n-cube is an n-dimensional data structure. */
+export type Hypercube = Cube<Array<any>>;
 /**
  * Create a callback to used in a map operation to create the predicate for each point on a dimension from a set of simple values.
  * @typeParam TValue The type of the source data.
@@ -30,13 +32,13 @@ export declare function pivot<TValue>(source: Array<TValue>, first: Dimension<TV
  */
 export declare function pivot<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>): Cube<TValue>;
 /**
- * Pivots source data by three or more dimensions returning an n-cube.
+ * Pivots source data by any number of dimensions returning a hypercube.
  * @typeParam TValue The type of the source data.
  * @param source The source data, an array of objects.
  * @param first The first dimension used to pivot the source data.
  * @param others Additional dimensions to pivot the source data by.
  */
-export declare function pivot<TValue>(source: Array<TValue>, ...[first, ...others]: Array<Dimension<TValue>>): Cube<any>;
+export declare function pivot<TValue>(source: Array<TValue>, ...[first, ...others]: Array<Dimension<TValue>>): Hypercube;
 /**
  * Queries data from a cube; data previously pivoted by two dimensions.
  * @typeParam TValue The type of the source data.

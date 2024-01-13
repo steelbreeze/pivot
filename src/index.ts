@@ -51,7 +51,7 @@ export function pivot<TValue>(source: Array<TValue>, first: Dimension<TValue>, s
 export function pivot<TValue>(source: Array<TValue>, ...[first, ...others]: Array<Dimension<TValue>>): Hypercube;
 
 // the implementation of pivot
-export function pivot<TValue>(source: Array<TValue>, ...[first, ...others]: Array<Dimension<TValue>>): Matrix<any> {
+export function pivot<TValue>(source: Array<TValue>, ...[first, ...others]: Array<Dimension<TValue>>) {
 	// create a result matrix sized to the first dimension
 	const matrix: Matrix<TValue> = first.map(() => []);
 
