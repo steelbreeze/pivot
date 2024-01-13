@@ -87,7 +87,7 @@ export const distinct = <TValue>(value: TValue, index: number, source: Array<TVa
 	source.indexOf(value) === index;
 
 // private implementation of the pivot function; required for the recursive call which does not use the public interface.
-function pivotImplementation<TValue>(source: Array<TValue>, ...dimensions: Array<Dimension<TValue>>): Matrix<any> {
+function pivotImplementation<TValue>(source: Array<TValue>, ...dimensions: Array<Dimension<TValue>>): Matrix<TValue> | Cube<any> {
 	// slice the first dimension from the others
 	const [first, ...others]: Array<Dimension<TValue>> = dimensions;
 
@@ -107,7 +107,7 @@ function pivotImplementation<TValue>(source: Array<TValue>, ...dimensions: Array
 
 	// recurse if there are other dimensions, otherside just return the matrix
 	if (others.length) {
-		var result: Cube<TValue> = [];
+		var result: Cube<any> = [];
 
 		for (var slice of matrix) {
 			result.push(pivotImplementation(slice, ...others));

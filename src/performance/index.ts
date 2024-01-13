@@ -12,7 +12,10 @@ function test(scale: number): void {
 	const x: Dimension<Data> = [];
 	const y: Dimension<Data> = []
 
-	console.time(`Create data with ${Math.pow(scale, 3)} records`);
+//	const t1 = `Create data with ${Math.pow(scale, 3)} records`;
+	const t2 = `Create cube with ${Math.pow(scale, 3)} records`;
+
+//	console.time(t1);
 
 	for (let i = 0; i < scale; i++) {
 		for (let j = 0; j < scale; j++) {
@@ -25,12 +28,12 @@ function test(scale: number): void {
 		y.push(record => record.j === i);
 	}
 
-	console.timeEnd(`Create data with ${Math.pow(scale, 3)} records`);
-	console.time('Create cube')
+//	console.timeEnd(t1);
+	console.time(t2)
 
 	pivot(data, y, x);
 
-	console.timeEnd('Create cube')
+	console.timeEnd(t2)
 }
 
 test(100);
