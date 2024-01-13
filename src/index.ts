@@ -62,21 +62,8 @@ function pivotImplementation<TValue>(source: Array<TValue>, ...[first, ...others
  * @param cube The cube to query data from.
  * @param query A callback function to create a result from each cell of the cube.
  */
-export const map = <TValue, TResult>(cube: Cube<TValue>, query: Function<Array<TValue>, TResult>): Matrix<TResult> => {
-	var result: Matrix<TResult> = [];
-
-	for (var matrix of cube) {
-		var interim: Array<TResult> = [];
-
-		for (var array of matrix) {
-			interim.push(query(array));
-		}
-
-		result.push(interim);
-	}
-
-	return result;
-}
+export const map = <TValue, TResult>(cube: Cube<TValue>, query: Function<Array<TValue>, TResult>): Matrix<TResult> =>
+	cube.map(matrix => matrix.map(query));
 
 /**
  * A generator, to create a function to pass into a cube map operation as the query parameter that sums numerical values derived from rows in a cube.
@@ -84,15 +71,7 @@ export const map = <TValue, TResult>(cube: Cube<TValue>, query: Function<Array<T
  * @param selector A callback function to derive a numerical value for each object in the source data.
  */
 export const sum = <TValue>(selector: Function<TValue, number>): Function<Array<TValue>, number> =>
-	(source: Array<TValue>) => {
-		var result: number = 0;
-
-		for (var value of source) {
-			result += selector(value);
-		}
-
-		return result;
-	};
+	(source: Array<TValue>) => source.reduce((a: number, b: TValue) => a + selector(b), 0);
 
 /**
  * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube.
