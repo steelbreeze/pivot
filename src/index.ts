@@ -13,6 +13,9 @@ export type Matrix<TValue> = Array<Array<TValue>>;
 /** A cube is a three dimensional data structure. */
 export type Cube<TValue> = Array<Array<Array<TValue>>>;
 
+/** An n-cube is an n-dimensional data structure. */
+export type Hypercube = Cube<Array<any>>;
+
 /**
  * Create a callback to used in a map operation to create the predicate for each point on a dimension from a set of simple values.
  * @typeParam TValue The type of the source data.
@@ -21,37 +24,34 @@ export type Cube<TValue> = Array<Array<Array<TValue>>>;
 export const criteria = <TValue>(key: keyof TValue): Function<TValue[keyof TValue], Predicate<TValue>> =>
 	(criterion: TValue[keyof TValue]) => (value: TValue) => value[key] === criterion;
 
-export const pivot: {
-	/**
-	 * Pivots source data by one dimension returning a matrix.
-	 * @typeParam TValue The type of the source data.
-	 * @param source The source data, an array of objects.
-	 * @param first The first dimension used to pivot the source data.
-	 */
-	<TValue>(source: Array<TValue>, first: Dimension<TValue>): Matrix<TValue>;
+/**
+ * Pivots source data by one dimension returning a matrix.
+ * @typeParam TValue The type of the source data.
+ * @param source The source data, an array of objects.
+ * @param first The first dimension used to pivot the source data.
+ */
+export function pivot<TValue>(source: Array<TValue>, first: Dimension<TValue>): Matrix<TValue>;
 
-	/**
-	 * Pivots source data by two dimensions returning a cube.
-	 * @typeParam TValue The type of the source data.
-	 * @param source The source data, an array of objects.
-	 * @param first The first dimension used to pivot the source data.
-	 * @param second The second dimension used to pivot the source data.
-	 */
-	<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>): Cube<TValue>;
+/**
+ * Pivots source data by two dimensions returning a cube.
+ * @typeParam TValue The type of the source data.
+ * @param source The source data, an array of objects.
+ * @param first The first dimension used to pivot the source data.
+ * @param second The second dimension used to pivot the source data.
+ */
+export function pivot<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>): Cube<TValue>;
 
-	/**
-	 * Pivots source data by three or more dimensions returning an n-cube.
-	 * @typeParam TValue The type of the source data.
-	 * @param source The source data, an array of objects.
-	 * @param first The first dimension used to pivot the source data.
-	 * @param second The second dimension used to pivot the source data.
-	 * @param others Additional dimensions to pivot the source data by.
-	 */
-	<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Cube<any>;
-} = pivotImplementation; // NOTE: this applies a public interface called pivot over the pivotImplementation function with varying return types depending on the number of dimensions passed.
+/**
+ * Pivots source data by any number of dimensions returning a hypercube.
+ * @typeParam TValue The type of the source data.
+ * @param source The source data, an array of objects.
+ * @param first The first dimension used to pivot the source data.
+ * @param others Additional dimensions to pivot the source data by.
+ */
+export function pivot<TValue>(source: Array<TValue>, ...[first, ...others]: Array<Dimension<TValue>>): Hypercube;
 
-// private implementation of the pivot function; required for the recursive call which does not use the public interface.
-function pivotImplementation<TValue>(source: Array<TValue>, ...[first, ...others]: Array<Dimension<TValue>>): Matrix<TValue> | Cube<any> {
+// the implementation of pivot
+export function pivot<TValue>(source: Array<TValue>, ...[first, ...others]: Array<Dimension<TValue>>): Matrix<any> {
 	// create a result matrix sized to the first dimension
 	const matrix: Matrix<TValue> = first.map(() => []);
 
@@ -67,7 +67,7 @@ function pivotImplementation<TValue>(source: Array<TValue>, ...[first, ...others
 	}
 
 	// recurse if there are other dimensions, otherwise just return the matrix
-	return others.length ? matrix.map(slice => pivotImplementation(slice, ...others)) : matrix;
+	return others.length ? matrix.map(slice => pivot(slice, ...others)) : matrix;
 }
 
 /**
