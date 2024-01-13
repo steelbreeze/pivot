@@ -20,7 +20,7 @@ export type Matrix<TValue> = Array<Array<TValue>>;
  * A cube is a three dimensional data structure.
  * @param TValue The type of the source data that the cube was created from.
  */
-export type Cube<TValue> = Array<Array<Array<TValue>>>;
+export type Cube<TValue> = Matrix<Array<TValue>>;
 
 /**
  * An n-cube is an n-dimensional data structure.
