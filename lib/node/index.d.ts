@@ -20,7 +20,7 @@ export type Cube<TValue> = Matrix<Array<TValue>>;
 /**
  * An n-cube is an n-dimensional data structure.
  */
-export type Hypercube = Cube<Array<any>>;
+export type Hypercube = Array<any>;
 /**
  * Create a callback to used in a map operation to create the predicate for each point on a dimension from a set of simple values.
  * @typeParam TValue The type of the source data.

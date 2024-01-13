@@ -25,7 +25,7 @@ export type Cube<TValue> = Matrix<Array<TValue>>;
 /**
  * An n-cube is an n-dimensional data structure.
  */
-export type Hypercube = Cube<Array<any>>;
+export type Hypercube = Array<any>;
 
 /**
  * Create a callback to used in a map operation to create the predicate for each point on a dimension from a set of simple values.
@@ -62,6 +62,9 @@ export function pivot<TValue>(source: Array<TValue>, ...dimensions: Array<Dimens
 
 // the implementation of pivot
 export function pivot<TValue>(source: Array<TValue>, ...[first, ...others]: Array<Dimension<TValue>>) {
+	// a little protection in case hypercube interface is used and no dimensions passed
+	if(!first) return source;
+
 	// create a result matrix sized to the first dimension
 	const matrix: Matrix<TValue> = first.map(() => []);
 
