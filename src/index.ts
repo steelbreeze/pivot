@@ -36,6 +36,26 @@ export const pivot: {
 	<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Cube<any>;
 } = pivotImplementation; // NOTE: this applies a public interface called pivot over the pivotImplementation function with varying return types depending on the number of dimensions passed.
 
+// private implementation of the pivot function; required for the recursive call which does not use the public interface.
+function pivotImplementation<TValue>(source: Array<TValue>, ...[first, ...others]: Array<Dimension<TValue>>): Matrix<TValue> | Cube<any> {
+	// create a result matrix sized to the first dimension
+	const matrix: Matrix<TValue> = first.map(() => []);
+
+	// partition source data into the matrix according to the criteria of the first dimension
+	for (var value of source) {
+		for (var di = 0, dl = first.length; di < dl; ++di) {
+			if (first[di](value)) {
+				matrix[di].push(value);
+
+				break;
+			}
+		}
+	}
+
+	// recurse if there are other dimensions, otherwise just return the matrix
+	return others.length ? matrix.map(slice => pivotImplementation(slice, ...others)) : matrix;
+}
+
 /**
  * Queries data from a cube; data previously pivoted by two dimensions.
  * @typeParam TValue The type of the source data.
@@ -85,23 +105,3 @@ export const average = <TValue>(selector: Function<TValue, number>): Function<Ar
 /** Function to pass into Array.prototype.filter to return unique values */
 export const distinct = <TValue>(value: TValue, index: number, source: Array<TValue>): boolean =>
 	source.indexOf(value) === index;
-
-// private implementation of the pivot function; required for the recursive call which does not use the public interface.
-function pivotImplementation<TValue>(source: Array<TValue>, ...[first, ...others]: Array<Dimension<TValue>>): Matrix<TValue> | Cube<any> {
-	// create a result matrix sized to the first dimension
-	const matrix: Matrix<TValue> = first.map(() => []);
-
-	// partition source data into the matrix according to the criteria of the first dimension
-	for (var value of source) {
-		for (var di = 0, dl = first.length; di < dl; ++di) {
-			if (first[di](value)) {
-				matrix[di].push(value);
-
-				break;
-			}
-		}
-	}
-
-	// recurse if there are other dimensions, otherwise just return the matrix
-	return others.length ? matrix.map(slice => pivotImplementation(slice, ...others)) : matrix;
-}
