@@ -14,18 +14,30 @@ export type Cube<TValue> = Array<Array<Array<TValue>>>;
  * @param key The property in the source data to base this predicate on.
  */
 export declare const criteria: <TValue>(key: keyof TValue) => Function<TValue[keyof TValue], Predicate<TValue>>;
-/**
- * Pivots source data by one or more dimensions returning an n-cube.
- * @typeParam TValue The type of the source data.
- * @param source The source data, an array of objects.
- * @param first The first dimension used to pivot the source data.
- * @param second The second dimension used to pivot the source data.
- * @param others Additional dimensions to pivot the source data by.
- * @returns Returns an n-cube, the type of which depends on how many dimensions are passed in: Matrix<TValue> for one dimension; Cube<TValue> for two dimension; Cube<Array<TValue> for three dimensions, etc..
- */
 export declare const pivot: {
+    /**
+     * Pivots source data by one dimension returning a matrix.
+     * @typeParam TValue The type of the source data.
+     * @param source The source data, an array of objects.
+     * @param first The first dimension used to pivot the source data.
+     */
     <TValue>(source: Array<TValue>, first: Dimension<TValue>): Matrix<TValue>;
+    /**
+     * Pivots source data by two dimensions returning a cube.
+     * @typeParam TValue The type of the source data.
+     * @param source The source data, an array of objects.
+     * @param first The first dimension used to pivot the source data.
+     * @param second The second dimension used to pivot the source data.
+     */
     <TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>): Cube<TValue>;
+    /**
+     * Pivots source data by three or more dimensions returning an n-cube.
+     * @typeParam TValue The type of the source data.
+     * @param source The source data, an array of objects.
+     * @param first The first dimension used to pivot the source data.
+     * @param second The second dimension used to pivot the source data.
+     * @param others Additional dimensions to pivot the source data by.
+     */
     <TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Cube<any>;
 };
 /**
