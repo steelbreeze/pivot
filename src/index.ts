@@ -91,7 +91,7 @@ function pivotImplementation<TValue>(source: Array<TValue>, ...[first, ...others
 	// create a result matrix sized to the first dimension
 	const matrix: Matrix<TValue> = first.map(() => []);
 
-	// partition source data according to the criteria of the first dimension
+	// partition source data into the matrix according to the criteria of the first dimension
 	for (var value of source) {
 		for (var di = 0, dl = first.length; di < dl; ++di) {
 			if (first[di](value)) {
@@ -102,16 +102,6 @@ function pivotImplementation<TValue>(source: Array<TValue>, ...[first, ...others
 		}
 	}
 
-	// recurse if there are other dimensions, otherside just return the matrix
-	if (others.length) {
-		var result: Cube<any> = [];
-
-		for (var slice of matrix) {
-			result.push(pivotImplementation(slice, ...others));
-		}
-
-		return result;
-	}
-
-	return matrix;
+	// recurse if there are other dimensions, otherwise just return the matrix
+	return others.length ? matrix.map(slice => pivotImplementation(slice, ...others)) : matrix;
 }
