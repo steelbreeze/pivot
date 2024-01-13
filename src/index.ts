@@ -4,16 +4,27 @@ export type Function<TArg, TResult> = (arg: TArg) => TResult;
 /** A predicate is a function returning a boolean result */
 export type Predicate<TArg> = Function<TArg, boolean>;
 
-/** A dimension is a series of predicates used to partition data. */
+/**
+ * A dimension is a series of predicates used to partition data.
+ * @param TValue The type of the source data that the dimension was created for.
+ */
 export type Dimension<TValue> = Array<Predicate<TValue>>;
 
-/** A matrix is a two dimensional data structure. */
+/**
+ * A matrix is a two dimensional data structure.
+ * @param TValue The type of the source data that the matrix was created from.
+ */
 export type Matrix<TValue> = Array<Array<TValue>>;
 
-/** A cube is a three dimensional data structure. */
+/**
+ * A cube is a three dimensional data structure.
+ * @param TValue The type of the source data that the cube was created from.
+ */
 export type Cube<TValue> = Array<Array<Array<TValue>>>;
 
-/** An n-cube is an n-dimensional data structure. */
+/**
+ * An n-cube is an n-dimensional data structure.
+ */
 export type Hypercube = Cube<Array<any>>;
 
 /**
@@ -45,10 +56,9 @@ export function pivot<TValue>(source: Array<TValue>, first: Dimension<TValue>, s
  * Pivots source data by any number of dimensions returning a hypercube.
  * @typeParam TValue The type of the source data.
  * @param source The source data, an array of objects.
- * @param first The first dimension used to pivot the source data.
- * @param others Additional dimensions to pivot the source data by.
+ * @param dimensions The dimensions to pivot the source data by.
  */
-export function pivot<TValue>(source: Array<TValue>, ...[first, ...others]: Array<Dimension<TValue>>): Hypercube;
+export function pivot<TValue>(source: Array<TValue>, ...dimensions: Array<Dimension<TValue>>): Hypercube;
 
 // the implementation of pivot
 export function pivot<TValue>(source: Array<TValue>, ...[first, ...others]: Array<Dimension<TValue>>) {
