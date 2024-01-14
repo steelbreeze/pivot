@@ -36,36 +36,65 @@ export type Cube<TValue> = Matrix<Array<TValue>>;
  */
 export type Hypercube = Array<any>;
 /**
- * Create a callback to used in a map operation to create the predicate for each point on a dimension from a set of simple values.
+ * Create a callback {@link Function} used in a map operation to create the {@link Predicate} for each point on a {@link Dimension} from a set of simple values.
  * @typeParam TValue The type of the source data that will be evaluated by this criteria.
- * @param key The property in the source data to base this predicate on.
+ * @param key The property in the source data to base this {@link Predicate} on.
+ * @example
+ * The following code creates a {@link Dimension} that will be used to evaluate ```Player``` objects during a {@link pivot} operation based on the value of their ```position``` property:
+ * ```ts
+ * const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
+ * const dimension = positions.map(criteria<Player>('position'));
+ * ```
+ * See src/example/index.ts for a complete example.
  * @category Core API
  */
 export declare const criteria: <TValue>(key: keyof TValue) => Function<TValue[keyof TValue], Predicate<TValue>>;
-/** @deprecated Pass at least one dimension to the pivot operation. */
+/**
+ * @deprecated Pass at least one dimension to the pivot operation.
+ * @hidden
+ */
 export declare function pivot<TValue>(source: Array<TValue>): Matrix<TValue>;
 /**
- * Pivots source data by one dimension returning a matrix.
+ * Pivots source data by one {@link Dimension} returning a {@link Matrix}.
  * @typeParam TValue The type of the source data.
  * @param source The source data, an array of objects.
- * @param dimension The dimension used to pivot the source data by.
+ * @param dimension The {@link Dimension} used to pivot the source data by.
+ * @example
+ * The following code creates a {@link Matrix} of ```Player``` objects, pivoted by their ```position``` property:
+ * ```ts
+ * const dimension = positions.map(criteria<Player>('position'));
+ * const matrix = pivot(squad, dimension);
+ * ```
+ * See src/example/index.ts for a complete example.
  * @category Core API
  */
 export declare function pivot<TValue>(source: Array<TValue>, dimension: Dimension<TValue>): Matrix<TValue>;
 /**
- * Pivots source data by two dimensions returning a cube.
+ * Pivots source data by two {@link Dimension dimensions} returning a {@link Cube}.
  * @typeParam TValue The type of the source data.
  * @param source The source data, an array of objects.
- * @param dimension1 The first dimension used to pivot the source data.
- * @param dimension2 The second dimension used to pivot the source data.
+ * @param dimension1 The first {@link Dimension} used to pivot the source data.
+ * @param dimension2 The second {@link Dimension} used to pivot the source data.
+ * @example
+ * The following code creates a {@link Cube} of ```Player``` objects, pivoted by their ```country``` property then by their ```position``` property:
+ * ```ts
+ * const x = positions.map(criteria<Player>('position'));
+ * const y = countries.map(criteria<Player>('country'));
+ * const cube = pivot(squad, y, x);
+ * ```
+ * See src/example/index.ts for a complete example.
  * @category Core API
  */
 export declare function pivot<TValue>(source: Array<TValue>, dimension1: Dimension<TValue>, dimension2: Dimension<TValue>): Cube<TValue>;
 /**
- * Pivots source data by any number of dimensions returning a hypercube.
+ * Pivots source data by any number of {@link Dimension dimensions} returning a {@link Hypercube}.
  * @typeParam TValue The type of the source data.
  * @param source The source data, an array of objects.
- * @param dimensions The dimensions to pivot the source data by.
+ * @param dimensions The {@link Dimension dimensions} to pivot the source data by.
+ * The following code creates a {@link Hypercube}, pivoting the source data by three {@link Dimension dimensions} (though it can be any number):
+ * ```ts
+ * const hypercube = pivot(data, z, y, x);
+ * ```
  * @category Core API
  */
 export declare function pivot<TValue>(source: Array<TValue>, ...dimensions: Array<Dimension<TValue>>): Hypercube;
