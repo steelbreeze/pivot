@@ -7,6 +7,7 @@
  * Simple {@link Dimension dimensions} can be created by mapping a set of values using the {@link criteria} function and a property name from the data set to be pivoted.
  * 
  * Once a {@link Cube} is created, the {@link aggregate} function can be used to perform aggregate query operations on the subset of the source data in each cell.
+ * 
  * @module
  */
 
@@ -63,7 +64,7 @@ export type Hypercube = Array<any>;
  * const positions: string[] = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
  * const dimension: Dimension<<Player> = positions.map(criteria('position'));
  * ```
- * See src/example/index.ts for a complete example.
+ * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building
  */
 export const criteria = <TValue>(key: keyof TValue): Function<TValue[keyof TValue], Criteria<TValue>> =>
@@ -87,7 +88,7 @@ export function pivot<TValue>(source: Array<TValue>): Matrix<TValue>;
  * 
  * const matrix: Matrix<Player> = pivot(squad, x);
  * ```
- * See src/example/index.ts for a complete example.
+ * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building
  */
 export function pivot<TValue>(source: Array<TValue>, dimension: Dimension<TValue>): Matrix<TValue>;
@@ -106,7 +107,7 @@ export function pivot<TValue>(source: Array<TValue>, dimension: Dimension<TValue
  * 
  * const cube: Cube<Player> = pivot(squad, y, x);
  * ```
- * See src/example/index.ts for a complete example.
+ * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building
  */
 export function pivot<TValue>(source: Array<TValue>, dimension1: Dimension<TValue>, dimension2: Dimension<TValue>): Cube<TValue>;
@@ -123,6 +124,7 @@ export function pivot<TValue>(source: Array<TValue>, dimension1: Dimension<TValu
  * ```ts
  * const hypercube: Hypercube = pivot(data, z, y, x);
  * ```
+ * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building
  */
 export function pivot<TValue>(source: Array<TValue>, ...dimensions: Array<Dimension<TValue>>): Hypercube;
@@ -167,6 +169,7 @@ export function pivot<TValue>(source: Array<TValue>, ...[dimension, ...dimension
  *   return player => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
  * }
  * ```
+ * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
 export const aggregate = <TValue, TResult>(cube: Cube<TValue>, selector: Function<Array<TValue>, TResult>): Matrix<TResult> =>
@@ -190,6 +193,7 @@ export const aggregate = <TValue, TResult>(cube: Cube<TValue>, selector: Functio
  *   return player => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
  * }
  * ```
+ * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
 export const sum = <TValue>(selector: Function<TValue, number>): Function<Array<TValue>, number> =>
@@ -213,6 +217,7 @@ export const sum = <TValue>(selector: Function<TValue, number>): Function<Array<
  *   return player => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
  * }
  * ```
+ * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
 export const average = <TValue>(selector: Function<TValue, number>): Function<Array<TValue>, number> =>
