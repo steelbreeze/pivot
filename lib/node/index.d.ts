@@ -1,6 +1,14 @@
-/** A simple function taking an agrument and returning a result */
+/**
+ * A simple function taking an agrument and returning a result.
+ * @param TArg The type of the argument passed into the function.
+ * @param TResult The type of the result provided by the functions.
+ * @param arg The argument passed into the function.
+ */
 export type Function<TArg, TResult> = (arg: TArg) => TResult;
-/** A predicate is a function returning a boolean result */
+/**
+ * A predicate is a function returning a boolean result.
+ * @param TArg The type of the argument passed into the function.
+ */
 export type Predicate<TArg> = Function<TArg, boolean>;
 /**
  * A dimension is a series of predicates used to partition data.
