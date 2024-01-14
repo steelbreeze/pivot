@@ -1,4 +1,4 @@
-<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>Pivot</title><meta name="description" content="Documentation for Pivot"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
+<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>@steelbreeze/pivot</title><meta name="description" content="Documentation for @steelbreeze/pivot"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
 <div class="tsd-toolbar-contents container">
 <div class="table-cell" id="tsd-search" data-base=".">
 <div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div>
@@ -6,34 +6,42 @@
 <div id="tsd-toolbar-links"></div></div>
 <ul class="results">
 <li class="state loading">Preparing search index...</li>
-<li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">Pivot</a></div>
+<li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">@steelbreeze/pivot</a></div>
 <div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="#icon-menu"></use></svg></a></div></div></header>
 <div class="container container-main">
 <div class="col-content">
 <div class="tsd-page-title">
-<h2>Pivot</h2></div>
+<h2>@steelbreeze/pivot</h2></div>
+<section class="tsd-panel tsd-comment">
+<div class="tsd-comment tsd-typography"><p>A minimal library for pivoting data by 1-n dimensions.</p>
+<p>The <a href="functions/pivot.html" class="tsd-kind-function">pivot</a> function slices and dices data by one or more <a href="types/Dimension.html" class="tsd-kind-type-alias">dimensions</a>, returning a <a href="types/Matrix.html" class="tsd-kind-type-alias">Matrix</a> if one <a href="types/Dimension.html" class="tsd-kind-type-alias">Dimension</a> is passed, a <a href="types/Cube.html" class="tsd-kind-type-alias">Cube</a> if two
+<a href="types/Dimension.html" class="tsd-kind-type-alias">dimensions</a> are passed, and a <a href="types/Hypercube.html" class="tsd-kind-type-alias">Hypercube</a> if more than two <a href="types/Dimension.html" class="tsd-kind-type-alias">dimensions</a> are passed.</p>
+<p>Simple <a href="types/Dimension.html" class="tsd-kind-type-alias">dimensions</a> can be created by mapping a set of values using the <a href="functions/criteria-1.html" class="tsd-kind-function">criteria</a> function and a property name from the data set to be pivoted.</p>
+<p>Once a <a href="types/Cube.html" class="tsd-kind-type-alias">Cube</a> is created, the <a href="functions/aggregate.html" class="tsd-kind-function">aggregate</a> function can be used to perform aggregate query operations on the subset of the source data in each cell.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div></section>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <h3 class="tsd-index-heading uppercase">Index</h3>
 <section class="tsd-index-section">
-<h3 class="tsd-index-heading">Core API</h3>
-<div class="tsd-index-list"><a href="functions/criteria.html" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>criteria</span></a>
+<h3 class="tsd-index-heading">Cube building</h3>
+<div class="tsd-index-list"><a href="functions/criteria-1.html" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>criteria</span></a>
 <a href="functions/pivot.html" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>pivot</span></a>
 </div></section>
 <section class="tsd-index-section">
-<h3 class="tsd-index-heading">Cube query helpers</h3>
-<div class="tsd-index-list"><a href="functions/average.html" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>average</span></a>
-<a href="functions/flatten.html" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>flatten</span></a>
+<h3 class="tsd-index-heading">Cube query</h3>
+<div class="tsd-index-list"><a href="functions/aggregate.html" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>aggregate</span></a>
+<a href="functions/average.html" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>average</span></a>
 <a href="functions/sum.html" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg><span>sum</span></a>
 </div></section>
 <section class="tsd-index-section">
 <h3 class="tsd-index-heading">Type declarations</h3>
-<div class="tsd-index-list"><a href="types/Cube.html" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg><span>Cube</span></a>
+<div class="tsd-index-list"><a href="types/Criteria.html" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg><span>Criteria</span></a>
+<a href="types/Cube.html" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg><span>Cube</span></a>
 <a href="types/Dimension.html" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg><span>Dimension</span></a>
 <a href="types/Function.html" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg><span>Function</span></a>
 <a href="types/Hypercube.html" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg><span>Hypercube</span></a>
 <a href="types/Matrix.html" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg><span>Matrix</span></a>
-<a href="types/Predicate.html" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg><span>Predicate</span></a>
 </div></section></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
@@ -49,17 +57,17 @@
 <div class="tsd-theme-toggle">
 <h4 class="uppercase">Theme</h4><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div></div>
 <div class="site-menu">
-<nav class="tsd-navigation"><a href="index.html" class="current"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>Pivot</span></a>
+<nav class="tsd-navigation"><a href="index.html" class="current"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>@steelbreeze/pivot</span></a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base=".">
+<li><a href="types/Criteria.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg>Criteria</a></li>
 <li><a href="types/Cube.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg>Cube</a></li>
 <li><a href="types/Dimension.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg>Dimension</a></li>
 <li><a href="types/Function.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg>Function</a></li>
 <li><a href="types/Hypercube.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg>Hypercube</a></li>
 <li><a href="types/Matrix.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg>Matrix</a></li>
-<li><a href="types/Predicate.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg>Predicate</a></li>
+<li><a href="functions/aggregate.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg>aggregate</a></li>
 <li><a href="functions/average.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg>average</a></li>
-<li><a href="functions/criteria.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg>criteria</a></li>
-<li><a href="functions/flatten.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg>flatten</a></li>
+<li><a href="functions/criteria-1.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg>criteria</a></li>
 <li><a href="functions/pivot.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg>pivot</a></li>
 <li><a href="functions/sum.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg>sum</a></li></ul></nav></div></div></div>
 <div class="tsd-generator">

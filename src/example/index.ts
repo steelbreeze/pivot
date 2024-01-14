@@ -1,4 +1,4 @@
-import { Function, Dimension, Cube, criteria, pivot, flatten, average, Matrix } from '..';
+import { Function, Dimension, Cube, criteria, pivot, aggregate, average, Matrix } from '..';
 import { Player, squad } from './fulham';
 import { distinct } from './distinct';
 
@@ -16,7 +16,7 @@ const y: Dimension<Player> = countries.map(criteria('country'));
 const cube: Cube<Player> = pivot(squad, y, x);
 
 // find the average age of players by position by country as at 2021-05-23
-const result: Matrix<number> = flatten(cube, average(age(new Date('2021-05-23'))));
+const result: Matrix<number> = aggregate(cube, average(age(new Date('2021-05-23'))));
 
 // Creates a callback to calculate a players age from their date of birth as at a given date
 function age(asAt: Date = new Date()): Function<Player, number> {

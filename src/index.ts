@@ -1,4 +1,16 @@
 /**
+ * A minimal library for pivoting data by 1-n dimensions.
+ * 
+ * The {@link pivot} function slices and dices data by one or more {@link Dimension dimensions}, returning a {@link Matrix} if one {@link Dimension} is passed, a {@link Cube} if two
+ * {@link Dimension dimensions} are passed, and a {@link Hypercube} if more than two {@link Dimension dimensions} are passed.
+ * 
+ * Simple {@link Dimension dimensions} can be created by mapping a set of values using the {@link criteria} function and a property name from the data set to be pivoted.
+ * 
+ * Once a {@link Cube} is created, the {@link aggregate} function can be used to perform aggregate query operations on the subset of the source data in each cell.
+ * @module
+ */
+
+/**
  * A simple function taking an agrument and returning a result.
  * @typeParam TArg The type of the argument passed into the function.
  * @typeParam TResult The type of the result provided by the functions.
@@ -8,18 +20,18 @@
 export type Function<TArg, TResult> = (arg: TArg) => TResult;
 
 /**
- * A predicate is a function returning a boolean result.
- * @typeParam TArg The type of the argument passed into the function.
+ * Criteria is point on a dimension used to evaluate source data for a specific condition.
+ * @typeParam TValue The type of the source data that the criteria was created for.
  * @category Type declarations
  */
-export type Predicate<TArg> = Function<TArg, boolean>;
+export type Criteria<TValue> = Function<TValue, boolean>;
 
 /**
- * A dimension is a series of predicates used to partition data.
+ * A dimension is a series of {@link Criteria} used to partition data.
  * @typeParam TValue The type of the source data that the dimension was created for.
  * @category Type declarations
  */
-export type Dimension<TValue> = Array<Predicate<TValue>>;
+export type Dimension<TValue> = Array<Criteria<TValue>>;
 
 /**
  * A matrix is a two dimensional data structure.
@@ -42,9 +54,9 @@ export type Cube<TValue> = Matrix<Array<TValue>>;
 export type Hypercube = Array<any>;
 
 /**
- * Creates a callback {@link Function} used in a map operation to create the {@link Predicate} for each point on a {@link Dimension} from a set of simple values.
+ * Creates a callback {@link Function} used in a map operation to create the {@link Criteria} for each point on a {@link Dimension} from a set of simple values.
  * @typeParam TValue The type of the source data that will be evaluated by this criteria.
- * @param key The property in the source data to base this {@link Predicate} on.
+ * @param key The property in the source data to base this {@link Criteria} on.
  * @example
  * The following code creates a {@link Dimension} that will be used to evaluate ```Player``` objects during a {@link pivot} operation based on the value of their ```position``` property:
  * ```ts
@@ -52,9 +64,9 @@ export type Hypercube = Array<any>;
  * const dimension: Dimension<<Player> = positions.map(criteria('position'));
  * ```
  * See src/example/index.ts for a complete example.
- * @category Core API
+ * @category Cube building
  */
-export const criteria = <TValue>(key: keyof TValue): Function<TValue[keyof TValue], Predicate<TValue>> =>
+export const criteria = <TValue>(key: keyof TValue): Function<TValue[keyof TValue], Criteria<TValue>> =>
 	(criterion: TValue[keyof TValue]) => (value: TValue) => value[key] === criterion;
 
 /**
@@ -71,11 +83,12 @@ export function pivot<TValue>(source: Array<TValue>): Matrix<TValue>;
  * @example
  * The following code creates a {@link Matrix} of ```Player``` objects, pivoted by their ```position``` property:
  * ```ts
- * const dimension: Dimension<Player> = positions.map(criteria('position'));
- * const matrix: Matrix<Player> = pivot(squad, dimension);
+ * const x: Dimension<Player> = positions.map(criteria('position'));
+ * 
+ * const matrix: Matrix<Player> = pivot(squad, x);
  * ```
  * See src/example/index.ts for a complete example.
- * @category Core API
+ * @category Cube building
  */
 export function pivot<TValue>(source: Array<TValue>, dimension: Dimension<TValue>): Matrix<TValue>;
 
@@ -90,10 +103,11 @@ export function pivot<TValue>(source: Array<TValue>, dimension: Dimension<TValue
  * ```ts
  * const x: Dimension<Player> = positions.map(criteria('position'));
  * const y: Dimension<Player> = countries.map(criteria('country'));
+ * 
  * const cube: Cube<Player> = pivot(squad, y, x);
  * ```
  * See src/example/index.ts for a complete example.
- * @category Core API
+ * @category Cube building
  */
 export function pivot<TValue>(source: Array<TValue>, dimension1: Dimension<TValue>, dimension2: Dimension<TValue>): Cube<TValue>;
 
@@ -103,12 +117,13 @@ export function pivot<TValue>(source: Array<TValue>, dimension1: Dimension<TValu
  * @param source The source data, an array of objects.
  * @param dimensions The {@link Dimension dimensions} to pivot the source data by.
  * @returns Because of the arbitory number of {@link Dimension dimensions} that can be passed to this overload, the shape of the {@link Hypercube} cannot be known. 
+ * @remarks While it is possible to pass no {@link Dimension} arguments into this overload of the pivot function, it will result in an exception being thrown.
  * @example
  * The following code creates a {@link Hypercube}, pivoting the source data by three {@link Dimension dimensions} (though it can be any number):
  * ```ts
  * const hypercube: Hypercube = pivot(data, z, y, x);
  * ```
- * @category Core API
+ * @category Cube building
  */
 export function pivot<TValue>(source: Array<TValue>, ...dimensions: Array<Dimension<TValue>>): Hypercube;
 
@@ -133,44 +148,72 @@ export function pivot<TValue>(source: Array<TValue>, ...[dimension, ...dimension
 }
 
 /**
- * Flattens a {@link Cube} into a {@link Matrix} using a selector {@link Function} to transform the objects in each cell of data in the {@link Cube} into a result.
+ * Aggregates data from a {@link Cube} into a {@link Matrix} using a selector {@link Function} to transform the objects in each cell of data in the {@link Cube} into a result.
  * @typeParam TValue The type of the data within the {@link Cube}.
  * @typeParam TResult The type of value returned by the selector.
  * @param cube The {@link Cube} to query data from.
  * @param selector A callback {@link Function} to create a result from each cell of the {@link Cube}.
  * @example
- * The following code flattens a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
+ * The following code aggregates a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
  * ```ts
  * const x: Dimension<Player> = positions.map(criteria('position'));
  * const y: Dimension<Player> = countries.map(criteria('country'));
  * 
  * const cube: Cube<Player> = pivot(squad, y, x);
  * 
- * const result: Matrix<number> = flatten(cube, average(age()));
+ * const result: Matrix<number> = aggregate(cube, average(age()));
  * 
  * function age(asAt: Date = new Date()): Function<Player, number> {
  *   return player => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
  * }
  * ```
- * @category Cube query helpers
+ * @category Cube query
  */
-export const flatten = <TValue, TResult>(cube: Cube<TValue>, selector: Function<Array<TValue>, TResult>): Matrix<TResult> =>
+export const aggregate = <TValue, TResult>(cube: Cube<TValue>, selector: Function<Array<TValue>, TResult>): Matrix<TResult> =>
 	cube.map(matrix => matrix.map(selector));
 
 /**
- * A generator, to create a function to pass into a cube map operation as the query parameter that sums numerical values derived from rows in a cube.
+ * Create a callback {@link Function} to pass into {@link aggregate} that sums numerical values derived by the selector {@link Function}.
  * @typeParam TValue The type of the data within the cube that will be passed into the selector.
- * @param selector A callback function to derive a numerical value for each object in the source data.
- * @category Cube query helpers
+ * @param selector A callback {@link Function} to derive a numerical value for each object in the source data.
+ * @example
+ * The following code aggregates a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
+ * ```ts
+ * const x: Dimension<Player> = positions.map(criteria('position'));
+ * const y: Dimension<Player> = countries.map(criteria('country'));
+ * 
+ * const cube: Cube<Player> = pivot(squad, y, x);
+ * 
+ * const result: Matrix<number> = aggregate(cube, sum(age()));
+ * 
+ * function age(asAt: Date = new Date()): Function<Player, number> {
+ *   return player => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
+ * }
+ * ```
+ * @category Cube query
  */
 export const sum = <TValue>(selector: Function<TValue, number>): Function<Array<TValue>, number> =>
 	(source: Array<TValue>) => source.reduce((a: number, b: TValue) => a + selector(b), 0);
 
 /**
- * A generator, to create a function to pass into query that averages numerical values derived from rows in a cube.
+ * Create a callback {@link Function} to pass into {@link aggregate} that averages numerical values derived by the selector {@link Function}.
  * @typeParam TValue The type of the data within the cube that will be passed into the selector.
- * @param selector A callback function to derive a numerical value for each object in the source data.
- * @category Cube query helpers
+ * @param selector A callback {@link Function} to derive a numerical value for each object in the source data.
+ * @example
+ * The following code aggregates a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
+ * ```ts
+ * const x: Dimension<Player> = positions.map(criteria('position'));
+ * const y: Dimension<Player> = countries.map(criteria('country'));
+ * 
+ * const cube: Cube<Player> = pivot(squad, y, x);
+ * 
+ * const result: Matrix<number> = aggregate(cube, average(age()));
+ * 
+ * function age(asAt: Date = new Date()): Function<Player, number> {
+ *   return player => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
+ * }
+ * ```
+ * @category Cube query
  */
 export const average = <TValue>(selector: Function<TValue, number>): Function<Array<TValue>, number> =>
 	(source: Array<TValue>) => sum(selector)(source) / source.length;

@@ -1,4 +1,4 @@
-import { criteria, pivot, flatten } from '..';
+import { criteria, pivot, aggregate } from '..';
 import { distinct } from './distinct';
 
 interface Data {
@@ -26,4 +26,4 @@ const y = data.map(row => row.b).filter(distinct).map(criteria('b'));
 const cube = pivot(data, x, y);
 
 // Display the values of 'c' seen in the data
-console.log(flatten(cube, records => records.map(t => t.c)));
+console.log(aggregate(cube, records => records.map(t => t.c)));
