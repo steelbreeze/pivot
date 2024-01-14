@@ -1,4 +1,4 @@
-import { criteria, pivot, map, average } from '..';
+import { Function, criteria, pivot, flatten, average } from '..';
 import { Player, squad } from './fulham';
 import { distinct } from './distinct';
 
@@ -13,14 +13,14 @@ const x = positions.map(criteria<Player>('position'));
 const y = countries.map(criteria<Player>('country'));
 
 // create the pivot cube from the squad data using position and country for x and y axes
-let cube = pivot(squad, y, x);
+const cube = pivot(squad, y, x);
 
 // find the average age of players by position by country as at 2021-05-23
-const result = map(cube, average(age(new Date('2021-05-23'))));
+const result = flatten(cube, average(age(new Date('2021-05-23'))));
 
 // Creates a callback to calculate a players age from their date of birth as at a given date
-function age(asAt: Date): (person: { dateOfBirth: Date }) => number {
-	return (player) => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
+function age(asAt: Date = new Date()): Function<Player, number> {
+	return player => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
 }
 
 // pretty print the result with axes

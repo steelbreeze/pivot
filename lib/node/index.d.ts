@@ -36,7 +36,7 @@ export type Cube<TValue> = Matrix<Array<TValue>>;
  */
 export type Hypercube = Array<any>;
 /**
- * Create a callback {@link Function} used in a map operation to create the {@link Predicate} for each point on a {@link Dimension} from a set of simple values.
+ * Creates a callback {@link Function} used in a map operation to create the {@link Predicate} for each point on a {@link Dimension} from a set of simple values.
  * @typeParam TValue The type of the source data that will be evaluated by this criteria.
  * @param key The property in the source data to base this {@link Predicate} on.
  * @example
@@ -101,13 +101,23 @@ export declare function pivot<TValue>(source: Array<TValue>, dimension1: Dimensi
  */
 export declare function pivot<TValue>(source: Array<TValue>, ...dimensions: Array<Dimension<TValue>>): Hypercube;
 /**
- * Queries data from a cube; data previously pivoted by two dimensions.
+ * Flattens a {@link Cube} into a {@link Matrix} using a selector {@link Function} to transform the objects in each cell of data in the cube into a result.
  * @typeParam TValue The type of the data within the cube.
  * @param cube The cube to query data from.
- * @param query A callback function to create a result from each cell of the cube.
+ * @param selector A callback {@link Function} to create a result from each cell of the cube.
+ * @example
+ * The following code flattens a {@link Cube}, returning the {@link average} age of players in a squad as at 23rd March 2021:
+ * ```ts
+ * const cube = pivot(squad, y, x);
+ * const result = flatten(cube, average(age()));
+ *
+ * function age(asAt: Date = new Date()): (person: { dateOfBirth: Date }) => number {
+ *   return (player) => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
+ * }
+ * ```
  * @category Cube query helpers
  */
-export declare const map: <TValue, TResult>(cube: Cube<TValue>, query: Function<TValue[], TResult>) => Matrix<TResult>;
+export declare const flatten: <TValue, TResult>(cube: Cube<TValue>, selector: Function<TValue[], TResult>) => Matrix<TResult>;
 /**
  * A generator, to create a function to pass into a cube map operation as the query parameter that sums numerical values derived from rows in a cube.
  * @typeParam TValue The type of the data within the cube that will be passed into the selector.
