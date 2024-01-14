@@ -1,22 +1,22 @@
-import { Function, criteria, pivot, flatten, average } from '..';
+import { Function, Dimension, Cube, criteria, pivot, flatten, average, Matrix } from '..';
 import { Player, squad } from './fulham';
 import { distinct } from './distinct';
 
 // the position dimension we want in a custom order
-const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
+const positions: string[] = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
 
 // the countries dimension we derive from the squad data and order alphabetically
-const countries = squad.map(player => player.country).filter(distinct).sort();
+const countries: string[] = squad.map(player => player.country).filter(distinct).sort();
 
 // we then create dimensions which also reference a property in the source data 
-const x = positions.map(criteria<Player>('position'));
-const y = countries.map(criteria<Player>('country'));
+const x: Dimension<Player> = positions.map(criteria('position'));
+const y: Dimension<Player> = countries.map(criteria('country'));
 
 // create the pivot cube from the squad data using position and country for x and y axes
-const cube = pivot(squad, y, x);
+const cube: Cube<Player> = pivot(squad, y, x);
 
 // find the average age of players by position by country as at 2021-05-23
-const result = flatten(cube, average(age(new Date('2021-05-23'))));
+const result: Matrix<number> = flatten(cube, average(age(new Date('2021-05-23'))));
 
 // Creates a callback to calculate a players age from their date of birth as at a given date
 function age(asAt: Date = new Date()): Function<Player, number> {

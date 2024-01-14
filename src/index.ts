@@ -48,8 +48,8 @@ export type Hypercube = Array<any>;
  * @example
  * The following code creates a {@link Dimension} that will be used to evaluate ```Player``` objects during a {@link pivot} operation based on the value of their ```position``` property:
  * ```ts
- * const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
- * const dimension = positions.map(criteria<Player>('position'));
+ * const positions: string[] = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
+ * const dimension: Dimension<<Player> = positions.map(criteria('position'));
  * ```
  * See src/example/index.ts for a complete example.
  * @category Core API
@@ -71,8 +71,8 @@ export function pivot<TValue>(source: Array<TValue>): Matrix<TValue>;
  * @example
  * The following code creates a {@link Matrix} of ```Player``` objects, pivoted by their ```position``` property:
  * ```ts
- * const dimension = positions.map(criteria<Player>('position'));
- * const matrix = pivot(squad, dimension);
+ * const dimension: Dimension<Player> = positions.map(criteria('position'));
+ * const matrix: Matrix<Player> = pivot(squad, dimension);
  * ```
  * See src/example/index.ts for a complete example.
  * @category Core API
@@ -88,9 +88,9 @@ export function pivot<TValue>(source: Array<TValue>, dimension: Dimension<TValue
  * @example
  * The following code creates a {@link Cube} of ```Player``` objects, pivoted by their ```country``` property then by their ```position``` property:
  * ```ts
- * const x = positions.map(criteria<Player>('position'));
- * const y = countries.map(criteria<Player>('country'));
- * const cube = pivot(squad, y, x);
+ * const x: Dimension<Player> = positions.map(criteria('position'));
+ * const y: Dimension<Player> = countries.map(criteria('country'));
+ * const cube: Cube<Player> = pivot(squad, y, x);
  * ```
  * See src/example/index.ts for a complete example.
  * @category Core API
@@ -106,7 +106,7 @@ export function pivot<TValue>(source: Array<TValue>, dimension1: Dimension<TValu
  * @example
  * The following code creates a {@link Hypercube}, pivoting the source data by three {@link Dimension dimensions} (though it can be any number):
  * ```ts
- * const hypercube = pivot(data, z, y, x);
+ * const hypercube: Hypercube = pivot(data, z, y, x);
  * ```
  * @category Core API
  */
@@ -133,19 +133,20 @@ export function pivot<TValue>(source: Array<TValue>, ...[dimension, ...dimension
 }
 
 /**
- * Flattens a {@link Cube} into a {@link Matrix} using a selector {@link Function} to transform the objects in each cell of data in the cube into a result.
- * @typeParam TValue The type of the data within the cube.
- * @param cube The cube to query data from.
- * @param selector A callback {@link Function} to create a result from each cell of the cube.
+ * Flattens a {@link Cube} into a {@link Matrix} using a selector {@link Function} to transform the objects in each cell of data in the {@link Cube} into a result.
+ * @typeParam TValue The type of the data within the {@link Cube}.
+ * @typeParam TResult The type of value returned by the selector.
+ * @param cube The {@link Cube} to query data from.
+ * @param selector A callback {@link Function} to create a result from each cell of the {@link Cube}.
  * @example
  * The following code flattens a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
  * ```ts
- * const x = positions.map(criteria<Player>('position'));
- * const y = countries.map(criteria<Player>('country'));
+ * const x: Dimension<Player> = positions.map(criteria('position'));
+ * const y: Dimension<Player> = countries.map(criteria('country'));
  * 
- * const cube = pivot(squad, y, x);
+ * const cube: Cube<Player> = pivot(squad, y, x);
  * 
- * const result = flatten(cube, average(age()));
+ * const result: Matrix<number> = flatten(cube, average(age()));
  * 
  * function age(asAt: Date = new Date()): Function<Player, number> {
  *   return player => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
