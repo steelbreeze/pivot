@@ -91,6 +91,8 @@ export declare function pivot<TValue>(source: Array<TValue>, dimension1: Dimensi
  * @typeParam TValue The type of the source data.
  * @param source The source data, an array of objects.
  * @param dimensions The {@link Dimension dimensions} to pivot the source data by.
+ * @returns Because of the arbitory number of {@link Dimension dimensions} that can be passed to this overload, the shape of the {@link Hypercube} cannot be known.
+ * @example
  * The following code creates a {@link Hypercube}, pivoting the source data by three {@link Dimension dimensions} (though it can be any number):
  * ```ts
  * const hypercube = pivot(data, z, y, x);

@@ -1,4 +1,5 @@
 import { criteria, pivot, map } from '..';
+import { distinct } from './distinct';
 
 interface Data {
 	a: number;
@@ -26,8 +27,3 @@ const cube = pivot(data, x, y);
 
 // Display the values of 'c' seen in the data
 console.log(map(cube, records => records.map(t => t.c)));
-
-// function to pass into Array.prototype.filter to return unique values.
-function distinct<TValue>(value: TValue, index: number, source: Array<TValue>): boolean {
-	return source.indexOf(value) === index;
-}

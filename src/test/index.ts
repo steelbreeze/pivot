@@ -1,4 +1,5 @@
 import { Cube, criteria, pivot } from "..";
+import { distinct } from "../example/distinct";
 
 enum Nationality {
 	American = "American",
@@ -49,8 +50,3 @@ console.log(ncube[0][1][0][0] === emily);
 console.log(ncube[1][0][0][0] === arnold);
 console.log(ncube[1][1][1][0] === seamus);
 console.log(ncube[1][1][1][1] === eugene);
-
-// function to pass into Array.prototype.filter to return unique values.
-function distinct<TValue>(value: TValue, index: number, source: Array<TValue>): boolean {
-	return source.indexOf(value) === index;
-}

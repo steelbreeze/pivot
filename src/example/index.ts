@@ -1,5 +1,6 @@
 import { criteria, pivot, map, average } from '..';
 import { Player, squad } from './fulham';
+import { distinct } from './distinct';
 
 // the position dimension we want in a custom order
 const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
@@ -33,9 +34,4 @@ function print(value: any) {
 	const str = String(value || '');
 
 	return str.length < 8 ? str : (str.substring(0, 6) + '\u2026');
-}
-
-// function to pass into Array.prototype.filter to return unique values.
-function distinct<TValue>(value: TValue, index: number, source: Array<TValue>): boolean {
-	return source.indexOf(value) === index;
 }
