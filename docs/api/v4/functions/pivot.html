@@ -17,7 +17,25 @@
 <h1>Function pivot</h1></div>
 <section class="tsd-panel">
 <ul class="tsd-signatures">
-<li class="tsd-signature tsd-anchor-link" id="pivot"><span class="tsd-kind-call-signature">pivot</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">source</span>, <span class="tsd-kind-parameter">first</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../types/Matrix.html" class="tsd-signature-type tsd-kind-type-alias">Matrix</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span><a href="#pivot" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
+<li class="tsd-signature tsd-anchor-link" id="pivot"><span class="tsd-kind-call-signature">pivot</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">source</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../types/Matrix.html" class="tsd-signature-type tsd-kind-type-alias">Matrix</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span><a href="#pivot" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
+<li class="tsd-description">
+<section class="tsd-panel">
+<h4>Type Parameters</h4>
+<ul class="tsd-type-parameter-list">
+<li>
+<h4><span class="tsd-kind-type-parameter">TValue</span></h4></li></ul></section>
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li>
+<h5><span class="tsd-kind-parameter">source</span>: <span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">[]</span></h5></li></ul></div>
+<h4 class="tsd-returns-title">Returns <a href="../types/Matrix.html" class="tsd-signature-type tsd-kind-type-alias">Matrix</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span></h4>
+<div class="tsd-comment tsd-typography">
+<h4>Deprecated</h4><p>Pass at least one dimension to the pivot operation.</p>
+</div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/0ab698e/src/index.ts#L54">index.ts:54</a></li></ul></aside></li>
+<li class="tsd-signature tsd-anchor-link" id="pivot-1"><span class="tsd-kind-call-signature">pivot</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">source</span>, <span class="tsd-kind-parameter">dimension</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../types/Matrix.html" class="tsd-signature-type tsd-kind-type-alias">Matrix</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span><a href="#pivot-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Pivots source data by one dimension returning a matrix.</p>
 </div>
@@ -38,15 +56,15 @@
 </div>
 <div class="tsd-comment tsd-typography"></div></li>
 <li>
-<h5><span class="tsd-kind-parameter">first</span>: <a href="../types/Dimension.html" class="tsd-signature-type tsd-kind-type-alias">Dimension</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span></h5>
-<div class="tsd-comment tsd-typography"><p>The first dimension used to pivot the source data.</p>
+<h5><span class="tsd-kind-parameter">dimension</span>: <a href="../types/Dimension.html" class="tsd-signature-type tsd-kind-type-alias">Dimension</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span></h5>
+<div class="tsd-comment tsd-typography"><p>The dimension used to pivot the source data by.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="../types/Matrix.html" class="tsd-signature-type tsd-kind-type-alias">Matrix</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/ba25135/src/index.ts#L52">index.ts:52</a></li></ul></aside></li>
-<li class="tsd-signature tsd-anchor-link" id="pivot-1"><span class="tsd-kind-call-signature">pivot</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">source</span>, <span class="tsd-kind-parameter">first</span>, <span class="tsd-kind-parameter">second</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../types/Cube.html" class="tsd-signature-type tsd-kind-type-alias">Cube</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span><a href="#pivot-1" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
+<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/0ab698e/src/index.ts#L63">index.ts:63</a></li></ul></aside></li>
+<li class="tsd-signature tsd-anchor-link" id="pivot-2"><span class="tsd-kind-call-signature">pivot</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">source</span>, <span class="tsd-kind-parameter">dimension1</span>, <span class="tsd-kind-parameter">dimension2</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../types/Cube.html" class="tsd-signature-type tsd-kind-type-alias">Cube</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span><a href="#pivot-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Pivots source data by two dimensions returning a cube.</p>
 </div>
@@ -67,20 +85,20 @@
 </div>
 <div class="tsd-comment tsd-typography"></div></li>
 <li>
-<h5><span class="tsd-kind-parameter">first</span>: <a href="../types/Dimension.html" class="tsd-signature-type tsd-kind-type-alias">Dimension</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span></h5>
+<h5><span class="tsd-kind-parameter">dimension1</span>: <a href="../types/Dimension.html" class="tsd-signature-type tsd-kind-type-alias">Dimension</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span></h5>
 <div class="tsd-comment tsd-typography"><p>The first dimension used to pivot the source data.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></li>
 <li>
-<h5><span class="tsd-kind-parameter">second</span>: <a href="../types/Dimension.html" class="tsd-signature-type tsd-kind-type-alias">Dimension</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span></h5>
+<h5><span class="tsd-kind-parameter">dimension2</span>: <a href="../types/Dimension.html" class="tsd-signature-type tsd-kind-type-alias">Dimension</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span></h5>
 <div class="tsd-comment tsd-typography"><p>The second dimension used to pivot the source data.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <a href="../types/Cube.html" class="tsd-signature-type tsd-kind-type-alias">Cube</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/ba25135/src/index.ts#L61">index.ts:61</a></li></ul></aside></li>
-<li class="tsd-signature tsd-anchor-link" id="pivot-2"><span class="tsd-kind-call-signature">pivot</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">source</span>, <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">dimensions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../types/Hypercube.html" class="tsd-signature-type tsd-kind-type-alias">Hypercube</a><a href="#pivot-2" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
+<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/0ab698e/src/index.ts#L73">index.ts:73</a></li></ul></aside></li>
+<li class="tsd-signature tsd-anchor-link" id="pivot-3"><span class="tsd-kind-call-signature">pivot</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type tsd-kind-type-parameter">TValue</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">source</span>, <span class="tsd-signature-symbol">...</span><span class="tsd-kind-parameter">dimensions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../types/Hypercube.html" class="tsd-signature-type tsd-kind-type-alias">Hypercube</a><a href="#pivot-3" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></li>
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Pivots source data by any number of dimensions returning a hypercube.</p>
 </div>
@@ -108,7 +126,7 @@
 <h4 class="tsd-returns-title">Returns <a href="../types/Hypercube.html" class="tsd-signature-type tsd-kind-type-alias">Hypercube</a></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/ba25135/src/index.ts#L69">index.ts:69</a></li></ul></aside></li></ul></section></div>
+<li>Defined in <a href="https://github.com/steelbreeze/pivot/blob/0ab698e/src/index.ts#L82">index.ts:82</a></li></ul></aside></li></ul></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -133,7 +151,6 @@
 <li><a href="../types/Predicate.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-2097152"></use></svg>Predicate</a></li>
 <li><a href="average.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg>average</a></li>
 <li><a href="criteria.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg>criteria</a></li>
-<li><a href="distinct.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg>distinct</a></li>
 <li><a href="map.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg>map</a></li>
 <li><a href="pivot.html" class="current"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg>pivot</a></li>
 <li><a href="sum.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-64"></use></svg>sum</a></li></ul></nav></div></div></div>

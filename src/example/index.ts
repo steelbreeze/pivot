@@ -1,5 +1,5 @@
-import { distinct, criteria, pivot, map, average } from '..';
-import { squad } from './fulham';
+import { criteria, pivot, map, average } from '..';
+import { Player, squad } from './fulham';
 
 // the position dimension we want in a custom order
 const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
@@ -8,8 +8,8 @@ const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
 const countries = squad.map(player => player.country).filter(distinct).sort();
 
 // we then create dimensions which also reference a property in the source data 
-const x = positions.map(criteria('position'));
-const y = countries.map(criteria('country'));
+const x = positions.map(criteria<Player>('position'));
+const y = countries.map(criteria<Player>('country'));
 
 // create the pivot cube from the squad data using position and country for x and y axes
 let cube = pivot(squad, y, x);
@@ -33,4 +33,9 @@ function print(value: any) {
 	const str = String(value || '');
 
 	return str.length < 8 ? str : (str.substring(0, 6) + '\u2026');
+}
+
+// function to pass into Array.prototype.filter to return unique values.
+function distinct<TValue>(value: TValue, index: number, source: Array<TValue>): boolean {
+	return source.indexOf(value) === index;
 }

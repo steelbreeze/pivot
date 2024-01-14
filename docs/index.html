@@ -43,7 +43,7 @@
 		<table id="squad"></table>
 	</main>
 	<html-include href="https://steelbreeze.net/components/footer.html"></html-include>
-	<script src = "https://steelbreeze.net/components/html-include.js"></script>
+	<script src="https://steelbreeze.net/components/html-include.js"></script>
 	<script src="./dist/pivot.min.js"></script>
 	<script type="module">
 		const squad = [
@@ -77,7 +77,7 @@
 
 		// create axes out of the dimensions derived from the squad data
 		const position = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'].map(criteria('position'));
-		const country = squad.map(player => player.country).filter(pivot.distinct).sort().map(criteria('country'));
+		const country = squad.map(player => player.country).filter(distinct).sort().map(criteria('country'));
 
 		// create the pivot cube
 		const cube = pivot.pivot(squad, country, position);
@@ -108,11 +108,17 @@
 				row => row[key] === value,
 				{
 					metadata: [
-//						{ key: 'key', value: key },
+						//						{ key: 'key', value: key },
 						{ key, value }
 					]
 				});
 		}
+
+		// function to pass into Array.prototype.filter to return unique values.
+		function distinct(value, index, source) {
+			return source.indexOf(value) === index;
+		}
+
 	</script>
 </body>
 

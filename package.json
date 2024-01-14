@@ -1,6 +1,6 @@
 {
   "name": "@steelbreeze/pivot",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "Minimal TypeScript / JavaScript n-cube library",
   "main": "lib/node/index.js",
   "module": "lib/node/index.js",
