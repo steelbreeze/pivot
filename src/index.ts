@@ -62,7 +62,7 @@ export type Hypercube = Array<any>;
  * The following code creates a {@link Dimension} that will be used to evaluate ```Player``` objects during a {@link pivot} operation based on the value of their ```position``` property:
  * ```ts
  * const positions: string[] = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
- * const dimension: Dimension<<Player> = positions.map(criteria('position'));
+ * const x: Dimension<<Player> = positions.map(criteria('position'));
  * ```
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building
@@ -84,6 +84,7 @@ export function pivot<TValue>(source: Array<TValue>): Matrix<TValue>;
  * @example
  * The following code creates a {@link Matrix} of ```Player``` objects, pivoted by their ```position``` property:
  * ```ts
+ * const positions: string[] = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
  * const x: Dimension<Player> = positions.map(criteria('position'));
  * 
  * const matrix: Matrix<Player> = pivot(squad, x);
