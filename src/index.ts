@@ -12,7 +12,7 @@
  */
 
 /**
- * A simple function taking an agrument and returning a result.
+ * A simple function, taking an agrument and returning a result.
  * @typeParam TArg The type of the argument passed into the function.
  * @typeParam TResult The type of the result provided by the functions.
  * @typeParam arg The argument passed into the function.
@@ -21,15 +21,15 @@
 export type Function<TArg, TResult> = (arg: TArg) => TResult;
 
 /**
- * Criteria is point on a dimension used to evaluate source data for a specific condition.
+ * A criteria is point on a {@link Dimension} used to evaluate source data for a specific condition.
  * @typeParam TValue The type of the source data that the criteria was created for.
  * @category Type declarations
  */
 export type Criteria<TValue> = Function<TValue, boolean>;
 
 /**
- * A dimension is a series of {@link Criteria} used to partition data.
- * @typeParam TValue The type of the source data that the dimension was created for.
+ * A dimension is a set of {@link Criteria} used to partition data.
+ * @typeParam TValue The type of the source data that the {@link Dimension} was created for.
  * @category Type declarations
  */
 export type Dimension<TValue> = Array<Criteria<TValue>>;
