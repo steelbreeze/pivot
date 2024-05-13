@@ -140,7 +140,7 @@ export declare function pivot<TValue>(source: Array<TValue>, ...dimensions: Arra
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export declare const aggregate: <TValue, TResult>(cube: Cube<TValue>, selector: Function<TValue[], TResult>) => Matrix<TResult>;
+export declare const aggregate: <TValue, TResult>(cube: Cube<TValue>, selector: Function<Array<TValue>, TResult>) => Matrix<TResult>;
 /**
  * Create a callback {@link Function} to pass into {@link aggregate} that sums numerical values derived by the selector {@link Function}.
  * @typeParam TValue The type of the data within the cube that will be passed into the selector.
@@ -162,7 +162,7 @@ export declare const aggregate: <TValue, TResult>(cube: Cube<TValue>, selector: 
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export declare const sum: <TValue>(selector: Function<TValue, number>) => Function<TValue[], number>;
+export declare const sum: <TValue>(selector: Function<TValue, number>) => Function<Array<TValue>, number>;
 /**
  * Create a callback {@link Function} to pass into {@link aggregate} that averages numerical values derived by the selector {@link Function}.
  * @typeParam TValue The type of the data within the cube that will be passed into the selector.
@@ -184,4 +184,4 @@ export declare const sum: <TValue>(selector: Function<TValue, number>) => Functi
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export declare const average: <TValue>(selector: Function<TValue, number>) => Function<TValue[], number>;
+export declare const average: <TValue>(selector: Function<TValue, number>) => Function<Array<TValue>, number>;
