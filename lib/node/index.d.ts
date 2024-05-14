@@ -62,6 +62,7 @@ export type Hypercube = Cube<Array<any>>;
  */
 export declare const criteria: <TValue>(key: keyof TValue) => Function<TValue[keyof TValue], Criteria<TValue>>;
 /**
+ * Discourage calls to pivot functions without and dimensions.
  * @deprecated Pass at least one dimension to the pivot operation.
  * @hidden
  */
