@@ -46,7 +46,7 @@ export type Cube<TValue> = Matrix<Array<TValue>>;
  * An n-cube is an n-dimensional data structure.
  * @category Type declarations
  */
-export type Hypercube = Array<any>;
+export type Hypercube = Cube<Array<any>>;
 /**
  * Creates a callback {@link Function} used in a map operation to create the {@link Criteria} for each point on a {@link Dimension} from a set of simple values.
  * @typeParam TValue The type of the source data that will be evaluated by this criteria.

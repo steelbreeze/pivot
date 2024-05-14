@@ -52,7 +52,7 @@ export type Cube<TValue> = Matrix<Array<TValue>>;
  * An n-cube is an n-dimensional data structure.
  * @category Type declarations
  */
-export type Hypercube = Array<any>;
+export type Hypercube = Cube<Array<any>>;
 
 /**
  * Creates a callback {@link Function} used in a map operation to create the {@link Criteria} for each point on a {@link Dimension} from a set of simple values.
@@ -140,8 +140,6 @@ export function pivot<TValue>(source: Array<TValue>, ...[dimension, ...dimension
 		for (var di = 0, dl = dimension.length; di < dl; ++di) {
 			if (dimension[di](value)) {
 				matrix[di].push(value);
-
-				break;
 			}
 		}
 	}
