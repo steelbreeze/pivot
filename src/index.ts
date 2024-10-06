@@ -133,7 +133,7 @@ export function pivot<TValue>(source: Array<TValue>, ...dimensions: Array<Dimens
 
 // the implementation of pivot
 export function pivot<TValue>(source: Array<TValue>, ...[dimension, ...dimensions]: Array<Dimension<TValue>>) {
-	const matrix: Matrix<TValue> = dimension.map((criteria) => {
+	const matrix: Matrix<TValue> = dimension.map((criteria: Criteria<TValue>) => {
 		const slice: Array<TValue> = [];
 
 		for (var value of source) {
