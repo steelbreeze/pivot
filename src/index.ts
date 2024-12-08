@@ -133,9 +133,7 @@ export function pivot<TValue>(source: Array<TValue>, ...dimensions: Array<Dimens
 
 // the implementation of pivot
 export function pivot<TValue>(source: Array<TValue>, ...[dimension, ...dimensions]: Array<Dimension<TValue>>) {
-	const matrix: Matrix<TValue> = [];
-
-	for (const criteria of dimension) {
+	const matrix: Matrix<TValue> = dimension.map((criteria: Criteria<TValue>) => {
 		const slice: Array<TValue> = [];
 
 		for (const value of source) {
@@ -144,8 +142,8 @@ export function pivot<TValue>(source: Array<TValue>, ...[dimension, ...dimension
 			}
 		}
 
-		matrix.push(slice);
-	}
+		return slice;
+	});
 
 	// recurse if there are other dimensions, otherwise just return the matrix
 	return dimensions.length ? matrix.map(slice => pivot(slice, ...dimensions)) : matrix;
