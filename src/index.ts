@@ -67,8 +67,28 @@ export type Hypercube = Cube<Array<any>>;
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building
  */
-export const criteria = <TValue>(key: keyof TValue): Function<TValue[keyof TValue], Criteria<TValue>> =>
-	(criterion: TValue[keyof TValue]) => (value: TValue) => value[key] === criterion;
+export function criteria<TValue>(key: keyof TValue): Function<TValue[keyof TValue], Criteria<TValue>> {
+	return (criterion: TValue[keyof TValue]) => (value: TValue) => value[key] === criterion;
+}
+
+/**
+ * Slices a source array into a matrix based on the criteria expressed within a dimension.
+ * @param source The source data, an array of objects.
+ * @param dimension The {@link Dimension} used to slice the source data by.
+ */
+export function slice<TValue>(source: Array<TValue>, dimension: Dimension<TValue>): Matrix<TValue> {
+	return dimension.map((criteria: Criteria<TValue>) => {
+		var result: Array<TValue> = [];
+
+		for (var value of source) {
+			if (criteria(value)) {
+				result.push(value);
+			}
+		}
+
+		return result;
+	});
+}
 
 /**
  * Discourage calls to pivot functions without and dimensions.
@@ -133,20 +153,8 @@ export function pivot<TValue>(source: Array<TValue>, ...dimensions: Array<Dimens
 
 // the implementation of pivot
 export function pivot<TValue>(source: Array<TValue>, ...[dimension, ...dimensions]: Array<Dimension<TValue>>) {
-	const matrix: Matrix<TValue> = dimension.map((criteria: Criteria<TValue>) => {
-		const slice: Array<TValue> = [];
-
-		for (const value of source) {
-			if (criteria(value)) {
-				slice.push(value);
-			}
-		}
-
-		return slice;
-	});
-
 	// recurse if there are other dimensions, otherwise just return the matrix
-	return dimensions.length ? matrix.map(slice => pivot(slice, ...dimensions)) : matrix;
+	return dimensions.length ? slice(source, dimension).map(slice => pivot(slice, ...dimensions)) : slice(source, dimension);
 }
 
 /**
@@ -172,8 +180,9 @@ export function pivot<TValue>(source: Array<TValue>, ...[dimension, ...dimension
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export const aggregate = <TValue, TResult>(cube: Cube<TValue>, selector: Function<Array<TValue>, TResult>): Matrix<TResult> =>
-	cube.map(matrix => matrix.map(selector));
+export function aggregate<TValue, TResult>(cube: Cube<TValue>, selector: Function<Array<TValue>, TResult>): Matrix<TResult> {
+	return cube.map(matrix => matrix.map(selector));
+}
 
 /**
  * Create a callback {@link Function} to pass into {@link aggregate} that sums numerical values derived by the selector {@link Function}.
@@ -196,8 +205,9 @@ export const aggregate = <TValue, TResult>(cube: Cube<TValue>, selector: Functio
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export const sum = <TValue>(selector: Function<TValue, number>): Function<Array<TValue>, number> =>
-	(source: Array<TValue>) => source.reduce((a: number, b: TValue) => a + selector(b), 0);
+export function sum<TValue>(selector: Function<TValue, number>): Function<Array<TValue>, number> {
+	return (source: Array<TValue>) => source.reduce((a: number, b: TValue) => a + selector(b), 0);
+}
 
 /**
  * Create a callback {@link Function} to pass into {@link aggregate} that averages numerical values derived by the selector {@link Function}.
@@ -220,5 +230,6 @@ export const sum = <TValue>(selector: Function<TValue, number>): Function<Array<
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export const average = <TValue>(selector: Function<TValue, number>): Function<Array<TValue>, number> =>
-	(source: Array<TValue>) => sum(selector)(source) / source.length;
+export function average<TValue>(selector: Function<TValue, number>): Function<Array<TValue>, number> {
+	return (source: Array<TValue>) => sum(selector)(source) / source.length;
+}
