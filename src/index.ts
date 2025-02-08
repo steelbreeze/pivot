@@ -72,25 +72,6 @@ export function criteria<TValue>(key: keyof TValue): Function<TValue[keyof TValu
 }
 
 /**
- * Slices a source array into a matrix based on the criteria expressed within a dimension.
- * @param source The source data, an array of objects.
- * @param dimension The {@link Dimension} used to slice the source data by.
- */
-export function slice<TValue>(source: Array<TValue>, dimension: Dimension<TValue>): Matrix<TValue> {
-	return dimension.map((criteria: Criteria<TValue>) => {
-		var result: Array<TValue> = [];
-
-		for (var value of source) {
-			if (criteria(value)) {
-				result.push(value);
-			}
-		}
-
-		return result;
-	});
-}
-
-/**
  * Discourage calls to pivot functions without and dimensions.
  * @deprecated Pass at least one dimension to the pivot operation.
  * @hidden
@@ -153,8 +134,10 @@ export function pivot<TValue>(source: Array<TValue>, ...dimensions: Array<Dimens
 
 // the implementation of pivot
 export function pivot<TValue>(source: Array<TValue>, ...[dimension, ...dimensions]: Array<Dimension<TValue>>) {
+	const matrix: Matrix<TValue> = dimension.map((criteria: Criteria<TValue>) => source.filter(criteria));
+
 	// recurse if there are other dimensions, otherwise just return the matrix
-	return dimensions.length ? slice(source, dimension).map(slice => pivot(slice, ...dimensions)) : slice(source, dimension);
+	return dimensions.length ? matrix.map((slice: Array<TValue>) => pivot(slice, ...dimensions)) : matrix;
 }
 
 /**
@@ -181,7 +164,7 @@ export function pivot<TValue>(source: Array<TValue>, ...[dimension, ...dimension
  * @category Cube query
  */
 export function aggregate<TValue, TResult>(cube: Cube<TValue>, selector: Function<Array<TValue>, TResult>): Matrix<TResult> {
-	return cube.map(matrix => matrix.map(selector));
+	return cube.map((matrix: Matrix<TValue>) => matrix.map(selector));
 }
 
 /**

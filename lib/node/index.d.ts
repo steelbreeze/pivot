@@ -62,12 +62,6 @@ export type Hypercube = Cube<Array<any>>;
  */
 export declare function criteria<TValue>(key: keyof TValue): Function<TValue[keyof TValue], Criteria<TValue>>;
 /**
- * Slices a source array into a matrix based on the criteria expressed within a dimension.
- * @param source The source data, an array of objects.
- * @param dimension The {@link Dimension} used to slice the source data by.
- */
-export declare function slice<TValue>(source: Array<TValue>, dimension: Dimension<TValue>): Matrix<TValue>;
-/**
  * Discourage calls to pivot functions without and dimensions.
  * @deprecated Pass at least one dimension to the pivot operation.
  * @hidden
