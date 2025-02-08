@@ -1,4 +1,4 @@
-import { criteria, pivot, aggregate } from '..';
+import { property, pivot, aggregate } from '..';
 import { distinct } from './distinct';
 
 interface Data {
@@ -17,10 +17,10 @@ const data: Data[] = [
 ];
 
 // create a dimension with pre-defined values for the property 'a' in the data.
-const x = [1, 2, 3].map(criteria('a'));
+const x = [1, 2, 3].map(property('a'));
 
 // create a dimension with derived values for the property 'b' in the data.
-const y = data.map(row => row.b).filter(distinct).map(criteria('b'));
+const y = data.map(row => row.b).filter(distinct).map(property('b'));
 
 // create a cube from the data using the x and y dimensions
 const cube = pivot(data, x, y);

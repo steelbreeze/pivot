@@ -1,7 +1,7 @@
 # pivot
 [![Maintainability](https://api.codeclimate.com/v1/badges/c8ed29d6e2fa0bc0d582/maintainability)](https://codeclimate.com/github/steelbreeze/pivot/maintainability)
 
-A minimalist pivot table library for TypeScript/JavaScript. While small (a mere 435 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite dimensions, filtering.
+A minimalist pivot table library for TypeScript/JavaScript. While small (a mere 478 bytes when minified), this library is large in capability, supporting derived and custom dimensions, derived fields for dimensions and calculations, composite dimensions, filtering.
 
 The library also provides a modest set of numerical selectors. Suggestions for additions, or better still contributions, are welcome.
 
@@ -30,8 +30,9 @@ The documentation can be found [here](http://steelbreeze.net/pivot/api/v4), and 
 ## Example
 The following is the result of pivoting publicly available information about the Fulham Football Club [men's squad](https://web.archive.org/web/20210516151437/https://www.fulhamfc.com/teams) at the end of the 2020/21 season, calculating the average age of players by position and country.
 ```typescript
-import { distinct, criteria, pivot, map, average } from '@steelbreeze/pivot';
-import { squad } from './fulham';
+import { dimension, property, pivot, aggregate, average } from '@steelbreeze/pivot';
+import { Player, squad } from './fulham';
+import { distinct } from './distinct';
 
 // the position dimension we want in a custom order
 const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
@@ -40,8 +41,8 @@ const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
 const countries = squad.map(player => player.country).filter(distinct).sort();
 
 // we then create dimensions which also reference a property in the source data 
-const x = positions.map(criteria('position'));
-const y = countries.map(criteria('country'));
+const x = dimension(positions, property<Player>('position')); // using the built-in dimension generator matching a property
+const y = dimension(countries, (country: string) => (player: Player) => player.country === country); // using a user-defined generator
 
 // create the pivot cube from the squad data using position and country for x and y axes
 let cube = pivot(squad, y, x);

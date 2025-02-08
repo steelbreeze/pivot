@@ -4,7 +4,7 @@
  * The {@link pivot} function slices and dices data by one or more {@link Dimension dimensions}, returning a {@link Matrix} if one {@link Dimension} is passed, a {@link Cube} if two
  * {@link Dimension dimensions} are passed, and a {@link Hypercube} if more than two {@link Dimension dimensions} are passed.
  * 
- * Simple {@link Dimension dimensions} can be created by mapping a set of values using the {@link criteria} function and a property name from the data set to be pivoted.
+ * Simple {@link Dimension dimensions} can be created by mapping a set of values using the {@link property} function and a property name from the data set to be pivoted.
  * 
  * Once a {@link Cube} is created, the {@link aggregate} function can be used to perform aggregate query operations on the subset of the source data in each cell.
  * 
@@ -55,19 +55,31 @@ export type Cube<TValue> = Matrix<Array<TValue>>;
 export type Hypercube = Cube<Array<any>>;
 
 /**
- * Creates a callback {@link Function} used in a map operation to create the {@link Criteria} for each point on a {@link Dimension} from a set of simple values.
+ * Creates a {@link Dimension} from some source data that will be used to slice and dice 
+ * @param source The seed data for the dimension; one entry in the source array will be one point on the dimension.
+ * @param generator A function that creates a {@link Criteria} for each point on the dimension.
+ * The following code creates a {@link Dimension} that will be used to evaluate ```Player``` objects during a {@link pivot} operation based on the value of their ```position``` property:
+ * ```ts
+ * const positions: string[] = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
+ * const x = dimension(positions, property('position'));
+ */
+export function dimension<DValue, TValue>(source: Array<DValue>, generator: Function<DValue, Criteria<TValue>>): Dimension<TValue> {
+	return source.map(generator);
+}
+/**
+ * Creates a function {@link Function} for use in the {@link dimension} function to create a {@link Dimension} matching properties.
  * @typeParam TValue The type of the source data that will be evaluated by this criteria.
  * @param key The property in the source data to base this {@link Criteria} on.
  * @example
  * The following code creates a {@link Dimension} that will be used to evaluate ```Player``` objects during a {@link pivot} operation based on the value of their ```position``` property:
  * ```ts
  * const positions: string[] = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
- * const x: Dimension<<Player> = positions.map(criteria('position'));
+ * const x = dimension(positions, property('position'));
  * ```
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building
  */
-export function criteria<TValue>(key: keyof TValue): Function<TValue[keyof TValue], Criteria<TValue>> {
+export function property<TValue>(key: keyof TValue): Function<TValue[keyof TValue], Criteria<TValue>> {
 	return (criterion: TValue[keyof TValue]) => (value: TValue) => value[key] === criterion;
 }
 
