@@ -75,62 +75,40 @@ export declare const dimension: <TDimension, TSource>(source: Array<TDimension>,
  */
 export declare const property: <TSource>(key: keyof TSource) => Function<TSource[keyof TSource], Predicate<TSource>>;
 /**
- * Discourage calls to pivot functions without and dimensions.
- * @deprecated Pass at least one dimension to the pivot operation.
- * @hidden
- */
-export declare function pivot<TSource>(source: Array<TSource>): Matrix<TSource>;
-/**
- * Pivots source data by one {@link Dimension} returning a {@link Matrix} (read on for two or more dimensions).
- * @typeParam TSource The type of the source data.
- * @param source The source data, an array of objects.
- * @param dimension The {@link Dimension} used to pivot the source data by.
+ * Slices and dices source data by one or more dimensions, returning, Matrix, Cube or Hypercube depending on the number of dimensions passed.
+ * See the overloads for more detail.
  * @example
- * The following code creates a {@link Matrix} of ```Player``` objects, pivoted by their ```position``` property:
+ * The following code creates a {@link Cube}, slicing and dicing the squad data for a football team by player position and country:
  * ```ts
- * const positions: string[] = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
- * const x: Dimension<Player> = positions.map(property('position'));
- *
- * const matrix: Matrix<Player> = pivot(squad, x);
- * ```
- * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
- * @category Cube building
- */
-export declare function pivot<TSource>(source: Array<TSource>, dimension: Dimension<TSource>): Matrix<TSource>;
-/**
- * Pivots source data by two {@link Dimension dimensions} returning a {@link Cube}.
- * @typeParam TSource The type of the source data.
- * @param source The source data, an array of objects.
- * @param dimension1 The first {@link Dimension} used to pivot the source data.
- * @param dimension2 The second {@link Dimension} used to pivot the source data.
- * @example
- * The following code creates a {@link Cube} of ```Player``` objects, pivoted by their ```country``` property then by their ```position``` property:
- * ```ts
- * const x: Dimension<Player> = positions.map(property('position'));
- * const y: Dimension<Player> = countries.map(property('country'));
+ * const x: Dimension<Player> = positions.map(property<Player>('position'));
+ * const y: Dimension<Player> = countries.map(property<Player>('country'));
  *
  * const cube: Cube<Player> = pivot(squad, y, x);
  * ```
- * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building
  */
-export declare function pivot<TSource>(source: Array<TSource>, dimension1: Dimension<TSource>, dimension2: Dimension<TSource>): Cube<TSource>;
-/**
- * Pivots source data by any number of {@link Dimension dimensions} returning a {@link Hypercube}.
- * @typeParam TSource The type of the source data.
- * @param source The source data, an array of objects.
- * @param dimensions The {@link Dimension dimensions} to pivot the source data by.
- * @returns Because of the arbitory number of {@link Dimension dimensions} that can be passed to this overload, the shape of the {@link Hypercube} cannot be known.
- * @remarks While it is possible to pass no {@link Dimension} arguments into this overload of the pivot function, it will result in an exception being thrown.
- * @example
- * The following code creates a {@link Hypercube}, pivoting the source data by three {@link Dimension dimensions} (though it can be any number):
- * ```ts
- * const hypercube: Hypercube = pivot(data, z, y, x);
- * ```
- * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
- * @category Cube building
- */
-export declare function pivot<TSource>(source: Array<TSource>, ...dimensions: Array<Dimension<TSource>>): Hypercube;
+export declare const pivot: {
+    /** @hidden @deprecated */
+    <TSource>(source: Array<TSource>): Array<TSource>;
+    /**
+     * Slices source data by one dimension, returning a Matrix.
+     * @typeParam TSource The type of the source data to be sliced.
+     * @param source The source data, an array of objects.
+     */
+    <TSource>(source: Array<TSource>, dimension: Dimension<TSource>): Matrix<TSource>;
+    /**
+     * Slices and dices source data by two dimensions, returning a Cube.
+     * @typeParam TSource The type of the source data to be sliced.
+     * @param source The source data, an array of objects.
+     */
+    <TSource>(source: Array<TSource>, dimension1: Dimension<TSource>, dimension2: Dimension<TSource>): Cube<TSource>;
+    /**
+     * Slices and dices source data by two or more dimensions, returning a Hypercube.
+     * @typeParam TSource The type of the source data to be sliced.
+     * @param source The source data, an array of objects.
+     */
+    <TSource>(source: Array<TSource>, ...dimensions: Array<Dimension<TSource>>): Hypercube;
+};
 /**
  * Aggregates data from a {@link Cube} into a {@link Matrix} using a selector {@link Function} to transform the objects in each cell of data in the {@link Cube} into a result.
  * @typeParam TSource The type of the data within the {@link Cube}.
