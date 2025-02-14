@@ -62,10 +62,13 @@ export type Hypercube = Cube<Array<any>>;
  * ```ts
  * const positions: string[] = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
  * const x = dimension(positions, property('position'));
+ * ```
+ * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
+ * @category Cube building
  */
-export function dimension<TDimension, TSource>(source: Array<TDimension>, generator: Function<TDimension, Predicate<TSource>>): Dimension<TSource> {
-	return source.map(generator);
-}
+export const dimension = <TDimension, TSource>(source: Array<TDimension>, generator: Function<TDimension, Predicate<TSource>>): Dimension<TSource> =>
+	source.map(generator);
+
 /**
  * Creates a predicate function {@link Predicate} for use in the {@link dimension} function to create a {@link Dimension} matching properties.
  * @typeParam TSource The type of the source data that will be evaluated by the generated predicate.
@@ -79,9 +82,8 @@ export function dimension<TDimension, TSource>(source: Array<TDimension>, genera
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building
  */
-export function property<TSource>(key: keyof TSource): Function<TSource[keyof TSource], Predicate<TSource>> {
-	return (criterion: TSource[keyof TSource]) => (value: TSource) => value[key] === criterion;
-}
+export const property = <TSource>(key: keyof TSource): Function<TSource[keyof TSource], Predicate<TSource>> =>
+	(criterion: TSource[keyof TSource]) => (value: TSource) => value[key] === criterion;
 
 /**
  * Discourage calls to pivot functions without and dimensions.
@@ -91,7 +93,7 @@ export function property<TSource>(key: keyof TSource): Function<TSource[keyof TS
 export function pivot<TSource>(source: Array<TSource>): Matrix<TSource>;
 
 /**
- * Pivots source data by one {@link Dimension} returning a {@link Matrix}.
+ * Pivots source data by one {@link Dimension} returning a {@link Matrix} (read on for two or more dimensions).
  * @typeParam TSource The type of the source data.
  * @param source The source data, an array of objects.
  * @param dimension The {@link Dimension} used to pivot the source data by.
@@ -175,9 +177,8 @@ export function pivot<TSource>(source: Array<TSource>, ...[dimension, ...dimensi
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export function aggregate<TSource, TResult>(cube: Cube<TSource>, selector: Function<Array<TSource>, TResult>): Matrix<TResult> {
-	return cube.map((matrix: Matrix<TSource>) => matrix.map(selector));
-}
+export const aggregate =<TSource, TResult>(cube: Cube<TSource>, selector: Function<Array<TSource>, TResult>): Matrix<TResult> =>
+	cube.map((matrix: Matrix<TSource>) => matrix.map(selector));
 
 /**
  * Create a callback {@link Function} to pass into {@link aggregate} that sums numerical values derived by the selector {@link Function}.
@@ -200,9 +201,8 @@ export function aggregate<TSource, TResult>(cube: Cube<TSource>, selector: Funct
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export function sum<TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number> {
-	return (source: Array<TSource>) => source.reduce((a: number, b: TSource) => a + selector(b), 0);
-}
+export const sum = <TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number> =>
+	(source: Array<TSource>) => source.reduce((a: number, b: TSource) => a + selector(b), 0);
 
 /**
  * Create a callback {@link Function} to pass into {@link aggregate} that averages numerical values derived by the selector {@link Function}.
@@ -225,6 +225,5 @@ export function sum<TSource>(selector: Function<TSource, number>): Function<Arra
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export function average<TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number> {
-	return (source: Array<TSource>) => sum(selector)(source) / source.length;
-}
+export const average = <TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number> =>
+	(source: Array<TSource>) => sum(selector)(source) / source.length;

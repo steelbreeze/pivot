@@ -55,8 +55,11 @@ export type Hypercube = Cube<Array<any>>;
  * ```ts
  * const positions: string[] = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
  * const x = dimension(positions, property('position'));
+ * ```
+ * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
+ * @category Cube building
  */
-export declare function dimension<TDimension, TSource>(source: Array<TDimension>, generator: Function<TDimension, Predicate<TSource>>): Dimension<TSource>;
+export declare const dimension: <TDimension, TSource>(source: Array<TDimension>, generator: Function<TDimension, Predicate<TSource>>) => Dimension<TSource>;
 /**
  * Creates a predicate function {@link Predicate} for use in the {@link dimension} function to create a {@link Dimension} matching properties.
  * @typeParam TSource The type of the source data that will be evaluated by the generated predicate.
@@ -70,7 +73,7 @@ export declare function dimension<TDimension, TSource>(source: Array<TDimension>
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building
  */
-export declare function property<TSource>(key: keyof TSource): Function<TSource[keyof TSource], Predicate<TSource>>;
+export declare const property: <TSource>(key: keyof TSource) => Function<TSource[keyof TSource], Predicate<TSource>>;
 /**
  * Discourage calls to pivot functions without and dimensions.
  * @deprecated Pass at least one dimension to the pivot operation.
@@ -78,7 +81,7 @@ export declare function property<TSource>(key: keyof TSource): Function<TSource[
  */
 export declare function pivot<TSource>(source: Array<TSource>): Matrix<TSource>;
 /**
- * Pivots source data by one {@link Dimension} returning a {@link Matrix}.
+ * Pivots source data by one {@link Dimension} returning a {@link Matrix} (read on for two or more dimensions).
  * @typeParam TSource The type of the source data.
  * @param source The source data, an array of objects.
  * @param dimension The {@link Dimension} used to pivot the source data by.
@@ -151,7 +154,7 @@ export declare function pivot<TSource>(source: Array<TSource>, ...dimensions: Ar
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export declare function aggregate<TSource, TResult>(cube: Cube<TSource>, selector: Function<Array<TSource>, TResult>): Matrix<TResult>;
+export declare const aggregate: <TSource, TResult>(cube: Cube<TSource>, selector: Function<Array<TSource>, TResult>) => Matrix<TResult>;
 /**
  * Create a callback {@link Function} to pass into {@link aggregate} that sums numerical values derived by the selector {@link Function}.
  * @typeParam TSource The type of the data within the cube that will be passed into the selector.
@@ -173,7 +176,7 @@ export declare function aggregate<TSource, TResult>(cube: Cube<TSource>, selecto
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export declare function sum<TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number>;
+export declare const sum: <TSource>(selector: Function<TSource, number>) => Function<Array<TSource>, number>;
 /**
  * Create a callback {@link Function} to pass into {@link aggregate} that averages numerical values derived by the selector {@link Function}.
  * @typeParam TSource The type of the data within the cube that will be passed into the selector.
@@ -195,4 +198,4 @@ export declare function sum<TSource>(selector: Function<TSource, number>): Funct
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export declare function average<TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number>;
+export declare const average: <TSource>(selector: Function<TSource, number>) => Function<Array<TSource>, number>;
