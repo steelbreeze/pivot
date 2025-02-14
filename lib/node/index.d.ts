@@ -75,7 +75,7 @@ export declare const dimension: <TDimension, TSource>(source: Array<TDimension>,
  */
 export declare const property: <TSource>(key: keyof TSource) => Function<TSource[keyof TSource], Predicate<TSource>>;
 /**
- * Slices and dices source data by one or more dimensions, returning, Matrix, Cube or Hypercube depending on the number of dimensions passed.
+ * Slices and dices source data by one or more dimensions, returning, {@link Matrix}, {@link Cube} or {@link Hypercube} depending on the number of dimensions passed.
  * See the overloads for more detail.
  * @example
  * The following code creates a {@link Cube}, slicing and dicing the squad data for a football team by player position and country:
@@ -90,14 +90,23 @@ export declare const property: <TSource>(key: keyof TSource) => Function<TSource
 export declare const pivot: {
     /** @hidden @deprecated */
     <TSource>(source: Array<TSource>): Array<TSource>;
-    /** @hidden */
+    /**
+     * @typeParam TSource The type of the source data to be sliced.
+     * @param source The source data, an array of objects.
+     * @param dimension The dimension to slice the data by.
+     */
     <TSource>(source: Array<TSource>, dimension: Dimension<TSource>): Matrix<TSource>;
-    /** @hidden */
+    /**
+     * @typeParam TSource The type of the source data to be sliced.
+     * @param source The source data, an array of objects.
+     * @param dimension1 The dimension to slice the data by.
+     * @param dimension2 The dimension to dice the data by.
+     */
     <TSource>(source: Array<TSource>, dimension1: Dimension<TSource>, dimension2: Dimension<TSource>): Cube<TSource>;
     /**
      * @typeParam TSource The type of the source data to be sliced.
      * @param source The source data, an array of objects.
-     * @param dimensions One or more dimensions to pivot the data by.
+     * @param dimensions Three or more dimensions to pivot the data by.
      */
     <TSource>(source: Array<TSource>, ...dimensions: Array<Dimension<TSource>>): Hypercube;
 };
