@@ -75,9 +75,15 @@
 			{ shirt: 27, position: 'Forward', givenName: 'Josh', familyName: 'Maja', country: 'Nigeria', dateOfBirth: new Date('1998-12-27') }
 		];
 
+		// hard code the positions
+		const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
+
+		// derive countries from the squad data
+		const countries = squad.map(player => player.country).filter(distinct).sort();
+
 		// create axes out of the dimensions derived from the squad data
-		const position = pivot.dimension(['Goalkeeper', 'Defender', 'Midfielder', 'Forward'], property('position'));
-		const country = pivot.dimension(squad.map(player => player.country).filter(distinct).sort(), property('country'));
+		const position = pivot.dimension(positions, property('position'));
+		const country = pivot.dimension(countries, property('country'));
 
 		// create the pivot cube
 		const cube = pivot.pivot(squad, country, position);
