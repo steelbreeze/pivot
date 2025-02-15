@@ -99,36 +99,34 @@ export const property = <TSource>(key: keyof TSource): Function<TSource[keyof TS
  * @category Cube building
  */
 export const pivot: {
-	/** @hidden @deprecated */
-	<TSource>(source: Array<TSource>): Array<TSource>;
-
 	/**
 	 * @typeParam TSource The type of the source data to be sliced.
 	 * @param source The source data, an array of objects.
-	 * @param dimension The dimension to slice the data by.
+	 * @param first The dimension to slice the data by.
 	 */
-	<TSource>(source: Array<TSource>, dimension: Dimension<TSource>): Matrix<TSource>;
+	<TSource>(source: Array<TSource>, first: Dimension<TSource>): Matrix<TSource>;
 
 	/**
-	 * @typeParam TSource The type of the source data to be sliced.
+	 * @typeParam TSource The type of the source data to be sliced and diced.
 	 * @param source The source data, an array of objects.
-	 * @param dimension1 The dimension to slice the data by.
-	 * @param dimension2 The dimension to dice the data by.
+	 * @param first The first dimension to slice the data by.
+	 * @param second The second dimension to dice the data by.
 	 */
-	<TSource>(source: Array<TSource>, dimension1: Dimension<TSource>, dimension2: Dimension<TSource>): Cube<TSource>;
+	<TSource>(source: Array<TSource>, first: Dimension<TSource>, second: Dimension<TSource>): Cube<TSource>;
 
 	/**
-	 * @typeParam TSource The type of the source data to be sliced.
+	 * @typeParam TSource The type of the source data to be sliced and diced.
 	 * @param source The source data, an array of objects.
-	 * @param dimensions Three or more dimensions to pivot the data by.
+	 * @param first The first dimension to slice the data by.
+	 * @param others Two or more other dimensions to pivot the data by.
 	 */
-	<TSource>(source: Array<TSource>, ...dimensions: Array<Dimension<TSource>>): Hypercube;
-} = <TSource>(source: Array<TSource>, ...[dimension, ...dimensions]: Array<Dimension<TSource>>) => {
+	<TSource>(source: Array<TSource>, first: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Hypercube;
+} = <TSource>(source: Array<TSource>, ...[first, second, ...others]: Array<Dimension<TSource>>) => {
 	// slice the source data by the first dimension provided
-	const matrix: Matrix<TSource> = dimension.map((predicate: Predicate<TSource>) => source.filter(predicate));
+	const matrix: Matrix<TSource> = first!.map((predicate: Predicate<TSource>) => source.filter(predicate));
 
 	// recurse if there are other dimensions, otherwise just return the matrix
-	return dimensions.length ? matrix.map((slice: Array<TSource>) => pivot(slice, ...dimensions)) : matrix;
+	return second ? matrix.map((slice: Array<TSource>) => pivot(slice, second, ...others)) : matrix;
 }
 
 /**

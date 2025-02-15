@@ -88,27 +88,26 @@ export declare const property: <TSource>(key: keyof TSource) => Function<TSource
  * @category Cube building
  */
 export declare const pivot: {
-    /** @hidden @deprecated */
-    <TSource>(source: Array<TSource>): Array<TSource>;
     /**
      * @typeParam TSource The type of the source data to be sliced.
      * @param source The source data, an array of objects.
-     * @param dimension The dimension to slice the data by.
+     * @param first The dimension to slice the data by.
      */
-    <TSource>(source: Array<TSource>, dimension: Dimension<TSource>): Matrix<TSource>;
+    <TSource>(source: Array<TSource>, first: Dimension<TSource>): Matrix<TSource>;
     /**
-     * @typeParam TSource The type of the source data to be sliced.
+     * @typeParam TSource The type of the source data to be sliced and diced.
      * @param source The source data, an array of objects.
-     * @param dimension1 The dimension to slice the data by.
-     * @param dimension2 The dimension to dice the data by.
+     * @param first The first dimension to slice the data by.
+     * @param second The second dimension to dice the data by.
      */
-    <TSource>(source: Array<TSource>, dimension1: Dimension<TSource>, dimension2: Dimension<TSource>): Cube<TSource>;
+    <TSource>(source: Array<TSource>, first: Dimension<TSource>, second: Dimension<TSource>): Cube<TSource>;
     /**
-     * @typeParam TSource The type of the source data to be sliced.
+     * @typeParam TSource The type of the source data to be sliced and diced.
      * @param source The source data, an array of objects.
-     * @param dimensions Three or more dimensions to pivot the data by.
+     * @param first The first dimension to slice the data by.
+     * @param others Two or more other dimensions to pivot the data by.
      */
-    <TSource>(source: Array<TSource>, ...dimensions: Array<Dimension<TSource>>): Hypercube;
+    <TSource>(source: Array<TSource>, first: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Hypercube;
 };
 /**
  * Aggregates data from a {@link Cube} into a {@link Matrix} using a selector {@link Function} to transform the objects in each cell of data in the {@link Cube} into a result.
