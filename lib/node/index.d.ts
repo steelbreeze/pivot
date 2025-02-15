@@ -89,12 +89,14 @@ export declare const property: <TSource>(key: keyof TSource) => Function<TSource
  */
 export declare const pivot: {
     /**
+     * Slices data by one dimension, returning a {@link Matrix}.
      * @typeParam TSource The type of the source data to be sliced.
      * @param source The source data, an array of objects.
      * @param first The dimension to slice the data by.
      */
     <TSource>(source: Array<TSource>, first: Dimension<TSource>): Matrix<TSource>;
     /**
+     * Slices data by two dimensions, returning a {@link Cube}.
      * @typeParam TSource The type of the source data to be sliced and diced.
      * @param source The source data, an array of objects.
      * @param first The first dimension to slice the data by.
@@ -102,6 +104,7 @@ export declare const pivot: {
      */
     <TSource>(source: Array<TSource>, first: Dimension<TSource>, second: Dimension<TSource>): Cube<TSource>;
     /**
+     * Slices data by three or more dimensions, returning a {@link Hypercube}.
      * @typeParam TSource The type of the source data to be sliced and diced.
      * @param source The source data, an array of objects.
      * @param first The first dimension to slice the data by.
