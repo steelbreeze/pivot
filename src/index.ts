@@ -118,7 +118,7 @@ export const pivot: {
 	 * @typeParam TSource The type of the source data to be sliced and diced.
 	 * @param source The source data, an array of objects.
 	 * @param first The first dimension to slice the data by.
-	 * @param others Two or more other dimensions to pivot the data by.
+	 * @param others Other dimensions to pivot the data by.
 	 */
 	<TSource>(source: Array<TSource>, first: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Hypercube;
 } = <TSource>(source: Array<TSource>, ...[first, second, ...others]: Array<Dimension<TSource>>) => {
