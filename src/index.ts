@@ -6,7 +6,7 @@
  * 
  * Simple {@link Dimension dimensions} can be created by mapping a set of values using the {@link property} function and a property name from the data set to be pivoted.
  * 
- * Once a {@link Cube} is created, the {@link aggregate} function can be used to perform aggregate query operations on the subset of the source data in each cell.
+ * Once a {@link Cube} is created, the {@link query} function can be used to perform query operations on the subset of the source data in each cell.
  * 
  * @module
  */
@@ -133,20 +133,21 @@ export const pivot: {
 }
 
 /**
- * Aggregates data from a {@link Cube} into a {@link Matrix} using a selector {@link Function} to transform the objects in each cell of data in the {@link Cube} into a result.
- * @typeParam TSource The type of the data within the {@link Cube}.
+ * Queries data from a {@link Matrix} using a selector {@link Function} to transform the objects in each cell of data in the {@link Matrix} into a result.
+ * @typeParam TSource The type of the data within the {@link Matrix}.
  * @typeParam TResult The type of value returned by the selector.
- * @param cube The {@link Cube} to query data from.
+ * @param matrix The {@link Matrix} to query data from.
  * @param selector A callback {@link Function} to create a result from each cell of the {@link Cube}.
+ * @remarks The {@link Matrix} may also be a {@link Cube} or {@link Hypercube}.
  * @example
- * The following code aggregates a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
+ * The following code queries a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
  * ```ts
  * const x: Dimension<Player> = positions.map(property('position'));
  * const y: Dimension<Player> = countries.map(property('country'));
  * 
  * const cube: Cube<Player> = pivot(squad, y, x);
  * 
- * const result: Matrix<number> = aggregate(cube, average(age()));
+ * const result: Matrix<number> = query(cube, average(age()));
  * 
  * function age(asAt: Date = new Date()): Function<Player, number> {
  *   return player => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
@@ -155,22 +156,22 @@ export const pivot: {
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export const aggregate = <TSource, TResult>(cube: Cube<TSource>, selector: Function<Array<TSource>, TResult>): Matrix<TResult> =>
-	cube.map((matrix: Matrix<TSource>) => matrix.map(selector));
+export const query = <TSource, TResult>(matrix: Matrix<TSource>, selector: Function<TSource, TResult>): Matrix<TResult> =>
+	matrix.map((slice: Array<TSource>) => slice.map(selector));
 
 /**
- * Create a callback {@link Function} to pass into {@link aggregate} that sums numerical values derived by the selector {@link Function}.
+ * Create a callback {@link Function} to pass into {@link query} that sums numerical values derived by the selector {@link Function}.
  * @typeParam TSource The type of the data within the cube that will be passed into the selector.
  * @param selector A callback {@link Function} to derive a numerical value for each object in the source data.
  * @example
- * The following code aggregates a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
+ * The following code queries a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
  * ```ts
  * const x: Dimension<Player> = positions.map(property('position'));
  * const y: Dimension<Player> = countries.map(property('country'));
  * 
  * const cube: Cube<Player> = pivot(squad, y, x);
  * 
- * const result: Matrix<number> = aggregate(cube, sum(age()));
+ * const result: Matrix<number> = query(cube, sum(age()));
  * 
  * function age(asAt: Date = new Date()): Function<Player, number> {
  *   return player => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
@@ -183,18 +184,18 @@ export const sum = <TSource>(selector: Function<TSource, number>): Function<Arra
 	(source: Array<TSource>) => source.reduce((a: number, b: TSource) => a + selector(b), 0);
 
 /**
- * Create a callback {@link Function} to pass into {@link aggregate} that averages numerical values derived by the selector {@link Function}.
+ * Create a callback {@link Function} to pass into {@link query} that averages numerical values derived by the selector {@link Function}.
  * @typeParam TSource The type of the data within the cube that will be passed into the selector.
  * @param selector A callback {@link Function} to derive a numerical value for each object in the source data.
  * @example
- * The following code aggregates a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
+ * The following code queries a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
  * ```ts
  * const x: Dimension<Player> = positions.map(property('position'));
  * const y: Dimension<Player> = countries.map(property('country'));
  * 
  * const cube: Cube<Player> = pivot(squad, y, x);
  * 
- * const result: Matrix<number> = aggregate(cube, average(age()));
+ * const result: Matrix<number> = query(cube, average(age()));
  * 
  * function age(asAt: Date = new Date()): Function<Player, number> {
  *   return player => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;

@@ -1,4 +1,4 @@
-import { property, pivot, aggregate } from '..';
+import { property, pivot, query } from '..';
 import { distinct } from './distinct';
 
 interface Data {
@@ -26,4 +26,4 @@ const y = data.map(row => row.b).filter(distinct).map(property('b'));
 const cube = pivot(data, x, y);
 
 // Display the values of 'c' seen in the data
-console.log(aggregate(cube, records => records.map(t => t.c)));
+console.log(query(cube, records => records.map(t => t.c)));

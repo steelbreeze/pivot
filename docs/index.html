@@ -89,7 +89,7 @@
 		const cube = pivot.pivot(squad, country, position);
 
 		// find the average age of players by position by country, select just the full name
-		const result = pivot.aggregate(cube, players => players.map(player => `${player.givenName} ${player.familyName}`));
+		const result = pivot.query(cube, players => players.map(player => `${player.givenName} ${player.familyName}`));
 
 		document.getElementById("squad").innerHTML =
 			`<thead>` +

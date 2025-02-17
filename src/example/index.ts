@@ -1,4 +1,4 @@
-import { dimension, property, pivot, aggregate, average } from '..';
+import { dimension, property, pivot, query, average } from '..';
 import { Player, squad } from './fulham';
 import { distinct } from './distinct';
 
@@ -16,7 +16,7 @@ const y = dimension(countries, (country: string) => (player: Player) => player.c
 const cube = pivot(squad, y, x);
 
 // find the average age of players by position by country as at 2021-05-23
-const result = aggregate(cube, average(age(new Date('2021-05-23'))));
+const result = query(cube, average(age(new Date('2021-05-23'))));
 
 // Creates a callback to calculate a players age from their date of birth as at a given date
 function age(asAt: Date = new Date()) {
