@@ -183,6 +183,9 @@ export const query = <TSource, TResult>(matrix: Matrix<TSource>, selector: Funct
 export const sum = <TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number> =>
 	(source: Array<TSource>) => source.reduce((a: number, b: TSource) => a + selector(b), 0);
 
+export const count = <TSource>(source: Array<TSource>): number =>
+	source.length;
+
 /**
  * Create a callback {@link Function} to pass into {@link query} that averages numerical values derived by the selector {@link Function}.
  * @typeParam TSource The type of the data within the cube that will be passed into the selector.
@@ -205,4 +208,4 @@ export const sum = <TSource>(selector: Function<TSource, number>): Function<Arra
  * @category Cube query
  */
 export const average = <TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number> =>
-	(source: Array<TSource>) => sum(selector)(source) / source.length;
+	(source: Array<TSource>) => sum(selector)(source) / count(source);

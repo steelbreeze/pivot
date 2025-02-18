@@ -159,6 +159,7 @@ export declare const query: <TSource, TResult>(matrix: Matrix<TSource>, selector
  * @category Cube query
  */
 export declare const sum: <TSource>(selector: Function<TSource, number>) => Function<Array<TSource>, number>;
+export declare const count: <TSource>(source: Array<TSource>) => number;
 /**
  * Create a callback {@link Function} to pass into {@link query} that averages numerical values derived by the selector {@link Function}.
  * @typeParam TSource The type of the data within the cube that will be passed into the selector.

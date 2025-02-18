@@ -27,8 +27,6 @@ function age(asAt: Date = new Date()) {
 console.log(`\t${positions.map(print).join('\t')}`);
 console.log(result.map((row, index) => [countries[index], ...row].map(print).join('\t')).join('\n'));
 
-//console.log(partition(squad, x));
-
 // Print a value in 7 characters and truncate with ellipsis
 function print(value: any) {
 	const str = String(value || '');
