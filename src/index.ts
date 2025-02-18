@@ -124,9 +124,9 @@ export const pivot: {
 	 * @param others Other dimensions to pivot the data by.
 	 */
 	<TSource>(source: Array<TSource>, first: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Hypercube;
-} = <TSource>(source: Array<TSource>, ...[first, second, ...others]: Array<Dimension<TSource>>) => {
+} = <TSource>(source: Array<TSource>, first: Dimension<TSource>, ...[second, ...others]: Array<Dimension<TSource>>) => {
 	// slice the source data by the first dimension provided
-	const matrix: Matrix<TSource> = first!.map((predicate: Predicate<TSource>) => source.filter(predicate));
+	const matrix: Matrix<TSource> = first.map((predicate: Predicate<TSource>) => source.filter(predicate));
 
 	// recurse if there are other dimensions, otherwise just return the matrix
 	return second ? matrix.map((slice: Array<TSource>) => pivot(slice, second, ...others)) : matrix;
