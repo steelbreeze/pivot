@@ -144,7 +144,7 @@ export const pivot: {
 	 */
 	<TSource>(source: Array<TSource>, first: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Hypercube;
 } = <TSource>(source: Array<TSource>, first: Dimension<TSource>, ...[second, ...others]: Array<Dimension<TSource>>) =>
-	second ? slice(source, first).map((matrix: Array<TSource>) => pivot(matrix, second, ...others)) : slice(source, first);
+	second ? slice(source, first).map((sliced: Array<TSource>) => pivot(sliced, second, ...others)) : slice(source, first);
 
 /**
  * Queries data from a {@link Matrix} using a selector {@link Function} to transform the objects in each cell of data in the {@link Matrix} into a result.

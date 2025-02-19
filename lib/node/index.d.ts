@@ -78,7 +78,7 @@ export declare const property: <TSource>(key: keyof TSource) => Function<TSource
  * Slices data by one dimension, returning a {@link Matrix}.
  * @typeParam TSource The type of the source data to be sliced.
  * @param source The source data, an array of objects.
- * @param first The dimension to slice the data by.
+ * @param dimension The dimension to slice the data by.
  * @example
  * The following code creates a {@link Cube}, slicing and dicing the squad data for a football team by player position and country:
  * ```ts
