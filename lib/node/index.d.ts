@@ -75,6 +75,22 @@ export declare const dimension: <TDimension, TSource>(source: Array<TDimension>,
  */
 export declare const property: <TSource>(key: keyof TSource) => Function<TSource[keyof TSource], Predicate<TSource>>;
 /**
+ * Slices data by one dimension, returning a {@link Matrix}.
+ * @typeParam TSource The type of the source data to be sliced.
+ * @param source The source data, an array of objects.
+ * @param first The dimension to slice the data by.
+ * @example
+ * The following code creates a {@link Cube}, slicing and dicing the squad data for a football team by player position and country:
+ * ```ts
+ * const y: Dimension<Player> = countries.map(property<Player>('country'));
+ *
+ * const cube: Matrix<Player> = slice(squad, y);
+ * ```
+ * @category Cube building
+ * @remarks This is equivalent to {@link pivot} with one dimension.
+ */
+export declare const slice: <TSource>(source: Array<TSource>, dimension: Dimension<TSource>) => Matrix<TSource>;
+/**
  * Slices and dices source data by one or more dimensions, returning, {@link Matrix}, {@link Cube} or {@link Hypercube} depending on the number of dimensions passed.
  * See the overloads for more detail.
  * @example
@@ -93,6 +109,7 @@ export declare const pivot: {
      * @typeParam TSource The type of the source data to be sliced.
      * @param source The source data, an array of objects.
      * @param first The dimension to slice the data by.
+     * @remarks This is equivalent to {@link slice}.
      */
     <TSource>(source: Array<TSource>, first: Dimension<TSource>): Matrix<TSource>;
     /**
@@ -159,7 +176,6 @@ export declare const query: <TSource, TResult>(matrix: Matrix<TSource>, selector
  * @category Cube query
  */
 export declare const sum: <TSource>(selector: Function<TSource, number>) => Function<Array<TSource>, number>;
-export declare const count: <TSource>(source: Array<TSource>) => number;
 /**
  * Create a callback {@link Function} to pass into {@link query} that averages numerical values derived by the selector {@link Function}.
  * @typeParam TSource The type of the data within the cube that will be passed into the selector.

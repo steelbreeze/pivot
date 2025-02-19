@@ -86,6 +86,24 @@ export const property = <TSource>(key: keyof TSource): Function<TSource[keyof TS
 	(criterion: TSource[keyof TSource]) => (value: TSource) => value[key] === criterion;
 
 /**
+ * Slices data by one dimension, returning a {@link Matrix}.
+ * @typeParam TSource The type of the source data to be sliced.
+ * @param source The source data, an array of objects.
+ * @param dimension The dimension to slice the data by.
+ * @example
+ * The following code creates a {@link Cube}, slicing and dicing the squad data for a football team by player position and country:
+ * ```ts
+ * const y: Dimension<Player> = countries.map(property<Player>('country'));
+ * 
+ * const cube: Matrix<Player> = slice(squad, y);
+ * ```
+ * @category Cube building
+ * @remarks This is equivalent to {@link pivot} with one dimension.
+ */
+export const slice = <TSource>(source: Array<TSource>, dimension: Dimension<TSource>): Matrix<TSource> =>
+	dimension.map((predicate: Predicate<TSource>) => source.filter(predicate));
+
+/**
  * Slices and dices source data by one or more dimensions, returning, {@link Matrix}, {@link Cube} or {@link Hypercube} depending on the number of dimensions passed.
  * See the overloads for more detail.
  * @example
@@ -104,6 +122,7 @@ export const pivot: {
 	 * @typeParam TSource The type of the source data to be sliced.
 	 * @param source The source data, an array of objects.
 	 * @param first The dimension to slice the data by.
+	 * @remarks This is equivalent to {@link slice}.
 	 */
 	<TSource>(source: Array<TSource>, first: Dimension<TSource>): Matrix<TSource>;
 
@@ -124,13 +143,8 @@ export const pivot: {
 	 * @param others Other dimensions to pivot the data by.
 	 */
 	<TSource>(source: Array<TSource>, first: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Hypercube;
-} = <TSource>(source: Array<TSource>, first: Dimension<TSource>, ...[second, ...others]: Array<Dimension<TSource>>) => {
-	// slice the source data by the first dimension provided
-	const matrix: Matrix<TSource> = first.map((predicate: Predicate<TSource>) => source.filter(predicate));
-
-	// recurse if there are other dimensions, otherwise just return the matrix
-	return second ? matrix.map((slice: Array<TSource>) => pivot(slice, second, ...others)) : matrix;
-}
+} = <TSource>(source: Array<TSource>, first: Dimension<TSource>, ...[second, ...others]: Array<Dimension<TSource>>) =>
+	second ? slice(source, first).map((matrix: Array<TSource>) => pivot(matrix, second, ...others)) : slice(source, first);
 
 /**
  * Queries data from a {@link Matrix} using a selector {@link Function} to transform the objects in each cell of data in the {@link Matrix} into a result.
@@ -183,9 +197,6 @@ export const query = <TSource, TResult>(matrix: Matrix<TSource>, selector: Funct
 export const sum = <TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number> =>
 	(source: Array<TSource>) => source.reduce((a: number, b: TSource) => a + selector(b), 0);
 
-export const count = <TSource>(source: Array<TSource>): number =>
-	source.length;
-
 /**
  * Create a callback {@link Function} to pass into {@link query} that averages numerical values derived by the selector {@link Function}.
  * @typeParam TSource The type of the data within the cube that will be passed into the selector.
@@ -208,4 +219,4 @@ export const count = <TSource>(source: Array<TSource>): number =>
  * @category Cube query
  */
 export const average = <TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number> =>
-	(source: Array<TSource>) => sum(selector)(source) / count(source);
+	(source: Array<TSource>) => sum(selector)(source) / source.length;
