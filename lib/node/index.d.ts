@@ -105,11 +105,10 @@ export declare const slice: <TSource>(source: Array<TSource>, dimension: Dimensi
  */
 export declare const pivot: {
     /**
-     * Slices data by one dimension, returning a {@link Matrix}.
-     * @typeParam TSource The type of the source data to be sliced.
+     * Slices data by two dimensions, returning a {@link Cube}.
+     * @typeParam TSource The type of the source data to be sliced and diced.
      * @param source The source data, an array of objects.
-     * @param first The dimension to slice the data by.
-     * @remarks This is equivalent to {@link slice}.
+     * @param first The first dimension to slice the data by.
      */
     <TSource>(source: Array<TSource>, first: Dimension<TSource>): Matrix<TSource>;
     /**
@@ -125,7 +124,7 @@ export declare const pivot: {
      * @typeParam TSource The type of the source data to be sliced and diced.
      * @param source The source data, an array of objects.
      * @param first The first dimension to slice the data by.
-     * @param others Other dimensions to pivot the data by.
+     * @param others Two or more other dimensions to pivot the data by.
      */
     <TSource>(source: Array<TSource>, first: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Hypercube;
 };

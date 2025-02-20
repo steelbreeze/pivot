@@ -1,4 +1,4 @@
-import { Cube, property, pivot } from "..";
+import { Cube, property, slice, pivot } from "..";
 import { distinct } from "../example/distinct";
 
 enum Nationality {
@@ -31,7 +31,7 @@ const retired = [
 ];
 
 // pivot by just one dimension
-const matrix = pivot(data, gender);
+const matrix = slice(data, gender);
 console.log(matrix[0]![0] === emily);
 console.log(matrix[1]![0] === arnold);
 console.log(matrix[1]![1] === seamus);
