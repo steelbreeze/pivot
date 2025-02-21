@@ -82,7 +82,7 @@ export declare const property: <TSource>(key: keyof TSource) => Function<TSource
  * @example
  * The following code creates a {@link Cube}, slicing and dicing the squad data for a football team by player position and country:
  * ```ts
- * const y: Dimension<Player> = countries.map(property<Player>('country'));
+ * const y = dimension(countries, (country: string) => (player: Player) => player.country === country); // using a user-defined generator
  *
  * const cube: Matrix<Player> = slice(squad, y);
  * ```
@@ -96,8 +96,8 @@ export declare const slice: <TSource>(source: Array<TSource>, dimension: Dimensi
  * @example
  * The following code creates a {@link Cube}, slicing and dicing the squad data for a football team by player position and country:
  * ```ts
- * const x: Dimension<Player> = positions.map(property<Player>('position'));
- * const y: Dimension<Player> = countries.map(property<Player>('country'));
+ * const x = dimension(positions, property<Player>('position')); // using the built-in dimension generator matching a property
+ * const y = dimension(countries, (country: string) => (player: Player) => player.country === country); // using a user-defined generator
  *
  * const cube: Cube<Player> = pivot(squad, y, x);
  * ```
@@ -138,8 +138,8 @@ export declare const pivot: {
  * @example
  * The following code queries a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
  * ```ts
- * const x: Dimension<Player> = positions.map(property('position'));
- * const y: Dimension<Player> = countries.map(property('country'));
+ * const x = dimension(positions, property<Player>('position')); // using the built-in dimension generator matching a property
+ * const y = dimension(countries, (country: string) => (player: Player) => player.country === country); // using a user-defined generator
  *
  * const cube: Cube<Player> = pivot(squad, y, x);
  *
@@ -160,8 +160,8 @@ export declare const query: <TSource, TResult>(matrix: Matrix<TSource>, selector
  * @example
  * The following code queries a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
  * ```ts
- * const x: Dimension<Player> = positions.map(property('position'));
- * const y: Dimension<Player> = countries.map(property('country'));
+ * const x = dimension(positions, property<Player>('position')); // using the built-in dimension generator matching a property
+ * const y = dimension(countries, (country: string) => (player: Player) => player.country === country); // using a user-defined generator
  *
  * const cube: Cube<Player> = pivot(squad, y, x);
  *
@@ -182,8 +182,8 @@ export declare const sum: <TSource>(selector: Function<TSource, number>) => Func
  * @example
  * The following code queries a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
  * ```ts
- * const x: Dimension<Player> = positions.map(property('position'));
- * const y: Dimension<Player> = countries.map(property('country'));
+ * const x = dimension(positions, property<Player>('position')); // using the built-in dimension generator matching a property
+ * const y = dimension(countries, (country: string) => (player: Player) => player.country === country); // using a user-defined generator
  *
  * const cube: Cube<Player> = pivot(squad, y, x);
  *
