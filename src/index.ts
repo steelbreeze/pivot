@@ -221,7 +221,7 @@ export const average = <TSource>(selector: Function<TSource, number>): Function<
 	(source: Array<TSource>) => sum(selector)(source) / source.length;
 
 // fast alternative to Array.prototype.filter
-const filter = <TSource>(source: Array<TSource>, predicate: Predicate<TSource>): Array<TSource> => {
+function filter<TSource>(source: Array<TSource>, predicate: Predicate<TSource>): Array<TSource> {
 	const result: Array<TSource> = [];
 
 	for (let i = 0; i < source.length; ++i) {
