@@ -101,7 +101,7 @@ export const property = <TSource>(key: keyof TSource): Function<TSource[keyof TS
  * @remarks This is equivalent to {@link pivot} with one dimension.
  */
 export const slice = <TSource>(source: Array<TSource>, dimension: Dimension<TSource>): Matrix<TSource> =>
-	dimension.map((predicate: Predicate<TSource>) => source.filter(predicate));
+	dimension.map((predicate: Predicate<TSource>) => filter(source, predicate));
 
 /**
  * Slices and dices source data by one or more dimensions, returning, {@link Matrix}, {@link Cube} or {@link Hypercube} depending on the number of dimensions passed.
@@ -143,7 +143,7 @@ export const pivot: {
 	 */
 	<TSource>(source: Array<TSource>, first: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Hypercube;
 } = <TSource>(source: Array<TSource>, first: Dimension<TSource>, ...[second, ...others]: Array<Dimension<TSource>>) =>
-	second ? slice(source, first).map((sliced: Array<TSource>) => pivot(sliced, second, ...others)) : slice(source, first);
+		second ? slice(source, first).map((sliced: Array<TSource>) => pivot(sliced, second, ...others)) : slice(source, first);
 
 /**
  * Queries data from a {@link Matrix} using a selector {@link Function} to transform the objects in each cell of data in the {@link Matrix} into a result.
@@ -170,7 +170,7 @@ export const pivot: {
  * @category Cube query
  */
 export const query = <TSource, TResult>(matrix: Matrix<TSource>, selector: Function<TSource, TResult>): Matrix<TResult> =>
-	matrix.map((slice: Array<TSource>) => slice.map(selector));
+	matrix.map((sliced: Array<TSource>) => sliced.map(selector));
 
 /**
  * Create a callback {@link Function} to pass into {@link query} that sums numerical values derived by the selector {@link Function}.
@@ -219,3 +219,16 @@ export const sum = <TSource>(selector: Function<TSource, number>): Function<Arra
  */
 export const average = <TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number> =>
 	(source: Array<TSource>) => sum(selector)(source) / source.length;
+
+// fast alternative to Array.prototype.filter
+const filter = <TSource>(source: Array<TSource>, predicate: Predicate<TSource>): Array<TSource> => {
+	const result: Array<TSource> = [];
+
+	for (let i = 0; i < source.length; ++i) {
+		if (predicate(source[i])) {
+			result.push(source[i]);
+		}
+	}
+
+	return result;
+}
