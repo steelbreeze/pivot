@@ -67,7 +67,7 @@ export type Hypercube = Cube<Array<any>>;
  * @category Cube building
  */
 export const dimension = <TDimension, TSource>(source: Array<TDimension>, generator: Function<TDimension, Predicate<TSource>>): Dimension<TSource> =>
-	source.map(generator);
+	map(source, generator);
 
 /**
  * Creates a predicate function {@link Predicate} for use in the {@link dimension} function to create a {@link Dimension} matching properties.
@@ -101,7 +101,7 @@ export const property = <TSource>(key: keyof TSource): Function<TSource[keyof TS
  * @remarks This is equivalent to {@link pivot} with one dimension.
  */
 export const slice = <TSource>(source: Array<TSource>, dimension: Dimension<TSource>): Matrix<TSource> =>
-	dimension.map((predicate: Predicate<TSource>) => filter(source, predicate));
+	map(dimension, (predicate: Predicate<TSource>) => filter(source, predicate));
 
 /**
  * Slices and dices source data by one or more dimensions, returning, {@link Matrix}, {@link Cube} or {@link Hypercube} depending on the number of dimensions passed.
@@ -143,7 +143,7 @@ export const pivot: {
 	 */
 	<TSource>(source: Array<TSource>, first: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Hypercube;
 } = <TSource>(source: Array<TSource>, first: Dimension<TSource>, ...[second, ...others]: Array<Dimension<TSource>>) =>
-		second ? slice(source, first).map((sliced: Array<TSource>) => pivot(sliced, second, ...others)) : slice(source, first);
+		second ? map(slice(source, first), (sliced: Array<TSource>) => pivot(sliced, second, ...others)) : slice(source, first);
 
 /**
  * Queries data from a {@link Matrix} using a selector {@link Function} to transform the objects in each cell of data in the {@link Matrix} into a result.
@@ -170,7 +170,7 @@ export const pivot: {
  * @category Cube query
  */
 export const query = <TSource, TResult>(matrix: Matrix<TSource>, selector: Function<TSource, TResult>): Matrix<TResult> =>
-	matrix.map((sliced: Array<TSource>) => sliced.map(selector));
+	map(matrix, (sliced: Array<TSource>) => map(sliced, selector));
 
 /**
  * Create a callback {@link Function} to pass into {@link query} that sums numerical values derived by the selector {@link Function}.
@@ -228,6 +228,17 @@ function filter<TSource>(source: Array<TSource>, predicate: Predicate<TSource>):
 		if (predicate(source[i])) {
 			result.push(source[i]);
 		}
+	}
+
+	return result;
+}
+
+// fast alternative to Array.prototype.map
+function map<TSource, TResult>(source: Array<TSource>, mapper: Function<TSource, TResult>): Array<TResult> {
+	const result: Array<TResult> = [];
+
+	for (let i = 0; i < source.length; ++i) {
+		result.push(mapper(source[i]));
 	}
 
 	return result;
