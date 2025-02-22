@@ -19,7 +19,7 @@ const cube = pivot(squad, y, x);
 const result = query(cube, average(age(new Date('2021-05-23'))));
 
 // Creates a callback to calculate a players age from their date of birth as at a given date
-function age(asAt: Date = new Date()) {
+function age(asAt: Date) {
 	return (player: Player) => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
 }
 

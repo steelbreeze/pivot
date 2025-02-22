@@ -34,10 +34,10 @@ import { dimension, property, pivot, aggregate, average } from '@steelbreeze/piv
 import { Player, squad } from './fulham';
 import { distinct } from './distinct';
 
-// the position dimension we want in a custom order
+// the position dimension we want in a defined order
 const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
 
-// the countries dimension we derive from the data and order alphabetically
+// the countries dimension we derive from the squad data and order alphabetically
 const countries = squad.map(player => player.country).filter(distinct).sort();
 
 // we then create dimensions which also reference a property in the source data 
@@ -45,10 +45,10 @@ const x = dimension(positions, property<Player>('position')); // using the built
 const y = dimension(countries, (country: string) => (player: Player) => player.country === country); // using a user-defined generator
 
 // create the pivot cube from the squad data using position and country for x and y axes
-let cube = pivot(squad, y, x);
+const cube = pivot(squad, y, x);
 
 // find the average age of players by position by country as at 2021-05-23
-const result = map(cube, average(age(new Date('2021-05-23'))));
+const result = query(cube, average(age(new Date('2021-05-23'))));
 ```
 The full example can be found [here](https://github.com/steelbreeze/pivot/tree/main/src/example).
 
