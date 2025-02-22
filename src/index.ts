@@ -245,12 +245,12 @@ function map<TSource, TResult>(source: Array<TSource>, mapper: Function<TSource,
 }
 
 // fast alternative to Array.prototype.reduce
-function reduce<TSource, TResult>(source: Array<TSource>, reducer: (acc: TResult, value: TSource) => TResult, initialValue: TResult): TResult {
-	let result: TResult = initialValue;
+function reduce<TSource, TResult>(source: Array<TSource>, reducer: (accumulator: TResult, value: TSource) => TResult, initialValue: TResult): TResult {
+	let accumulator: TResult = initialValue;
 
 	for (let i = 0; i < source.length; ++i) {
-		result = reducer(result, source[i]);
+		accumulator = reducer(accumulator, source[i]);
 	}
 
-	return result;
+	return accumulator;
 }
