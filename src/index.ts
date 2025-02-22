@@ -61,7 +61,7 @@ export type Hypercube = Cube<Array<any>>;
  * The following code creates a {@link Dimension} that will be used to evaluate ```Player``` objects during a {@link pivot} operation based on the value of their ```position``` property:
  * ```ts
  * const positions: string[] = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
- * const x = dimension(positions, property('position'));
+ * const x = dimension(positions, property<Player>('position'));
  * ```
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building
@@ -77,7 +77,7 @@ export const dimension = <TDimension, TSource>(source: Array<TDimension>, genera
  * The following code creates a {@link Dimension} that will be used to evaluate ```Player``` objects during a {@link pivot} operation based on the value of their ```position``` property:
  * ```ts
  * const positions: string[] = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
- * const x = dimension(positions, property('position'));
+ * const x = dimension(positions, property<Player>('position'));
  * ```
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building

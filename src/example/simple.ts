@@ -17,10 +17,10 @@ const data: Data[] = [
 ];
 
 // create a dimension with pre-defined values for the property 'a' in the data.
-const x = [1, 2, 3].map(property('a'));
+const x = [1, 2, 3].map(property<Data>('a'));
 
 // create a dimension with derived values for the property 'b' in the data.
-const y = data.map(row => row.b).filter(distinct).map(property('b'));
+const y = data.map(row => row.b).filter(distinct).map(property<Data>('b'));
 
 // create a cube from the data using the x and y dimensions
 const cube = pivot(data, x, y);

@@ -21,8 +21,8 @@ const eugene: Person = { name: 'Eugene', gender: 'male', age: 75, nationality: N
 const data: Array<Person> = [arnold, emily, seamus, eugene];
 
 // derive nationality and gender dimensions from the person data
-const nationality = Object.values(Nationality).map(property('nationality'));
-const gender = data.map(person => person.gender).filter(distinct).sort().map(property('gender'));
+const nationality = Object.values(Nationality).map(property<Person>('nationality'));
+const gender = data.map(person => person.gender).filter(distinct).sort().map(property<Person>('gender'));
 
 // a dimension to determine if someone is above or below retirement age
 const retired = [
