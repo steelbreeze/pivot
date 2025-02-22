@@ -194,7 +194,7 @@ export const query = <TSource, TResult>(matrix: Matrix<TSource>, selector: Funct
  * @category Cube query
  */
 export const sum = <TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number> =>
-	(source: Array<TSource>) => source.reduce((a: number, b: TSource) => a + selector(b), 0);
+	(source: Array<TSource>) => reduce(source, (a: number, b: TSource) => a + selector(b), 0);
 
 /**
  * Create a callback {@link Function} to pass into {@link query} that averages numerical values derived by the selector {@link Function}.
@@ -239,6 +239,17 @@ function map<TSource, TResult>(source: Array<TSource>, mapper: Function<TSource,
 
 	for (let i = 0; i < source.length; ++i) {
 		result.push(mapper(source[i]));
+	}
+
+	return result;
+}
+
+// fast alternative to Array.prototype.reduce
+function reduce<TSource, TResult>(source: Array<TSource>, reducer: (acc: TResult, value: TSource) => TResult, initialValue: TResult): TResult {
+	let result: TResult = initialValue;
+
+	for (let i = 0; i < source.length; ++i) {
+		result = reducer(result, source[i]);
 	}
 
 	return result;
