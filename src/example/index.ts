@@ -2,6 +2,13 @@ import { dimension, property, pivot, query, average } from '..';
 import { Player, squad } from './fulham';
 import { distinct } from './distinct';
 
+const baseDate = new Date('2021-05-23');
+
+const yearDiff = (date1: Date, date2: Date) => new Date(date1.getTime() - date2.getTime()).getUTCFullYear() - 1970
+
+// calculates a players age from their date of birth as at a given date
+const age = (player: Player) => yearDiff(baseDate, player.dateOfBirth);
+
 // the position dimension we want in a defined order
 const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
 
@@ -16,12 +23,7 @@ const y = dimension(countries, (country: string) => (player: Player) => player.c
 const cube = pivot(squad, y, x);
 
 // find the average age of players by position by country as at 2021-05-23
-const result = query(cube, average(age(new Date('2021-05-23'))));
-
-// Creates a callback to calculate a players age from their date of birth as at a given date
-function age(asAt: Date) {
-	return (player: Player) => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
-}
+const result = query(cube, average(age));
 
 // pretty print the result with axes
 console.log(`\t${positions.map(print).join('\t')}`);

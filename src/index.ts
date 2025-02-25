@@ -22,31 +22,31 @@ export type Function<TArg, TResult> = (arg: TArg) => TResult;
 
 /**
  * A predicate is a boolean function, used as point on a {@link Dimension} used to evaluate source data for a specific condition.
- * @typeParam TSource The type of the source data that the predicate was created for.
+ * @typeParam TValue The type of the source data that the predicate was created for.
  * @category Type declarations
  */
-export type Predicate<TSource> = Function<TSource, boolean>;
+export type Predicate<TValue> = Function<TValue, boolean>;
 
 /**
  * A dimension is a set of {@link Predicate} used to partition data.
- * @typeParam TSource The type of the source data that the {@link Dimension} was created for.
+ * @typeParam TValue The type of the source data that the {@link Dimension} was created for.
  * @category Type declarations
  */
-export type Dimension<TSource> = Array<Predicate<TSource>>;
+export type Dimension<TValue> = Array<Predicate<TValue>>;
 
 /**
  * A matrix is a two dimensional data structure.
- * @typeParam TSource The type of the source data that the matrix was created from.
+ * @typeParam TValue The type of the source data that the matrix was created from.
  * @category Type declarations
  */
-export type Matrix<TSource> = Array<Array<TSource>>;
+export type Matrix<TValue> = Array<Array<TValue>>;
 
 /**
  * A cube is a three dimensional data structure.
- * @typeParam TSource The type of the source data that the cube was created from.
+ * @typeParam TValue The type of the source data that the cube was created from.
  * @category Type declarations
  */
-export type Cube<TSource> = Matrix<Array<TSource>>;
+export type Cube<TValue> = Matrix<Array<TValue>>;
 
 /**
  * An n-cube is an n-dimensional data structure.
@@ -56,7 +56,7 @@ export type Hypercube = Cube<Array<any>>;
 
 /**
  * Creates a {@link Dimension} from some source data that will be used to slice and dice 
- * @param source The seed data for the dimension; one entry in the source array will be one point on the dimension.
+ * @param dimensionSeed The seed data for the dimension; one entry in the source array will be one point on the dimension.
  * @param generator A function that creates a {@link Predicate} for each point on the dimension.
  * The following code creates a {@link Dimension} that will be used to evaluate ```Player``` objects during a {@link pivot} operation based on the value of their ```position``` property:
  * ```ts
@@ -66,12 +66,12 @@ export type Hypercube = Cube<Array<any>>;
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building
  */
-export const dimension = <TDimension, TSource>(source: Array<TDimension>, generator: Function<TDimension, Predicate<TSource>>): Dimension<TSource> =>
-	map(source, generator);
+export const dimension = <TDimension, TValue>(dimensionSeed: Array<TDimension>, generator: Function<TDimension, Predicate<TValue>>): Dimension<TValue> =>
+	map(dimensionSeed, generator);
 
 /**
  * Creates a predicate function {@link Predicate} for use in the {@link dimension} function to create a {@link Dimension} matching properties.
- * @typeParam TSource The type of the source data that will be evaluated by the generated predicate.
+ * @typeParam TValue The type of the source data that will be evaluated by the generated predicate.
  * @param key The property in the source data to base this {@link Predicate} on.
  * @example
  * The following code creates a {@link Dimension} that will be used to evaluate ```Player``` objects during a {@link pivot} operation based on the value of their ```position``` property:
@@ -82,13 +82,13 @@ export const dimension = <TDimension, TSource>(source: Array<TDimension>, genera
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building
  */
-export const property = <TSource>(key: keyof TSource): Function<TSource[keyof TSource], Predicate<TSource>> =>
-	(criterion: TSource[keyof TSource]) => (value: TSource) => value[key] === criterion;
+export const property = <TValue>(key: keyof TValue): Function<TValue[keyof TValue], Predicate<TValue>> =>
+	(criterion: TValue[keyof TValue]) => (value: TValue) => value[key] === criterion;
 
 /**
  * Slices data by one dimension, returning a {@link Matrix}.
- * @typeParam TSource The type of the source data to be sliced.
- * @param source The source data, an array of objects.
+ * @typeParam TValue The type of the source data to be sliced.
+ * @param values The source data, an array of objects.
  * @param dimension The dimension to slice the data by.
  * @example
  * The following code creates a {@link Cube}, slicing and dicing the squad data for a football team by player position and country:
@@ -100,8 +100,8 @@ export const property = <TSource>(key: keyof TSource): Function<TSource[keyof TS
  * @category Cube building
  * @remarks This is equivalent to {@link pivot} with one dimension.
  */
-export const slice = <TSource>(source: Array<TSource>, dimension: Dimension<TSource>): Matrix<TSource> =>
-	map(dimension, (predicate: Predicate<TSource>) => filter(source, predicate));
+export const slice = <TValue>(values: Array<TValue>, dimension: Dimension<TValue>): Matrix<TValue> =>
+	map(dimension, (predicate: Predicate<TValue>) => filter(values, predicate));
 
 /**
  * Slices and dices source data by one or more dimensions, returning, {@link Matrix}, {@link Cube} or {@link Hypercube} depending on the number of dimensions passed.
@@ -119,35 +119,35 @@ export const slice = <TSource>(source: Array<TSource>, dimension: Dimension<TSou
 export const pivot: {
 	/**
 	 * Slices data by two dimensions, returning a {@link Cube}.
-	 * @typeParam TSource The type of the source data to be sliced and diced.
+	 * @typeParam TValue The type of the source data to be sliced and diced.
 	 * @param source The source data, an array of objects.
 	 * @param first The first dimension to slice the data by.
 	 */
-	<TSource>(source: Array<TSource>, first: Dimension<TSource>): Matrix<TSource>;
+	<TValue>(source: Array<TValue>, first: Dimension<TValue>): Matrix<TValue>;
 
 	/**
 	 * Slices data by two dimensions, returning a {@link Cube}.
-	 * @typeParam TSource The type of the source data to be sliced and diced.
+	 * @typeParam TValue The type of the source data to be sliced and diced.
 	 * @param source The source data, an array of objects.
 	 * @param first The first dimension to slice the data by.
 	 * @param second The second dimension to dice the data by.
 	 */
-	<TSource>(source: Array<TSource>, first: Dimension<TSource>, second: Dimension<TSource>): Cube<TSource>;
+	<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>): Cube<TValue>;
 
 	/**
 	 * Slices data by three or more dimensions, returning a {@link Hypercube}.
-	 * @typeParam TSource The type of the source data to be sliced and diced.
+	 * @typeParam TValue The type of the source data to be sliced and diced.
 	 * @param source The source data, an array of objects.
 	 * @param first The first dimension to slice the data by.
 	 * @param others Two or more other dimensions to pivot the data by.
 	 */
-	<TSource>(source: Array<TSource>, first: Dimension<TSource>, ...others: Array<Dimension<TSource>>): Hypercube;
-} = <TSource>(source: Array<TSource>, first: Dimension<TSource>, ...[second, ...others]: Array<Dimension<TSource>>) =>
-		second ? map(slice(source, first), (sliced: Array<TSource>) => pivot(sliced, second, ...others)) : slice(source, first);
+	<TValue>(source: Array<TValue>, first: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Hypercube;
+} = <TValue>(values: Array<TValue>, first: Dimension<TValue>, ...[second, ...others]: Array<Dimension<TValue>>) =>
+		second ? map(slice(values, first), (sliced: Array<TValue>) => pivot(sliced, second, ...others)) : slice(values, first);
 
 /**
  * Queries data from a {@link Matrix} using a selector {@link Function} to transform the objects in each cell of data in the {@link Matrix} into a result.
- * @typeParam TSource The type of the data within the {@link Matrix}.
+ * @typeParam TValue The type of the data within the {@link Matrix}.
  * @typeParam TResult The type of value returned by the selector.
  * @param matrix The {@link Matrix} to query data from.
  * @param selector A callback {@link Function} to create a result from each cell of the {@link Cube}.
@@ -169,12 +169,12 @@ export const pivot: {
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export const query = <TSource, TResult>(matrix: Matrix<TSource>, selector: Function<TSource, TResult>): Matrix<TResult> =>
-	map(matrix, (sliced: Array<TSource>) => map(sliced, selector));
+export const query = <TValue, TResult>(matrix: Matrix<TValue>, selector: Function<TValue, TResult>): Matrix<TResult> =>
+	map(matrix, (sliced: Array<TValue>) => map(sliced, selector));
 
 /**
  * Create a callback {@link Function} to pass into {@link query} that sums numerical values derived by the selector {@link Function}.
- * @typeParam TSource The type of the data within the cube that will be passed into the selector.
+ * @typeParam TValue The type of the data within the cube that will be passed into the selector.
  * @param selector A callback {@link Function} to derive a numerical value for each object in the source data.
  * @example
  * The following code queries a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
@@ -193,12 +193,12 @@ export const query = <TSource, TResult>(matrix: Matrix<TSource>, selector: Funct
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export const sum = <TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number> =>
-	(source: Array<TSource>) => reduce(source, (a: number, b: TSource) => a + selector(b), 0);
+export const sum = <TValue>(selector: Function<TValue, number>): Function<Array<TValue>, number> =>
+	(values: Array<TValue>) => reduce(values, (accumulator: number, value: TValue) => accumulator + selector(value), 0);
 
 /**
  * Create a callback {@link Function} to pass into {@link query} that averages numerical values derived by the selector {@link Function}.
- * @typeParam TSource The type of the data within the cube that will be passed into the selector.
+ * @typeParam TValue The type of the data within the cube that will be passed into the selector.
  * @param selector A callback {@link Function} to derive a numerical value for each object in the source data.
  * @example
  * The following code queries a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
@@ -217,16 +217,16 @@ export const sum = <TSource>(selector: Function<TSource, number>): Function<Arra
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export const average = <TSource>(selector: Function<TSource, number>): Function<Array<TSource>, number> =>
-	(source: Array<TSource>) => sum(selector)(source) / source.length;
+export const average = <TValue>(selector: Function<TValue, number>): Function<Array<TValue>, number> =>
+	(values: Array<TValue>) => sum(selector)(values) / values.length;
 
 // fast alternative to Array.prototype.filter
-function filter<TSource>(source: Array<TSource>, predicate: Predicate<TSource>): Array<TSource> {
-	const result: Array<TSource> = [];
+function filter<TValue>(values: Array<TValue>, predicate: Predicate<TValue>): Array<TValue> {
+	const result: Array<TValue> = [];
 
-	for (let i = 0; i < source.length; ++i) {
-		if (predicate(source[i])) {
-			result.push(source[i]);
+	for (let index = 0; index < values.length; ++index) {
+		if (predicate(values[index])) {
+			result.push(values[index]);
 		}
 	}
 
@@ -234,22 +234,22 @@ function filter<TSource>(source: Array<TSource>, predicate: Predicate<TSource>):
 }
 
 // fast alternative to Array.prototype.map
-function map<TSource, TResult>(source: Array<TSource>, mapper: Function<TSource, TResult>): Array<TResult> {
+function map<TValue, TResult>(values: Array<TValue>, mapper: Function<TValue, TResult>): Array<TResult> {
 	const result: Array<TResult> = [];
 
-	for (let i = 0; i < source.length; ++i) {
-		result.push(mapper(source[i]));
+	for (let index = 0; index < values.length; ++index) {
+		result.push(mapper(values[index]));
 	}
 
 	return result;
 }
 
 // fast alternative to Array.prototype.reduce
-function reduce<TSource, TResult>(source: Array<TSource>, reducer: (accumulator: TResult, value: TSource) => TResult, initialValue: TResult): TResult {
+function reduce<TValue, TResult>(values: Array<TValue>, reducer: (accumulator: TResult, value: TValue) => TResult, initialValue: TResult): TResult {
 	let accumulator: TResult = initialValue;
 
-	for (let i = 0; i < source.length; ++i) {
-		accumulator = reducer(accumulator, source[i]);
+	for (let index = 0; index < values.length; ++index) {
+		accumulator = reducer(accumulator, values[index]);
 	}
 
 	return accumulator;
