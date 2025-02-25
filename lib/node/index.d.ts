@@ -48,8 +48,9 @@ export type Cube<TValue> = Matrix<Array<TValue>>;
  */
 export type Hypercube = Cube<Array<any>>;
 /**
- * Creates a {@link Dimension} from some source data that will be used to slice and dice
- * @param dimensionSeed The seed data for the dimension; one entry in the source array will be one point on the dimension.
+ * Creates a {@link Dimension} from some source data that will be used to slice and dice.
+ * @typeParam TCriteria The type of the seed data used to creat the dimension.
+ * @param criteria The seed data for the dimension; one entry in the source array will be one point on the dimension.
  * @param generator A function that creates a {@link Predicate} for each point on the dimension.
  * The following code creates a {@link Dimension} that will be used to evaluate ```Player``` objects during a {@link pivot} operation based on the value of their ```position``` property:
  * ```ts
@@ -59,7 +60,7 @@ export type Hypercube = Cube<Array<any>>;
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building
  */
-export declare const dimension: <TDimension, TValue>(dimensionSeed: Array<TDimension>, generator: Function<TDimension, Predicate<TValue>>) => Dimension<TValue>;
+export declare const dimension: <TCriteria, TValue>(criteria: Array<TCriteria>, generator: Function<TCriteria, Predicate<TValue>>) => Dimension<TValue>;
 /**
  * Creates a predicate function {@link Predicate} for use in the {@link dimension} function to create a {@link Dimension} matching properties.
  * @typeParam TValue The type of the source data that will be evaluated by the generated predicate.
