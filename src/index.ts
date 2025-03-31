@@ -110,6 +110,7 @@ export function slice<TValue>(values: Array<TValue>, dimension: Dimension<TValue
  * @typeParam TValue The type of the source data to be sliced and diced.
  * @param source The source data, an array of objects.
  * @param first The first dimension to slice the data by.
+ * @category Cube building
  */
 export function pivot<TValue>(source: Array<TValue>, first: Dimension<TValue>): Matrix<TValue>;
 
@@ -119,6 +120,7 @@ export function pivot<TValue>(source: Array<TValue>, first: Dimension<TValue>): 
  * @param source The source data, an array of objects.
  * @param first The first dimension to slice the data by.
  * @param second The second dimension to dice the data by.
+ * @category Cube building
  */
 export function pivot<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>): Cube<TValue>;
 
@@ -128,6 +130,7 @@ export function pivot<TValue>(source: Array<TValue>, first: Dimension<TValue>, s
  * @param source The source data, an array of objects.
  * @param first The first dimension to slice the data by.
  * @param others Two or more other dimensions to pivot the data by.
+ * @category Cube building
  */
 export function pivot<TValue>(source: Array<TValue>, first: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Hypercube;
 
