@@ -90,45 +90,30 @@ export declare const property: <TValue>(key: keyof TValue) => Function<TValue[ke
  * @category Cube building
  * @remarks This is equivalent to {@link pivot} with one dimension.
  */
-export declare const slice: <TValue>(values: Array<TValue>, dimension: Dimension<TValue>) => Matrix<TValue>;
+export declare function slice<TValue>(values: Array<TValue>, dimension: Dimension<TValue>): Matrix<TValue>;
 /**
- * Slices and dices source data by one or more dimensions, returning, {@link Matrix}, {@link Cube} or {@link Hypercube} depending on the number of dimensions passed.
- * See the overloads for more detail.
- * @example
- * The following code creates a {@link Cube}, slicing and dicing the squad data for a football team by player position and country:
- * ```ts
- * const x = dimension(positions, property<Player>('position')); // using the built-in dimension generator matching a property
- * const y = dimension(countries, (country: string) => (player: Player) => player.country === country); // using a user-defined generator
- *
- * const cube: Cube<Player> = pivot(squad, y, x);
- * ```
- * @category Cube building
+ * Slices data by two dimensions, returning a {@link Cube}.
+ * @typeParam TValue The type of the source data to be sliced and diced.
+ * @param source The source data, an array of objects.
+ * @param first The first dimension to slice the data by.
  */
-export declare const pivot: {
-    /**
-     * Slices data by two dimensions, returning a {@link Cube}.
-     * @typeParam TValue The type of the source data to be sliced and diced.
-     * @param source The source data, an array of objects.
-     * @param first The first dimension to slice the data by.
-     */
-    <TValue>(source: Array<TValue>, first: Dimension<TValue>): Matrix<TValue>;
-    /**
-     * Slices data by two dimensions, returning a {@link Cube}.
-     * @typeParam TValue The type of the source data to be sliced and diced.
-     * @param source The source data, an array of objects.
-     * @param first The first dimension to slice the data by.
-     * @param second The second dimension to dice the data by.
-     */
-    <TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>): Cube<TValue>;
-    /**
-     * Slices data by three or more dimensions, returning a {@link Hypercube}.
-     * @typeParam TValue The type of the source data to be sliced and diced.
-     * @param source The source data, an array of objects.
-     * @param first The first dimension to slice the data by.
-     * @param others Two or more other dimensions to pivot the data by.
-     */
-    <TValue>(source: Array<TValue>, first: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Hypercube;
-};
+export declare function pivot<TValue>(source: Array<TValue>, first: Dimension<TValue>): Matrix<TValue>;
+/**
+ * Slices data by two dimensions, returning a {@link Cube}.
+ * @typeParam TValue The type of the source data to be sliced and diced.
+ * @param source The source data, an array of objects.
+ * @param first The first dimension to slice the data by.
+ * @param second The second dimension to dice the data by.
+ */
+export declare function pivot<TValue>(source: Array<TValue>, first: Dimension<TValue>, second: Dimension<TValue>): Cube<TValue>;
+/**
+ * Slices data by three or more dimensions, returning a {@link Hypercube}.
+ * @typeParam TValue The type of the source data to be sliced and diced.
+ * @param source The source data, an array of objects.
+ * @param first The first dimension to slice the data by.
+ * @param others Two or more other dimensions to pivot the data by.
+ */
+export declare function pivot<TValue>(source: Array<TValue>, first: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Hypercube;
 /**
  * Queries data from a {@link Matrix} using a selector {@link Function} to transform the objects in each cell of data in the {@link Matrix} into a result.
  * @typeParam TValue The type of the data within the {@link Matrix}.
