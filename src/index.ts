@@ -88,25 +88,6 @@ export const property = <TValue>(key: keyof TValue): Function<TValue[keyof TValu
 
 /**
  * Slices data by one dimension, returning a {@link Matrix}.
- * @typeParam TValue The type of the source data to be sliced.
- * @param values The source data, an array of objects.
- * @param dimension The dimension to slice the data by.
- * @example
- * The following code creates a {@link Cube}, slicing and dicing the squad data for a football team by player position and country:
- * ```ts
- * const y = dimension(countries, (country: string) => (player: Player) => player.country === country); // using a user-defined generator
- * 
- * const cube: Matrix<Player> = slice(squad, y);
- * ```
- * @category Cube building
- * @remarks This is equivalent to {@link pivot} with one dimension.
- */
-export function slice<TValue>(values: Array<TValue>, dimension: Dimension<TValue>): Matrix<TValue> {
-	return map(dimension, (predicate: Predicate<TValue>) => filter(values, predicate));
-}
-
-/**
- * Slices data by one dimension, returning a {@link Matrix}.
  * @typeParam TValue The type of the source data to be sliced and diced.
  * @param source The source data, an array of objects.
  * @param first The first dimension to slice the data by.
@@ -212,6 +193,11 @@ export const sum = <TValue>(selector: Function<TValue, number>): Function<Array<
  */
 export const average = <TValue>(selector: Function<TValue, number>): Function<Array<TValue>, number> =>
 	(values: Array<TValue>) => sum(selector)(values) / values.length;
+
+// slices the data by one dimension
+function slice<TValue>(values: Array<TValue>, dimension: Dimension<TValue>): Matrix<TValue> {
+	return map(dimension, (predicate: Predicate<TValue>) => filter(values, predicate));
+}
 
 // fast alternative to Array.prototype.filter
 function filter<TValue>(values: Array<TValue>, predicate: Predicate<TValue>): Array<TValue> {

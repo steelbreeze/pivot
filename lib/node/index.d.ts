@@ -77,22 +77,6 @@ export declare const dimension: <TCriteria, TValue>(criteria: Array<TCriteria>, 
 export declare const property: <TValue>(key: keyof TValue) => Function<TValue[keyof TValue], Predicate<TValue>>;
 /**
  * Slices data by one dimension, returning a {@link Matrix}.
- * @typeParam TValue The type of the source data to be sliced.
- * @param values The source data, an array of objects.
- * @param dimension The dimension to slice the data by.
- * @example
- * The following code creates a {@link Cube}, slicing and dicing the squad data for a football team by player position and country:
- * ```ts
- * const y = dimension(countries, (country: string) => (player: Player) => player.country === country); // using a user-defined generator
- *
- * const cube: Matrix<Player> = slice(squad, y);
- * ```
- * @category Cube building
- * @remarks This is equivalent to {@link pivot} with one dimension.
- */
-export declare function slice<TValue>(values: Array<TValue>, dimension: Dimension<TValue>): Matrix<TValue>;
-/**
- * Slices data by one dimension, returning a {@link Matrix}.
  * @typeParam TValue The type of the source data to be sliced and diced.
  * @param source The source data, an array of objects.
  * @param first The first dimension to slice the data by.
