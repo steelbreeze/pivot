@@ -106,7 +106,7 @@ export function slice<TValue>(values: Array<TValue>, dimension: Dimension<TValue
 }
 
 /**
- * Slices data by two dimensions, returning a {@link Cube}.
+ * Slices data by one dimension, returning a {@link Matrix}.
  * @typeParam TValue The type of the source data to be sliced and diced.
  * @param source The source data, an array of objects.
  * @param first The first dimension to slice the data by.
