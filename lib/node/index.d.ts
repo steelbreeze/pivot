@@ -31,8 +31,8 @@ export type Predicate<TValue> = Function<TValue, boolean>;
  */
 export type Dimension<TValue> = Array<Predicate<TValue>>;
 /**
- * A matrix is a two dimensional data structure.
- * @typeParam TValue The type of the source data that the matrix was created from.
+ * A Matrix is a two dimensional data structure.
+ * @typeParam TValue The type of the source data that the Matrix was created from.
  * @category Type declarations
  */
 export type Matrix<TValue> = Array<Array<TValue>>;

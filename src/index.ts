@@ -35,8 +35,8 @@ export type Predicate<TValue> = Function<TValue, boolean>;
 export type Dimension<TValue> = Array<Predicate<TValue>>;
 
 /**
- * A matrix is a two dimensional data structure.
- * @typeParam TValue The type of the source data that the matrix was created from.
+ * A Matrix is a two dimensional data structure.
+ * @typeParam TValue The type of the source data that the Matrix was created from.
  * @category Type declarations
  */
 export type Matrix<TValue> = Array<Array<TValue>>;
@@ -84,7 +84,7 @@ export const dimension = <TCriteria, TValue>(criteria: Array<TCriteria>, generat
  * @category Cube building
  */
 export const property = <TValue>(key: keyof TValue): Function<TValue[keyof TValue], Predicate<TValue>> =>
-	(criterion: TValue[keyof TValue]) => (value: TValue) => value[key] === criterion;
+	criterion => value => value[key] === criterion;
 
 /**
  * Slices data by one dimension, returning a {@link Matrix}.
@@ -115,8 +115,9 @@ export function pivot<TValue>(source: Array<TValue>, first: Dimension<TValue>, s
  */
 export function pivot<TValue>(source: Array<TValue>, first: Dimension<TValue>, ...others: Array<Dimension<TValue>>): Hypercube;
 
+// implementation of the pivot function; the overloads above provide the appropriate return type depending on the number of dimensions passed
 export function pivot<TValue>(values: Array<TValue>, ...[first, second, ...others]: Array<Dimension<TValue>>) {
-	return second ? map(slice(values, first), (sliced: Array<TValue>) => pivot(sliced, second, ...others)) : slice(values, first);
+	return second ? map(slicer(values, first), slice => pivot(slice, second, ...others)) : slicer(values, first);
 }
 
 /**
@@ -144,7 +145,7 @@ export function pivot<TValue>(values: Array<TValue>, ...[first, second, ...other
  * @category Cube query
  */
 export const query = <TValue, TResult>(matrix: Matrix<TValue>, selector: Function<TValue, TResult>): Matrix<TResult> =>
-	map(matrix, (sliced: Array<TValue>) => map(sliced, selector));
+	map(matrix, slice => map(slice, selector));
 
 /**
  * Create a callback {@link Function} to pass into {@link query} that sums numerical values derived by the selector {@link Function}.
@@ -192,11 +193,11 @@ export const sum = <TValue>(selector: Function<TValue, number>): Function<Array<
  * @category Cube query
  */
 export const average = <TValue>(selector: Function<TValue, number>): Function<Array<TValue>, number> =>
-	(values: Array<TValue>) => sum(selector)(values) / values.length;
+	values => sum(selector)(values) / values.length;
 
 // slices the data by one dimension
-function slice<TValue>(values: Array<TValue>, dimension: Dimension<TValue>): Matrix<TValue> {
-	return map(dimension, (predicate: Predicate<TValue>) => filter(values, predicate));
+function slicer<TValue>(values: Array<TValue>, dimension: Dimension<TValue>): Matrix<TValue> {
+	return map(dimension, predicate => filter(values, predicate));
 }
 
 // fast alternative to Array.prototype.filter
