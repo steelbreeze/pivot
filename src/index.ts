@@ -169,7 +169,7 @@ export const query = <TValue, TResult>(matrix: Matrix<TValue>, selector: Functio
  * @category Cube query
  */
 export const sum = <TValue>(selector: Function<TValue, number>): Function<Array<TValue>, number> =>
-	(values: Array<TValue>) => reduce(values, (accumulator: number, value: TValue) => accumulator + selector(value), 0);
+	values => reduce(values, (accumulator, value) => accumulator + selector(value), 0);
 
 /**
  * Create a callback {@link Function} to pass into {@link query} that averages numerical values derived by the selector {@link Function}.
