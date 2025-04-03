@@ -200,8 +200,9 @@ function slicer<TElement>(elements: Array<TElement>, dimension: Dimension<TEleme
 	return map(dimension, predicate => filter(elements, predicate));
 }
 
+
 // fast alternative to Array.prototype.filter
-function filter<T>(array: Array<T>, callbackFn: Predicate<T>): Array<T> {
+function filter<T>(array: Array<T>, callbackFn: (value: T) => boolean): Array<T> {
 	const result: Array<T> = [];
 
 	for (let index = 0; index < array.length; ++index) {
@@ -214,7 +215,7 @@ function filter<T>(array: Array<T>, callbackFn: Predicate<T>): Array<T> {
 }
 
 // fast alternative to Array.prototype.map
-function map<T, U>(array: Array<T>, callbackFn: Function<T, U>): Array<U> {
+function map<T, U>(array: Array<T>, callbackFn: (value: T) => U): Array<U> {
 	const result: Array<U> = [];
 
 	for (let index = 0; index < array.length; ++index) {
