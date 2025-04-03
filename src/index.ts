@@ -226,7 +226,7 @@ function map<T, U>(array: Array<T>, callbackFn: (value: T) => U): Array<U> {
 }
 
 // fast alternative to Array.prototype.reduce
-function reduce<T, U>(array: Array<T>, callbackFn: (accumulator: U, element: T) => U, initialValue: U): U {
+function reduce<T, U>(array: Array<T>, callbackFn: (accumulator: U, currentValue: T) => U, initialValue: U): U {
 	let accumulator: U = initialValue;
 
 	for (let index = 0; index < array.length; ++index) {
