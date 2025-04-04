@@ -34,25 +34,27 @@ export type Predicate<TElement> = Function<TElement, boolean>;
  */
 export type Dimension<TElement> = Array<Predicate<TElement>>;
 
+export type Vector<TElement> = Array<TElement>;
+
 /**
  * A Matrix is a two dimensional data structure.
  * @typeParam TValue The type of the source data that the Matrix was created from.
  * @category Type declarations
  */
-export type Matrix<TElement> = Array<Array<TElement>>;
+export type Matrix<TElement> = Vector<Vector<TElement>>;
 
 /**
  * A cube is a three dimensional data structure.
  * @typeParam TValue The type of the source data that the cube was created from.
  * @category Type declarations
  */
-export type Cube<TElement> = Matrix<Array<TElement>>;
+export type Cube<TElement> = Vector<Matrix<TElement>>;
 
 /**
  * An n-cube is an n-dimensional data structure.
  * @category Type declarations
  */
-export type Hypercube = Cube<Array<any>>;
+export type Hypercube = Vector<Cube<any>>;
 
 /**
  * Creates a {@link Dimension} from some source data that will be used to slice and dice.
@@ -89,35 +91,35 @@ export const property = <TElement>(key: keyof TElement): Function<TElement[keyof
 /**
  * Slices data by one dimension, returning a {@link Matrix}.
  * @typeParam TValue The type of the source data to be sliced and diced.
- * @param elements The source data, an array of objects.
+ * @param array The source data, an array of objects.
  * @param first The first dimension to slice the data by.
  * @category Cube building
  */
-export function pivot<TElement>(elements: Array<TElement>, first: Dimension<TElement>): Matrix<TElement>;
+export function pivot<TElement>(array: Array<TElement>, first: Dimension<TElement>): Matrix<TElement>;
 
 /**
  * Slices data by two dimensions, returning a {@link Cube}.
  * @typeParam TValue The type of the source data to be sliced and diced.
- * @param elements The source data, an array of objects.
+ * @param array The source data, an array of objects.
  * @param first The first dimension to slice the data by.
  * @param second The second dimension to dice the data by.
  * @category Cube building
  */
-export function pivot<TElement>(elements: Array<TElement>, first: Dimension<TElement>, second: Dimension<TElement>): Cube<TElement>;
+export function pivot<TElement>(array: Array<TElement>, first: Dimension<TElement>, second: Dimension<TElement>): Cube<TElement>;
 
 /**
  * Slices data by three or more dimensions, returning a {@link Hypercube}.
  * @typeParam TValue The type of the source data to be sliced and diced.
- * @param elements The source data, an array of objects.
+ * @param array The source data, an array of objects.
  * @param first The first dimension to slice the data by.
  * @param others Two or more other dimensions to pivot the data by.
  * @category Cube building
  */
-export function pivot<TElement>(elements: Array<TElement>, first: Dimension<TElement>, ...others: Array<Dimension<TElement>>): Hypercube;
+export function pivot<TElement>(array: Array<TElement>, first: Dimension<TElement>, ...others: Array<Dimension<TElement>>): Hypercube;
 
 // implementation of the pivot function; the overloads above provide the appropriate return type depending on the number of dimensions passed
-export function pivot<TElement>(elements: Array<TElement>, ...[first, second, ...others]: Array<Dimension<TElement>>) {
-	return second ? map(slicer(elements, first), slice => pivot(slice, second, ...others)) : slicer(elements, first);
+export function pivot<TElement>(array: Array<TElement>, ...[first, second, ...others]: Array<Dimension<TElement>>) {
+	return second ? map(slice(array, first), vector => pivot(vector, second, ...others)) : slice(array, first);
 }
 
 /**
@@ -145,7 +147,7 @@ export function pivot<TElement>(elements: Array<TElement>, ...[first, second, ..
  * @category Cube query
  */
 export const query = <TElement, TResult>(matrix: Matrix<TElement>, selector: Function<TElement, TResult>): Matrix<TResult> =>
-	map(matrix, slice => map(slice, selector));
+	map(matrix, vector => map(vector, selector));
 
 /**
  * Create a callback {@link Function} to pass into {@link query} that sums numerical values derived by the selector {@link Function}.
@@ -168,8 +170,8 @@ export const query = <TElement, TResult>(matrix: Matrix<TElement>, selector: Fun
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export const sum = <TElement>(selector: Function<TElement, number>): Function<Array<TElement>, number> =>
-	slice => reduce(slice, (accumulator, element) => accumulator + selector(element), 0);
+export const sum = <TElement>(selector: Function<TElement, number>): Function<Vector<TElement>, number> =>
+	vector => reduce(vector, (accumulator, element) => accumulator + selector(element), 0);
 
 /**
  * Create a callback {@link Function} to pass into {@link query} that averages numerical values derived by the selector {@link Function}.
@@ -192,12 +194,12 @@ export const sum = <TElement>(selector: Function<TElement, number>): Function<Ar
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export const average = <TElement>(selector: Function<TElement, number>): Function<Array<TElement>, number> =>
-	slice => sum(selector)(slice) / slice.length;
+export const average = <TElement>(selector: Function<TElement, number>): Function<Vector<TElement>, number> =>
+	vector => sum(selector)(vector) / vector.length;
 
 // slices the data by one dimension
-function slicer<TElement>(elements: Array<TElement>, dimension: Dimension<TElement>): Matrix<TElement> {
-	return map(dimension, predicate => filter(elements, predicate));
+function slice<TElement>(array: Array<TElement>, dimension: Dimension<TElement>): Matrix<TElement> {
+	return map(dimension, predicate => filter(array, predicate));
 }
 
 
