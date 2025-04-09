@@ -4,7 +4,7 @@
  * The {@link pivot} function slices and dices data by one or more {@link Dimension dimensions}, returning a {@link Matrix} if one {@link Dimension} is passed, a {@link Cube} if two
  * {@link Dimension dimensions} are passed, and a {@link Hypercube} if more than two {@link Dimension dimensions} are passed.
  *
- * Simple {@link Dimension dimensions} can be created by mapping a set of values using the {@link property} function and a property name from the data set to be pivoted.
+ * Simple {@link Dimension dimensions} can be created by mapping a set of values using the {@link dimesion} and {@link property} functions.
  *
  * Once a {@link Cube} is created, the {@link query} function can be used to perform query operations on the subset of the source data in each cell.
  *
@@ -30,16 +30,22 @@ export type Predicate<TElement> = Function<TElement, boolean>;
  * @category Type declarations
  */
 export type Dimension<TElement> = Array<Predicate<TElement>>;
+/**
+ * A Vector is a one-dimensional data structure.
+ * @typeParam TValue The type of the elements within the Vector.
+ * @remarks While Vector is just an alias for Array, it is used to indicate a data that is the result of a {@link pivot} operation, and is therefore part of a {@link Matrix}, {@link Cube}, or {@link Hypercube}.
+ * @category Type declarations
+ */
 export type Vector<TElement> = Array<TElement>;
 /**
- * A Matrix is a two dimensional data structure.
- * @typeParam TValue The type of the source data that the Matrix was created from.
+ * A Matrix is a two-dimensional data structure.
+ * @typeParam TValue The type of the elements within the Matrix.
  * @category Type declarations
  */
 export type Matrix<TElement> = Vector<Vector<TElement>>;
 /**
- * A cube is a three dimensional data structure.
- * @typeParam TValue The type of the source data that the cube was created from.
+ * A cube is a three-dimensional data structure.
+ * @typeParam TValue The type of the elements within the Cube.
  * @category Type declarations
  */
 export type Cube<TElement> = Vector<Matrix<TElement>>;
