@@ -11,10 +11,10 @@
  * @module
  */
 /**
- * A simple function, taking an agrument and returning a result.
+ * A simple function, taking an argument and returning a result.
  * @typeParam TArg1 The type of the argument passed into the function.
  * @typeParam TResult The type of the result provided by the functions.
- * @typeParam arg The argument passed into the function.
+ * @typeParam arg1 The argument passed into the function.
  * @category Type declarations
  */
 export type Function1<TArg1, TResult> = (arg1: TArg1) => TResult;
@@ -48,26 +48,12 @@ export type Matrix<TElement> = Vector<Vector<TElement>>;
  * @typeParam TValue The type of the elements within the Cube.
  * @category Type declarations
  */
-export type Cube<TElement> = Vector<Matrix<TElement>>;
+export type Cube<TElement> = Matrix<Vector<TElement>>;
 /**
  * An n-cube is an n-dimensional data structure.
  * @category Type declarations
  */
-export type Hypercube = Vector<Cube<any>>;
-/**
- * Creates a {@link Dimension} from some source data that will be used to slice and dice.
- * @typeParam TCriteria The type of the seed data used to create the dimension.
- * @param values The seed data for the dimension; one entry in the source array will be one point on the dimension.
- * @param generator A function that creates a {@link Predicate1} for each point on the dimension.
- * The following code creates a {@link Dimension} that will be used to evaluate ```Player``` objects during a {@link pivot} operation based on the value of their ```position``` property:
- * ```ts
- * const positions: string[] = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
- * const x = dimension(positions, property<Player>('position'));
- * ```
- * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
- * @category Cube building
- */
-export declare const dimension: <TValues, TElement>(values: Array<TValues>, generator: Function1<TValues, Predicate1<TElement>>) => Dimension<TElement>;
+export type Hypercube = Cube<Vector<any>>;
 /**
  * Creates a predicate function {@link Predicate1} for use in the {@link dimension} function to create a {@link Dimension} matching properties.
  * @typeParam TValue The type of the source data that will be evaluated by the generated predicate.
@@ -76,7 +62,7 @@ export declare const dimension: <TValues, TElement>(values: Array<TValues>, gene
  * The following code creates a {@link Dimension} that will be used to evaluate ```Player``` objects during a {@link pivot} operation based on the value of their ```position``` property:
  * ```ts
  * const positions: string[] = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
- * const x = dimension(positions, property<Player>('position'));
+ * const x = positions.map(property<Player>('position'));
  * ```
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building
@@ -118,8 +104,8 @@ export declare function pivot<TElement>(array: Array<TElement>, first: Dimension
  * @example
  * The following code queries a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
  * ```ts
- * const x = dimension(positions, property<Player>('position')); // using the built-in dimension generator matching a property
- * const y = dimension(countries, (country: string) => (player: Player) => player.country === country); // using a user-defined generator
+ * const x = positions.map(property<Player>('position')); // using the built-in dimension generator matching a property
+ * const y = countries.map((country: string) => (player: Player) => player.country === country); // using a user-defined generator
  *
  * const cube: Cube<Player> = pivot(squad, y, x);
  *
@@ -140,8 +126,8 @@ export declare const query: <TElement, TResult>(matrix: Matrix<TElement>, select
  * @example
  * The following code queries a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
  * ```ts
- * const x = dimension(positions, property<Player>('position')); // using the built-in dimension generator matching a property
- * const y = dimension(countries, (country: string) => (player: Player) => player.country === country); // using a user-defined generator
+ * const x = positions.map(property<Player>('position')); // using the built-in property dimension generator
+ * const y = countries.map((country: string) => (player: Player) => player.country === country); // using a user-defined generator
  *
  * const cube: Cube<Player> = pivot(squad, y, x);
  *
@@ -159,11 +145,12 @@ export declare const sum: <TElement>(selector: Function1<TElement, number>) => F
  * Create a callback {@link Function1} to pass into {@link query} that averages numerical values derived by the selector {@link Function1}.
  * @typeParam TValue The type of the data within the cube that will be passed into the selector.
  * @param selector A callback {@link Function1} to derive a numerical value for each object in the source data.
+ * @returns Returns the average given the selector; note that for empty cells this will be NaN
  * @example
  * The following code queries a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
  * ```ts
- * const x = dimension(positions, property<Player>('position')); // using the built-in dimension generator matching a property
- * const y = dimension(countries, (country: string) => (player: Player) => player.country === country); // using a user-defined generator
+ * const x = positions.map(property<Player>('position')); // using the built-in property dimension generator
+ * const y = countries.map((country: string) => (player: Player) => player.country === country); // using a user-defined generator
  *
  * const cube: Cube<Player> = pivot(squad, y, x);
  *

@@ -1,4 +1,4 @@
-import { dimension, property, pivot, query, average } from '..';
+import { property, pivot, query, average } from '..';
 import { Player, squad } from './fulham';
 import { distinct } from './distinct';
 
@@ -16,8 +16,8 @@ const positions = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
 const countries = squad.map(player => player.country).filter(distinct).sort();
 
 // we then create dimensions which also reference a property in the source data 
-const x = dimension(positions, property<Player>('position')); // using the built-in dimension generator matching a property
-const y = dimension(countries, (country: string) => (player: Player) => player.country === country); // using a user-defined generator
+const x = positions.map(property<Player>('position')); // using the built-in property map generator
+const y = countries.map((country: string) => (player: Player) => player.country === country); // using a user-defined generator
 
 // create the pivot cube from the squad data using position and country for x and y axes
 const cube = pivot(squad, y, x);
