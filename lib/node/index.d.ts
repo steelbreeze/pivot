@@ -17,13 +17,13 @@
  * @typeParam arg1 The argument passed into the function.
  * @category Type declarations
  */
-export type Function1<TArg1, TResult> = (arg1: TArg1) => TResult;
+export type Function1<TResult, TArgs extends unknown[] = []> = (...args: TArgs) => TResult;
 /**
  * A predicate is a boolean function, used as point on a {@link Dimension} used to evaluate source data for a specific condition.
  * @typeParam TArg1 The type of the source data that the predicate was created for.
  * @category Type declarations
  */
-export type Predicate1<TArg1> = Function1<TArg1, boolean>;
+export type Predicate1<TArg1> = Function1<boolean, [TArg1]>;
 /**
  * A dimension is a set of {@link Predicate1} used to partition data.
  * @typeParam TValue The type of the source data that the {@link Dimension} was created for.
@@ -67,7 +67,7 @@ export type Hypercube = Cube<Vector<any>>;
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building
  */
-export declare const property: <TElement>(key: keyof TElement) => Function1<TElement[keyof TElement], Predicate1<TElement>>;
+export declare const property: <TElement>(key: keyof TElement) => Function1<Predicate1<TElement>, [TElement[keyof TElement]]>;
 /**
  * Slices data by one dimension, returning a {@link Matrix}.
  * @typeParam TValue The type of the source data to be sliced and diced.
@@ -118,7 +118,7 @@ export declare function pivot<TElement>(array: Array<TElement>, first: Dimension
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export declare const query: <TElement, TResult>(matrix: Matrix<TElement>, selector: Function1<TElement, TResult>) => Matrix<TResult>;
+export declare const query: <TElement, TResult>(matrix: Matrix<TElement>, selector: Function1<TResult, [TElement]>) => Matrix<TResult>;
 /**
  * Create a callback {@link Function1} to pass into {@link query} that sums numerical values derived by the selector {@link Function1}.
  * @typeParam TValue The type of the data within the cube that will be passed into the selector.
@@ -140,7 +140,7 @@ export declare const query: <TElement, TResult>(matrix: Matrix<TElement>, select
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export declare const sum: <TElement>(selector: Function1<TElement, number>) => Function1<Vector<TElement>, number>;
+export declare const sum: <TElement>(selector: Function1<number, [TElement]>) => Function1<number, [Vector<TElement>]>;
 /**
  * Create a callback {@link Function1} to pass into {@link query} that averages numerical values derived by the selector {@link Function1}.
  * @typeParam TValue The type of the data within the cube that will be passed into the selector.
@@ -163,4 +163,4 @@ export declare const sum: <TElement>(selector: Function1<TElement, number>) => F
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export declare const average: <TElement>(selector: Function1<TElement, number>) => Function1<Vector<TElement>, number>;
+export declare const average: <TElement>(selector: Function1<number, [TElement]>) => Function1<number, [Vector<TElement>]>;
