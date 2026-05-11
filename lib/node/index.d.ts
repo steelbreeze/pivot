@@ -18,7 +18,7 @@
  */
 export type Func<TResult, TArgs extends readonly unknown[] = []> = (...args: TArgs) => TResult;
 /**
- * A predicate is a boolean function, used as point on a {@link Dimension} used to evaluate source data for a specific condition.
+ * A predicate is a boolean function, used as a point on a {@link Dimension}
  * @typeParam TArgs The tuple type of the arguments passed to the predicate.
  * @category Type declarations
  */
@@ -28,7 +28,7 @@ export type Predicate<TArgs extends readonly unknown[] = []> = Func<boolean, TAr
  * @typeParam TValue The type of the source data that the {@link Dimension} was created for.
  * @category Type declarations
  */
-export type Dimension<TElement> = Array<Predicate<[TElement]>>;
+export type Dimension<TElement> = Array<Predicate<readonly [TElement]>>;
 /**
  * A Vector is a one-dimensional data structure.
  * @typeParam TValue The type of the elements within the Vector.
@@ -66,7 +66,7 @@ export type Hypercube = Cube<Vector<any>>;
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building
  */
-export declare const property: <TElement>(key: keyof TElement) => Func<Predicate<[TElement]>, readonly [TElement[keyof TElement]]>;
+export declare const property: <TElement>(key: keyof TElement) => Func<Predicate<readonly [TElement]>, readonly [TElement[keyof TElement]]>;
 /**
  * Slices data by one dimension, returning a {@link Matrix}.
  * @typeParam TValue The type of the source data to be sliced and diced.

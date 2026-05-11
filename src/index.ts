@@ -20,7 +20,7 @@
 export type Func<TResult, TArgs extends readonly unknown[] = []> = (...args: TArgs) => TResult;
 
 /**
- A predicate is a boolean function, used as a point on a {@link Dimension}
+ * A predicate is a boolean function, used as a point on a {@link Dimension}
  * @typeParam TArgs The tuple type of the arguments passed to the predicate.
  * @category Type declarations
  */
@@ -31,7 +31,7 @@ export type Predicate<TArgs extends readonly unknown[] = []> = Func<boolean, TAr
  * @typeParam TValue The type of the source data that the {@link Dimension} was created for.
  * @category Type declarations
  */
-export type Dimension<TElement> = Array<Predicate<[TElement]>>;
+export type Dimension<TElement> = Array<Predicate<readonly [TElement]>>;
 
 /**
  * A Vector is a one-dimensional data structure.
@@ -74,7 +74,7 @@ export type Hypercube = Cube<Vector<any>>;
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building
  */
-export const property = <TElement>(key: keyof TElement): Func<Predicate<[TElement]>, readonly [TElement[keyof TElement]]> =>
+export const property = <TElement>(key: keyof TElement): Func<Predicate<readonly [TElement]>, readonly [TElement[keyof TElement]]> =>
 	value => element => element[key] === value;
 
 /**
@@ -192,7 +192,7 @@ export const average = <TElement>(selector: Func<number, readonly [TElement]>): 
 	vector => sum(selector)(vector) / vector.length;
 
 // fast alternative to Array.prototype.filter
-function filter<T>(array: Array<T>, predicate: Predicate<[T]>): Array<T> {
+function filter<T>(array: Array<T>, predicate: Predicate<readonly [T]>): Array<T> {
 	const result: Array<T> = [];
 
 	for (let index = 0; index < array.length; ++index) {
