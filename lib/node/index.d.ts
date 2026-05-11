@@ -11,25 +11,24 @@
  * @module
  */
 /**
- * A simple function, taking an argument and returning a result.
- * @typeParam TArg1 The type of the argument passed into the function.
+ * A simple function, taking a variable number of arguments and returning a result.
  * @typeParam TResult The type of the result provided by the functions.
- * @typeParam arg1 The argument passed into the function.
+ * @typeParam TArgs The tuple type of the arguments passed into the function.
  * @category Type declarations
  */
-export type Function1<TResult, TArgs extends unknown[] = []> = (...args: TArgs) => TResult;
+export type Func<TResult, TArgs extends readonly unknown[] = []> = (...args: TArgs) => TResult;
 /**
  * A predicate is a boolean function, used as point on a {@link Dimension} used to evaluate source data for a specific condition.
- * @typeParam TArg1 The type of the source data that the predicate was created for.
+ * @typeParam TArgs The tuple type of the arguments passed to the predicate.
  * @category Type declarations
  */
-export type Predicate1<TArg1> = Function1<boolean, [TArg1]>;
+export type Predicate<TArgs extends readonly unknown[] = []> = Func<boolean, TArgs>;
 /**
- * A dimension is a set of {@link Predicate1} used to partition data.
+ * A dimension is a set of {@link Predicate} used to partition data.
  * @typeParam TValue The type of the source data that the {@link Dimension} was created for.
  * @category Type declarations
  */
-export type Dimension<TElement> = Array<Predicate1<TElement>>;
+export type Dimension<TElement> = Array<Predicate<[TElement]>>;
 /**
  * A Vector is a one-dimensional data structure.
  * @typeParam TValue The type of the elements within the Vector.
@@ -55,9 +54,9 @@ export type Cube<TElement> = Matrix<Vector<TElement>>;
  */
 export type Hypercube = Cube<Vector<any>>;
 /**
- * Creates a predicate function {@link Predicate1} for use in the {@link dimension} function to create a {@link Dimension} matching properties.
+ * Creates a predicate function {@link Predicate} for use in the {@link dimension} function to create a {@link Dimension} matching properties.
  * @typeParam TValue The type of the source data that will be evaluated by the generated predicate.
- * @param key The property in the source data to base this {@link Predicate1} on.
+ * @param key The property in the source data to base this {@link Predicate} on.
  * @example
  * The following code creates a {@link Dimension} that will be used to evaluate ```Player``` objects during a {@link pivot} operation based on the value of their ```position``` property:
  * ```ts
@@ -67,7 +66,7 @@ export type Hypercube = Cube<Vector<any>>;
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building
  */
-export declare const property: <TElement>(key: keyof TElement) => Function1<Predicate1<TElement>, [TElement[keyof TElement]]>;
+export declare const property: <TElement>(key: keyof TElement) => Func<Predicate<[TElement]>, readonly [TElement[keyof TElement]]>;
 /**
  * Slices data by one dimension, returning a {@link Matrix}.
  * @typeParam TValue The type of the source data to be sliced and diced.
@@ -95,11 +94,11 @@ export declare function pivot<TElement>(array: Array<TElement>, first: Dimension
  */
 export declare function pivot<TElement>(array: Array<TElement>, first: Dimension<TElement>, ...others: Array<Dimension<TElement>>): Hypercube;
 /**
- * Queries data from a {@link Matrix} using a selector {@link Function1} to transform the objects in each cell of data in the {@link Matrix} into a result.
+ * Queries data from a {@link Matrix} using a selector {@link Func} to transform the objects in each cell of data in the {@link Matrix} into a result.
  * @typeParam TValue The type of the data within the {@link Matrix}.
  * @typeParam TResult The type of value returned by the selector.
  * @param matrix The {@link Matrix} to query data from.
- * @param selector A callback {@link Function1} to create a result from each cell of the {@link Cube}.
+ * @param selector A callback {@link Func} to create a result from each cell of the {@link Cube}.
  * @remarks The {@link Matrix} may also be a {@link Cube} or {@link Hypercube}.
  * @example
  * The following code queries a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
@@ -111,18 +110,18 @@ export declare function pivot<TElement>(array: Array<TElement>, first: Dimension
  *
  * const result: Matrix<number> = query(cube, average(age()));
  *
- * function age(asAt: Date = new Date()): Function1<Player, number> {
+ * function age(asAt: Date = new Date()): Func<number, readonly [Player]> {
  *   return player => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
  * }
  * ```
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export declare const query: <TElement, TResult>(matrix: Matrix<TElement>, selector: Function1<TResult, [TElement]>) => Matrix<TResult>;
+export declare const query: <TElement, TResult>(matrix: Matrix<TElement>, selector: Func<TResult, readonly [TElement]>) => Matrix<TResult>;
 /**
- * Create a callback {@link Function1} to pass into {@link query} that sums numerical values derived by the selector {@link Function1}.
+ * Create a callback {@link Func} to pass into {@link query} that sums numerical values derived by the selector {@link Func}.
  * @typeParam TValue The type of the data within the cube that will be passed into the selector.
- * @param selector A callback {@link Function1} to derive a numerical value for each object in the source data.
+ * @param selector A callback {@link Func} to derive a numerical value for each object in the source data.
  * @example
  * The following code queries a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
  * ```ts
@@ -133,18 +132,18 @@ export declare const query: <TElement, TResult>(matrix: Matrix<TElement>, select
  *
  * const result: Matrix<number> = query(cube, sum(age()));
  *
- * function age(asAt: Date = new Date()): Function1<Player, number> {
+ * function age(asAt: Date = new Date()): Func<number, readonly [Player]> {
  *   return player => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
  * }
  * ```
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export declare const sum: <TElement>(selector: Function1<number, [TElement]>) => Function1<number, [Vector<TElement>]>;
+export declare const sum: <TElement>(selector: Func<number, readonly [TElement]>) => Func<number, readonly [Vector<TElement>]>;
 /**
- * Create a callback {@link Function1} to pass into {@link query} that averages numerical values derived by the selector {@link Function1}.
+ * Create a callback {@link Func} to pass into {@link query} that averages numerical values derived by the selector {@link Func}.
  * @typeParam TValue The type of the data within the cube that will be passed into the selector.
- * @param selector A callback {@link Function1} to derive a numerical value for each object in the source data.
+ * @param selector A callback {@link Func} to derive a numerical value for each object in the source data.
  * @returns Returns the average given the selector; note that for empty cells this will be NaN
  * @example
  * The following code queries a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
@@ -156,11 +155,11 @@ export declare const sum: <TElement>(selector: Function1<number, [TElement]>) =>
  *
  * const result: Matrix<number> = query(cube, average(age()));
  *
- * function age(asAt: Date = new Date()): Function1<Player, number> {
+ * function age(asAt: Date = new Date()): Func<number, readonly [Player]> {
  *   return player => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
  * }
  * ```
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export declare const average: <TElement>(selector: Function1<number, [TElement]>) => Function1<number, [Vector<TElement>]>;
+export declare const average: <TElement>(selector: Func<number, readonly [TElement]>) => Func<number, readonly [Vector<TElement>]>;
