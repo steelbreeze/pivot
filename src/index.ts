@@ -10,21 +10,27 @@
  * 
  * @module
  */
+import { Func, Predicate } from "./types";
 
 /**
- * A simple function, taking a variable number of arguments and returning a result.
- * @typeParam TResult The type of the result provided by the functions.
- * @typeParam TArgs The tuple type of the arguments passed into the function.
+ * A Matrix is a two-dimensional data structure.
+ * @typeParam TValue The type of the elements within the Matrix.
  * @category Type declarations
  */
-export type Func<TResult, TArgs extends readonly unknown[] = []> = (...args: TArgs) => TResult;
+export type Matrix<TElement> = Array<Array<TElement>>;
 
 /**
- * A predicate is a boolean function, used as a point on a {@link Dimension}
- * @typeParam TArgs The tuple type of the arguments passed to the predicate.
+ * A cube is a three-dimensional data structure.
+ * @typeParam TValue The type of the elements within the Cube.
  * @category Type declarations
  */
-export type Predicate<TArgs extends readonly unknown[] = []> = Func<boolean, TArgs>;
+export type Cube<TElement> = Array<Array<Array<TElement>>>;
+
+/**
+ * An n-cube is an n-dimensional data structure.
+ * @category Type declarations
+ */
+export type Hypercube = Array<Array<Array<Array<any>>>>;
 
 /**
  * A dimension is a set of {@link Predicate} used to partition data.
@@ -32,34 +38,6 @@ export type Predicate<TArgs extends readonly unknown[] = []> = Func<boolean, TAr
  * @category Type declarations
  */
 export type Dimension<TElement> = Array<Predicate<readonly [TElement]>>;
-
-/**
- * A Vector is a one-dimensional data structure.
- * @typeParam TValue The type of the elements within the Vector.
- * @remarks While Vector is just an alias for Array, it is used to indicate a data that is the result of a {@link pivot} operation, and is therefore part of a {@link Matrix}, {@link Cube}, or {@link Hypercube}.
- * @category Type declarations
- */
-export type Vector<TElement> = Array<TElement>;
-
-/**
- * A Matrix is a two-dimensional data structure.
- * @typeParam TValue The type of the elements within the Matrix.
- * @category Type declarations
- */
-export type Matrix<TElement> = Vector<Vector<TElement>>;
-
-/**
- * A cube is a three-dimensional data structure.
- * @typeParam TValue The type of the elements within the Cube.
- * @category Type declarations
- */
-export type Cube<TElement> = Matrix<Vector<TElement>>;
-
-/**
- * An n-cube is an n-dimensional data structure.
- * @category Type declarations
- */
-export type Hypercube = Cube<Vector<any>>;
 
 /**
  * Creates a predicate function {@link Predicate} for use in the {@link dimension} function to create a {@link Dimension} matching properties.
@@ -163,7 +141,7 @@ export const query = <TElement, TResult>(matrix: Matrix<TElement>, selector: Fun
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export const sum = <TElement>(selector: Func<number, readonly [TElement]>): Func<number, readonly [Vector<TElement>]> =>
+export const sum = <TElement>(selector: Func<number, readonly [TElement]>): Func<number, readonly [Array<TElement>]> =>
 	vector => vector.reduce((accumulator, element) => accumulator + selector(element), 0);
 
 /**
@@ -188,7 +166,7 @@ export const sum = <TElement>(selector: Func<number, readonly [TElement]>): Func
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export const average = <TElement>(selector: Func<number, readonly [TElement]>): Func<number, readonly [Vector<TElement>]> =>
+export const average = <TElement>(selector: Func<number, readonly [TElement]>): Func<number, readonly [Array<TElement>]> =>
 	vector => sum(selector)(vector) / vector.length;
 
 // fast alternative to Array.prototype.filter
