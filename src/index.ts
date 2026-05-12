@@ -17,28 +17,35 @@ import { Func, Predicate } from "./types";
  * @typeParam TElement The type of the source data that the {@link Dimension} was created for.
  * @category Type declarations
  */
-export type Dimension<TElement> = Predicate<readonly [TElement]>[];
+export type Dimension<TElement> = readonly Predicate<readonly [TElement]>[];
+
+/**
+ * A Vector is a one-dimensional data structure.
+ * @typeParam TElement The type of the elements within the Vector.
+ * @category Type declarations
+ */
+export type Vector<TElement> = readonly TElement[];
 
 /**
  * A Matrix is a two-dimensional data structure.
  * @typeParam TElement The type of the elements within the Matrix.
  * @category Type declarations
  */
-export type Matrix<TElement> = TElement[][];
+export type Matrix<TElement> = readonly Vector<TElement>[];
 
 /**
  * A cube is a three-dimensional data structure.
  * @typeParam TElement The type of the elements within the Cube.
  * @category Type declarations
  */
-export type Cube<TElement> = Matrix<TElement>[];
+export type Cube<TElement> = readonly Matrix<TElement>[];
 
 /**
  * A Hypercube is a data structure with at least four dimensions.
  * @typeParam TElement The type of the elements within the Hypercube.
  * @category Type declarations
  */
-export type Hypercube<TElement> = Cube<TElement>[] | Hypercube<TElement>[];
+export type Hypercube<TElement> = readonly Cube<TElement>[] | readonly Hypercube<TElement>[];
 
 /**
  * Creates a predicate function {@link Predicate} for use in the {@link dimension} function to create a {@link Dimension} matching properties.
@@ -63,7 +70,7 @@ export const property = <TElement>(key: keyof TElement): Func<Predicate<readonly
  * @param dimension The first dimension to slice the data by.
  * @category Cube building
  */
-export function pivot<TElement>(elements: readonly TElement[], dimension: Dimension<TElement>): Matrix<TElement>;
+export function pivot<TElement>(elements: Vector<TElement>, dimension: Dimension<TElement>): Matrix<TElement>;
 
 /**
  * Slices data by two dimensions, returning a {@link Cube}.
@@ -73,7 +80,7 @@ export function pivot<TElement>(elements: readonly TElement[], dimension: Dimens
  * @param second The second dimension to slice the data by.
  * @category Cube building
  */
-export function pivot<TElement>(elements: readonly TElement[], first: Dimension<TElement>, second: Dimension<TElement>): Cube<TElement>;
+export function pivot<TElement>(elements: Vector<TElement>, first: Dimension<TElement>, second: Dimension<TElement>): Cube<TElement>;
 
 /**
  * Slices data by an arbitrary number of dimensions, returning a {@link Hypercube}.
@@ -85,16 +92,16 @@ export function pivot<TElement>(elements: readonly TElement[], first: Dimension<
  * @param others  Further dimensions to slice the data by.
  * @category Cube building
  */
-export function pivot<TElement>(elements: readonly TElement[], first: Dimension<TElement>, ...[second, third, ...others]: readonly Dimension<TElement>[]): Hypercube<TElement>;
+export function pivot<TElement>(elements: Vector<TElement>, first: Dimension<TElement>, ...[second, third, ...others]: Dimension<TElement>[]): Hypercube<TElement>;
 
 // implementation of the pivot function; the overloads above provide the appropriate return type depending on the number of dimensions passed
-export function pivot<TElement>(elements: readonly TElement[], first: Dimension<TElement>, ...[second, ...others]: readonly Dimension<TElement>[]) {
+export function pivot<TElement>(elements: Vector<TElement>, first: Dimension<TElement>, ...[second, ...others]: readonly Dimension<TElement>[]) {
 	return second ? slice(elements, first).map(vector => pivot(vector, second, ...others)) : slice(elements, first);
 }
 
 // slices the data by one dimension
-const slice = <TElement>(elements: readonly TElement[], dimension: Dimension<TElement>): Matrix<TElement> =>
-	dimension.map(predicate => filter(elements, predicate));
+const slice = <TElement>(elements: Vector<TElement>, dimension: Dimension<TElement>): Matrix<TElement> =>
+	dimension.map(predicate => fastFilter(elements, predicate));
 
 /**
  * Queries data from a {@link Matrix} using a selector {@link Func} to transform the objects in each cell of data in the {@link Matrix} into a result.
@@ -144,7 +151,7 @@ export const query = <TElement, TResult>(matrix: Matrix<TElement>, selector: Fun
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export const sum = <TElement>(selector: Func<number, readonly [TElement]>): Func<number, readonly [TElement[]]> =>
+export const sum = <TElement>(selector: Func<number, readonly [TElement]>): Func<number, readonly [Vector<TElement>]> =>
 	vector => vector.reduce((accumulator, element) => accumulator + selector(element), 0);
 
 /**
@@ -169,11 +176,11 @@ export const sum = <TElement>(selector: Func<number, readonly [TElement]>): Func
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export const average = <TElement>(selector: Func<number, readonly [TElement]>): Func<number, readonly [TElement[]]> =>
+export const average = <TElement>(selector: Func<number, readonly [TElement]>): Func<number, readonly [Vector<TElement>]> =>
 	vector => sum(selector)(vector) / vector.length;
 
 // fast alternative to Array.prototype.filter
-function filter<T>(array: readonly T[], predicate: Predicate<readonly [T]>): T[] {
+function fastFilter<T>(array: readonly T[], predicate: Predicate<readonly [T]>): T[] {
 	const result: T[] = [];
 
 	for (let index = 0; index < array.length; ++index) {

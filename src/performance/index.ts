@@ -9,13 +9,7 @@ interface Data {
 function test(scale: number): void {
 
 	const data: Array<Data> = [];
-	const x: Dimension<Data> = [];
-	const y: Dimension<Data> = []
-
-	//	const t1 = `Create data with ${Math.pow(scale, 3)} records`;
-//	const t2 = `Create cube with ${Math.pow(scale, 3)} records`;
-
-	//	console.time(t1);
+	const dimensionData: number[] = [];
 
 	for (let i = 0; i < scale; i++) {
 		for (let j = 0; j < scale; j++) {
@@ -24,20 +18,18 @@ function test(scale: number): void {
 			}
 		}
 
-		x.push(record => record.i === i);
-		y.push(record => record.j === i);
+		dimensionData.push(i);
 	}
 
-	//	console.timeEnd(t1);
-	//	console.time(t2)
+	const x: Dimension<Data> = dimensionData.map(value => element => element.i === value);
+	const y: Dimension<Data> = dimensionData.map(value => element => element.j === value);
+
 	const start = performance.now();
 
 	pivot(data, y, x);
 
 	const end = performance.now();
 	console.log(`Create cube with ${Math.pow(scale, 3)} records: ${Math.round((end - start) * 1000) / 1000}ms`);
-
-	//	console.timeEnd(t2)
 }
 
 test(1);

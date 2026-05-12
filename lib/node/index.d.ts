@@ -1,7 +1,7 @@
 /**
  * A minimal library for pivoting data by 1-n dimensions.
  *
- * The {@link pivot} function slices and dices data by one or more {@link Dimension dimensions}, returning a {@link Matrix} if one {@link Dimension} is passed, a {@link Cube} if two
+ * The {@link pivot} function slices data by one or more {@link Dimension dimensions}, returning a {@link Matrix} if one {@link Dimension} is passed, a {@link Cube} if two
  * {@link Dimension dimensions} are passed, and a {@link Hypercube} if more than two {@link Dimension dimensions} are passed.
  *
  * Simple {@link Dimension dimensions} can be created by mapping a set of values using the {@link dimension} and {@link property} functions.
@@ -16,25 +16,31 @@ import { Func, Predicate } from "./types";
  * @typeParam TElement The type of the source data that the {@link Dimension} was created for.
  * @category Type declarations
  */
-export type Dimension<TElement> = Predicate<readonly [TElement]>[];
+export type Dimension<TElement> = readonly Predicate<readonly [TElement]>[];
+/**
+ * A Vector is a one-dimensional data structure.
+ * @typeParam TElement The type of the elements within the Vector.
+ * @category Type declarations
+ */
+export type Vector<TElement> = readonly TElement[];
 /**
  * A Matrix is a two-dimensional data structure.
  * @typeParam TElement The type of the elements within the Matrix.
  * @category Type declarations
  */
-export type Matrix<TElement> = TElement[][];
+export type Matrix<TElement> = readonly Vector<TElement>[];
 /**
  * A cube is a three-dimensional data structure.
  * @typeParam TElement The type of the elements within the Cube.
  * @category Type declarations
  */
-export type Cube<TElement> = Matrix<TElement>[];
+export type Cube<TElement> = readonly Matrix<TElement>[];
 /**
  * A Hypercube is a data structure with at least four dimensions.
  * @typeParam TElement The type of the elements within the Hypercube.
  * @category Type declarations
  */
-export type Hypercube<TElement> = Cube<TElement>[] | Hypercube<TElement>[];
+export type Hypercube<TElement> = readonly Cube<TElement>[] | readonly Hypercube<TElement>[];
 /**
  * Creates a predicate function {@link Predicate} for use in the {@link dimension} function to create a {@link Dimension} matching properties.
  * @typeParam TElement The type of the source data that will be evaluated by the generated predicate.
@@ -51,31 +57,32 @@ export type Hypercube<TElement> = Cube<TElement>[] | Hypercube<TElement>[];
 export declare const property: <TElement>(key: keyof TElement) => Func<Predicate<readonly [TElement]>, readonly [TElement[keyof TElement]]>;
 /**
  * Slices data by one dimension, returning a {@link Matrix}.
- * @typeParam TElement The type of the source data to be sliced and diced.
+ * @typeParam TElement The type of the source data.
  * @param elements The source data, an array of objects.
  * @param dimension The first dimension to slice the data by.
  * @category Cube building
  */
-export declare function pivot<TElement>(elements: readonly TElement[], dimension: Dimension<TElement>): Matrix<TElement>;
+export declare function pivot<TElement>(elements: Vector<TElement>, dimension: Dimension<TElement>): Matrix<TElement>;
 /**
  * Slices data by two dimensions, returning a {@link Cube}.
- * @typeParam TElement The type of the source data to be sliced and diced.
+ * @typeParam TElement The type of the source data.
  * @param elements The source data, an array of objects.
  * @param first The first dimension to slice the data by.
- * @param second The second dimension to dice the data by.
+ * @param second The second dimension to slice the data by.
  * @category Cube building
  */
-export declare function pivot<TElement>(elements: readonly TElement[], first: Dimension<TElement>, second: Dimension<TElement>): Cube<TElement>;
+export declare function pivot<TElement>(elements: Vector<TElement>, first: Dimension<TElement>, second: Dimension<TElement>): Cube<TElement>;
 /**
- * Slices data by an arbitory number of dimensions, returning a {@link Hypercube}.
- * @typeParam TElement The type of the source data to be sliced and diced.
+ * Slices data by an arbitrary number of dimensions, returning a {@link Hypercube}.
+ * @typeParam TElement The type of the source data.
  * @param elements The source data, an array of objects.
  * @param first The first dimension to slice the data by.
- * @param second The second dimension to dice the data by.
- * @param others Two or more other dimensions to pivot the data by.
+ * @param second The second dimension to slice the data by.
+ * @param third The third dimension to slice the data by.
+ * @param others  Further dimensions to slice the data by.
  * @category Cube building
  */
-export declare function pivot<TElement>(elements: readonly TElement[], first: Dimension<TElement>, ...[second, ...others]: readonly Dimension<TElement>[]): Hypercube<TElement>;
+export declare function pivot<TElement>(elements: Vector<TElement>, first: Dimension<TElement>, ...[second, third, ...others]: Dimension<TElement>[]): Hypercube<TElement>;
 /**
  * Queries data from a {@link Matrix} using a selector {@link Func} to transform the objects in each cell of data in the {@link Matrix} into a result.
  * @typeParam TElement The type of the data within the {@link Matrix}.
@@ -122,7 +129,7 @@ export declare const query: <TElement, TResult>(matrix: Matrix<TElement>, select
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export declare const sum: <TElement>(selector: Func<number, readonly [TElement]>) => Func<number, readonly [TElement[]]>;
+export declare const sum: <TElement>(selector: Func<number, readonly [TElement]>) => Func<number, readonly [Vector<TElement>]>;
 /**
  * Create a callback {@link Func} to pass into {@link query} that averages numerical values derived by the selector {@link Func}.
  * @typeParam TElement The type of the data within the cube that will be passed into the selector.
@@ -145,4 +152,4 @@ export declare const sum: <TElement>(selector: Func<number, readonly [TElement]>
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export declare const average: <TElement>(selector: Func<number, readonly [TElement]>) => Func<number, readonly [TElement[]]>;
+export declare const average: <TElement>(selector: Func<number, readonly [TElement]>) => Func<number, readonly [Vector<TElement>]>;
