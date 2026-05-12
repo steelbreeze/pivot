@@ -49,8 +49,6 @@ export type Hypercube<TElement> = Cube<TElement>[] | Hypercube<TElement>[];
  * @category Cube building
  */
 export declare const property: <TElement>(key: keyof TElement) => Func<Predicate<readonly [TElement]>, readonly [TElement[keyof TElement]]>;
-/** @deprecated */
-export declare function pivot<TElement>(elements: readonly TElement[]): TElement[];
 /**
  * Slices data by one dimension, returning a {@link Matrix}.
  * @typeParam TElement The type of the source data to be sliced and diced.
@@ -73,10 +71,11 @@ export declare function pivot<TElement>(elements: readonly TElement[], first: Di
  * @typeParam TElement The type of the source data to be sliced and diced.
  * @param elements The source data, an array of objects.
  * @param first The first dimension to slice the data by.
+ * @param second The second dimension to dice the data by.
  * @param others Two or more other dimensions to pivot the data by.
  * @category Cube building
  */
-export declare function pivot<TElement>(elements: readonly TElement[], first: Dimension<TElement>, ...others: Dimension<TElement>[]): Hypercube<TElement>;
+export declare function pivot<TElement>(elements: readonly TElement[], first: Dimension<TElement>, ...[second, ...others]: readonly Dimension<TElement>[]): Hypercube<TElement>;
 /**
  * Queries data from a {@link Matrix} using a selector {@link Func} to transform the objects in each cell of data in the {@link Matrix} into a result.
  * @typeParam TElement The type of the data within the {@link Matrix}.

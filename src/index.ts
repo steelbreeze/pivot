@@ -1,7 +1,7 @@
 /**
  * A minimal library for pivoting data by 1-n dimensions.
  * 
- * The {@link pivot} function slices and dices data by one or more {@link Dimension dimensions}, returning a {@link Matrix} if one {@link Dimension} is passed, a {@link Cube} if two
+ * The {@link pivot} function slices data by one or more {@link Dimension dimensions}, returning a {@link Matrix} if one {@link Dimension} is passed, a {@link Cube} if two
  * {@link Dimension dimensions} are passed, and a {@link Hypercube} if more than two {@link Dimension dimensions} are passed.
  * 
  * Simple {@link Dimension dimensions} can be created by mapping a set of values using the {@link dimension} and {@link property} functions.
@@ -57,14 +57,8 @@ export const property = <TElement>(key: keyof TElement): Func<Predicate<readonly
 	value => element => element[key] === value;
 
 /**
- * @deprecated At least one dimension must be supplied to pivot().
- * @category Cube building
- */
-export function pivot<TElement>(elements: readonly TElement[]): TElement[];
-
-/**
  * Slices data by one dimension, returning a {@link Matrix}.
- * @typeParam TElement The type of the source data to be sliced and diced.
+ * @typeParam TElement The type of the source data.
  * @param elements The source data, an array of objects.
  * @param dimension The first dimension to slice the data by.
  * @category Cube building
@@ -73,26 +67,29 @@ export function pivot<TElement>(elements: readonly TElement[], dimension: Dimens
 
 /**
  * Slices data by two dimensions, returning a {@link Cube}.
- * @typeParam TElement The type of the source data to be sliced and diced.
+ * @typeParam TElement The type of the source data.
  * @param elements The source data, an array of objects.
  * @param first The first dimension to slice the data by.
- * @param second The second dimension to dice the data by.
+ * @param second The second dimension to slice the data by.
  * @category Cube building
  */
 export function pivot<TElement>(elements: readonly TElement[], first: Dimension<TElement>, second: Dimension<TElement>): Cube<TElement>;
 
 /**
- * Slices data by an arbitory number of dimensions, returning a {@link Hypercube}.
- * @typeParam TElement The type of the source data to be sliced and diced.
+ * Slices data by an arbitrary number of dimensions, returning a {@link Hypercube}.
+ * @typeParam TElement The type of the source data.
  * @param elements The source data, an array of objects.
- * @param dimensions Two or more other dimensions to pivot the data by.
+ * @param first The first dimension to slice the data by.
+ * @param second The second dimension to slice the data by.
+ * @param third The third dimension to slice the data by.
+ * @param others  Further dimensions to slice the data by.
  * @category Cube building
  */
-export function pivot<TElement>(elements: readonly TElement[], ...dimensions: Dimension<TElement>[]): Hypercube<TElement>;
+export function pivot<TElement>(elements: readonly TElement[], first: Dimension<TElement>, ...[second, third, ...others]: readonly Dimension<TElement>[]): Hypercube<TElement>;
 
 // implementation of the pivot function; the overloads above provide the appropriate return type depending on the number of dimensions passed
-export function pivot<TElement>(elements: readonly TElement[], ...[first, second, ...others]: readonly Dimension<TElement>[]) {
-	return first ? second ? slice(elements, first).map(vector => pivot(vector, second, ...others)) : slice(elements, first) : elements;
+export function pivot<TElement>(elements: readonly TElement[], first: Dimension<TElement>, ...[second, ...others]: readonly Dimension<TElement>[]) {
+	return second ? slice(elements, first).map(vector => pivot(vector, second, ...others)) : slice(elements, first);
 }
 
 // slices the data by one dimension
