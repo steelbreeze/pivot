@@ -1,9 +1,9 @@
 /**
  * A minimal library for pivoting data by 1-n dimensions.
  * 
- * The {@link pivot} function slices data by one or more {@link Dimension dimensions}, returning a {@link Cube}, which is a nested array as deep as the number of dimensions passed into the {@link pivot} operstion.
+ * The {@link pivot} function slices data and dices data by one or more {@link Dimension dimensions}, returning a {@link Cube}, which is a nested array as deep as the number of dimensions passed into the {@link pivot} operstion.
  * 
- * Simple {@link Dimension dimensions} can be created by mapping a set of values using the {@link dimension} and {@link property} functions.
+ * Simple {@link Dimension dimensions} can be created by mapping a set of values using the {@link property} function or a custom mapping function.
  * 
  * Once a {@link Cube} is created, the {@link query} function can be used to perform query operations on the subset of the source data in each cell.
  * 
@@ -31,13 +31,6 @@ export type Dimension<TElement> = readonly Predicate<readonly [TElement]>[];
  * Creates a predicate function {@link Predicate} for use in the {@link dimension} function to create a {@link Dimension} matching properties.
  * @typeParam TElement The type of the source data that will be evaluated by the generated predicate.
  * @param key The property in the source data to base this {@link Predicate} on.
- * @example
- * The following code creates a {@link Dimension} that will be used to evaluate ```Player``` objects during a {@link pivot} operation based on the value of their ```position``` property:
- * ```ts
- * const positions: string[] = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];
- * const x = positions.map(property<Player>('position'));
- * ```
- * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube building
  */
 export const property = <TElement>(key: keyof TElement): Func<Predicate<readonly [TElement]>, readonly [TElement[keyof TElement]]> =>
@@ -57,53 +50,24 @@ export function pivot<TElement, TDimensions extends readonly [Dimension<TElement
 const slice = <TElement>(elements: readonly TElement[], dimension: Dimension<TElement>): TElement[][] =>
 	dimension.map(predicate => fastFilter(elements, predicate));
 
+
 /**
  * Queries data from a {@link Cube} using a selector {@link Func} to transform the elements in each cell into a result.
- * @typeParam TElement The type of the data within the {@link Cube}.
+ * @typeParam TCell The type of the data within the dimensions of the {@link Cube}.
  * @typeParam TResult The type of value returned by the selector.
  * @param cube The {@link Cube} to query data from.
  * @param selector A callback {@link Func} to create a result from each cell of the {@link Cube}.
- * @example
- * The following code queries a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
- * ```ts
- * const x = positions.map(property<Player>('position')); // using the built-in dimension generator matching a property
- * const y = countries.map((country: string) => (player: Player) => player.country === country); // using a user-defined generator
- * 
- * const cube = pivot(squad, y, x);
- * 
- * const result = query(cube, average(age()));
- * 
- * function age(asAt: Date = new Date()): Func<number, readonly [Player]> {
- *   return player => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
- * }
- * ```
- * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export const query = <TElement, TResult>(cube: TElement[][], selector: Func<TResult, readonly [TElement]>): TResult[][] =>
+export const query = <TCell extends readonly unknown[], TResult>(cube: TCell[][], selector: Func<TResult, readonly [TCell]>): TResult[][] =>
 	cube.map(slice => slice.map(selector));
 
 /**
- * Create a callback {@link Func} to pass into {@link query} that sums numerical values derived by the selector {@link Func}.
- * @typeParam TElement The type of the data within the cube that will be passed into the selector.
- * @param selector A callback {@link Func} to derive a numerical value for each object in the source data.
- * @example
- * The following code queries a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
- * ```ts
- * const x = positions.map(property<Player>('position')); // using the built-in property dimension generator
- * const y = countries.map((country: string) => (player: Player) => player.country === country); // using a user-defined generator
- * 
- * const cube: Cube<Player> = pivot(squad, y, x);
- * 
- * const result = query(cube, sum(age()));
- * 
- * function age(asAt: Date = new Date()): Func<number, readonly [Player]> {
- *   return player => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
- * }
- * ```
- * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
- * @category Cube query
- */
+* Create a callback {@link Func} to pass into {@link query} that sums numerical values derived by the selector {@link Func}.
+* @typeParam TElement The type of the data within the cube that will be passed into the selector.
+* @param selector A callback {@link Func} to derive a numerical value for each object in the source data.
+* @category Cube query
+*/
 export const sum = <TElement>(selector: Func<number, readonly [TElement]>): Func<number, readonly [TElement[]]> =>
 	vector => vector.reduce((accumulator, element) => accumulator + selector(element), 0);
 
@@ -112,21 +76,6 @@ export const sum = <TElement>(selector: Func<number, readonly [TElement]>): Func
  * @typeParam TElement The type of the data within the cube that will be passed into the selector.
  * @param selector A callback {@link Func} to derive a numerical value for each object in the source data.
  * @returns Returns the average given the selector; note that for empty cells this will be NaN
- * @example
- * The following code queries a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
- * ```ts
- * const x = positions.map(property<Player>('position')); // using the built-in property dimension generator
- * const y = countries.map((country: string) => (player: Player) => player.country === country); // using a user-defined generator
- * 
- * const cube: Cube<Player> = pivot(squad, y, x);
- * 
- * const result = query(cube, average(age()));
- * 
- * function age(asAt: Date = new Date()): Func<number, readonly [Player]> {
- *   return player => new Date(asAt.getTime() - player.dateOfBirth.getTime()).getUTCFullYear() - 1970;
- * }
- * ```
- * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
 export const average = <TElement>(selector: Func<number, readonly [TElement]>): Func<number, readonly [TElement[]]> =>
