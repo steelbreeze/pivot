@@ -1,4 +1,4 @@
-import { Cube, property, pivot, Hypercube, Matrix } from "..";
+import { property, pivot } from "..";
 import { distinct } from "../example/distinct";
 
 enum Nationality {
@@ -31,21 +31,21 @@ const retired = [
 ];
 
 // pivot by just one dimension
-const matrix: Matrix<Person> = pivot(data, gender);
+const matrix = pivot(data, gender);
 console.log(matrix[0][0] === emily);
 console.log(matrix[1][0] === arnold);
 console.log(matrix[1][1] === seamus);
 console.log(matrix[1][2] === eugene);
 
 // pivot by two dimensions
-const cube: Cube<Person> = pivot(data, gender, retired);
+const cube = pivot(data, gender, retired);
 console.log(cube[0][1][0] === emily);
 console.log(cube[1][0][0] === arnold);
 console.log(cube[1][1][0] === seamus);
 console.log(cube[1][1][1] === eugene);
 
 // pivot by three dimensions
-const hypercube: Hypercube<Person> = pivot(data, gender, retired, nationality);
+const hypercube = pivot(data, gender, retired, nationality);
 console.log(hypercube[0][1][0][0] === emily);
 console.log(hypercube[1][0][0][0] === arnold);
 console.log(hypercube[1][1][1][0] === seamus);
