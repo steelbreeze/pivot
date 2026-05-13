@@ -43,6 +43,12 @@ export type Dimension<TElement> = readonly Predicate<readonly [TElement]>[];
 export const property = <TElement>(key: keyof TElement): Func<Predicate<readonly [TElement]>, readonly [TElement[keyof TElement]]> =>
 	value => element => element[key] === value;
 
+/**
+ * Slices and dices a set of elements based on the criteria defined in one or more dimensions
+ * @param elements The elements to pivot
+ * @param dimensions The dimensions to slice and dice the data by
+ * @returns Returns an Cube, which is an n-dimensional array mirroring the number of dimensions plus the set of elements
+ */
 export function pivot<TElement, TDimensions extends readonly [Dimension<TElement>, ...Dimension<TElement>[]]>(elements: readonly TElement[], ...[first, second, ...others]: TDimensions): Cube<TElement, TDimensions> {
 	return (second ? slice(elements, first).map(vector => pivot(vector, second, ...others)) : slice(elements, first)) as Cube<TElement, TDimensions>;
 }
@@ -55,7 +61,7 @@ const slice = <TElement>(elements: readonly TElement[], dimension: Dimension<TEl
  * Queries data from a {@link Cube} using a selector {@link Func} to transform the elements in each cell into a result.
  * @typeParam TElement The type of the data within the {@link Cube}.
  * @typeParam TResult The type of value returned by the selector.
- * @param matrix The {@link Cube} to query data from.
+ * @param cube The {@link Cube} to query data from.
  * @param selector A callback {@link Func} to create a result from each cell of the {@link Cube}.
  * @example
  * The following code queries a {@link Cube}, returning the {@link average} age of players in a squad by country by position:
@@ -74,8 +80,8 @@ const slice = <TElement>(elements: readonly TElement[], dimension: Dimension<TEl
  * See {@link https://github.com/steelbreeze/pivot/blob/main/src/example/index.ts GitHub} for a complete example.
  * @category Cube query
  */
-export const query = <TElement, TResult>(matrix: TElement[][], selector: Func<TResult, readonly [TElement]>): TResult[][] =>
-	matrix.map(vector => vector.map(selector));
+export const query = <TElement, TResult>(cube: TElement[][], selector: Func<TResult, readonly [TElement]>): TResult[][] =>
+	cube.map(slice => slice.map(selector));
 
 /**
  * Create a callback {@link Func} to pass into {@link query} that sums numerical values derived by the selector {@link Func}.
